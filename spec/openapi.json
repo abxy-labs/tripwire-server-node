@@ -346,7 +346,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "team_0123456789abcdefghjkmnpqrst"
             }
           },
           {
@@ -395,7 +396,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "team_0123456789abcdefghjkmnpqrst"
             }
           }
         ],
@@ -437,7 +439,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "team_0123456789abcdefghjkmnpqrst"
             }
           },
           {
@@ -445,7 +448,9 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^key_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+              "example": "key_0123456789abcdefghjkmnpqrs"
             }
           }
         ],
@@ -470,7 +475,8 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "example": "team_0123456789abcdefghjkmnpqrst"
             }
           },
           {
@@ -478,7 +484,9 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^key_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+              "example": "key_0123456789abcdefghjkmnpqrs"
             }
           }
         ],
@@ -772,7 +780,9 @@
             ]
           },
           "id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^key_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+            "example": "key_0123456789abcdefghjkmnpqrs"
           },
           "createdAt": {
             "type": [
