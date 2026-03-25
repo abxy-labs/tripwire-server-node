@@ -6,15 +6,14 @@ This repository uses a manual `release.yml` workflow. Versions are independent f
 
 Configure these GitHub and registry settings:
 
-1. Make the repository public.
-2. Create a protected GitHub environment named `release` with required reviewer approval.
-3. Ensure the `@tripwire` npm scope is owned and usable for publishing `@tripwire/server`.
-4. For the first release only, add a short-lived granular `NPM_PUBLISH_TOKEN` GitHub Actions secret with publish access to `@tripwire/server`.
-5. After the first npm release succeeds, configure npm trusted publishing for:
+1. Create a protected GitHub environment named `release` with required reviewer approval.
+2. Ensure the `@tripwire` npm scope is owned and usable for publishing `@tripwire/server`.
+3. For the first release only, add a short-lived granular `NPM_PUBLISH_TOKEN` GitHub Actions secret with publish access to `@tripwire/server`.
+4. After the first npm release succeeds, configure npm trusted publishing for:
    - repository: `abxy-labs/tripwire-server-node`
    - workflow: `.github/workflows/release.yml`
    - environment: `release`
-6. Remove `NPM_PUBLISH_TOKEN` after npm trusted publishing is configured.
+5. Remove `NPM_PUBLISH_TOKEN` after npm trusted publishing is configured.
 
 ## Release flow
 
