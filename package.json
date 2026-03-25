@@ -37,7 +37,9 @@
   "scripts": {
     "build": "tsup",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "vitest run tests/client.test.ts tests/contract.test.ts tests/sealed-token.test.ts",
+    "test:live": "vitest run tests/live.test.ts",
+    "check:spec-sync": "bash ./scripts/check-spec-sync.sh",
     "test:packaging": "node ./scripts/check-packaging.mjs",
     "check": "npm run typecheck && npm run test && npm run build && npm run test:packaging"
   },

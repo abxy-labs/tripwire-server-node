@@ -90,6 +90,6 @@ Public SDKs should treat the payload as forward-compatible:
 
 ## Fixtures
 
-Golden vectors live under `sdk-spec/server/fixtures/sealed-token/`.
+Golden vectors live under `fixtures/sealed-token/`.
 
 Every language SDK must verify the shared vectors successfully and reject the invalid vectors it ships with.
