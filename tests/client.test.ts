@@ -57,7 +57,7 @@ describe('Tripwire client', () => {
       expect(url.searchParams.get('limit')).toBe('25');
       expect(init?.headers).toMatchObject({
         Authorization: 'Bearer sk_live_test',
-        'X-Tripwire-Client': '@abxy/tripwire',
+        'X-Tripwire-Client': '@abxy/tripwire-server',
       });
       return jsonResponse(fixture);
     });
