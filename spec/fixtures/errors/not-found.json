@@ -1,10 +1,10 @@
 {
   "error": {
-    "code": "resource.not_found",
-    "message": "The requested session was not found.",
+    "code": "request.not_found",
+    "message": "No session with sessionId \"sid_0123456789abcdefghjkmnpqrs\" was found. Verify the identifier and retry.",
     "status": 404,
     "retryable": false,
-    "requestId": "req_not_found",
-    "docsUrl": "https://tripwire.com/docs/api-reference/sessions"
+    "requestId": "req_22222222222222222222222222222222",
+    "docsUrl": "https://tripwirejs.com/docs/api-reference/sessions"
   }
 }

@@ -2,10 +2,10 @@
   "error": {
     "code": "request.validation_failed",
     "message": "Session list query parameters are invalid. Check limit, cursor, and verdict before retrying.",
-    "status": 400,
+    "status": 422,
     "retryable": false,
-    "requestId": "req_validation_error",
-    "docsUrl": "https://tripwire.com/docs/api-reference/sessions",
+    "requestId": "req_33333333333333333333333333333333",
+    "docsUrl": "https://tripwirejs.com/docs/api-reference/sessions",
     "details": {
       "fieldErrors": [
         {

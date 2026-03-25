@@ -31,7 +31,7 @@ async function bestEffortRevoke(client: Tripwire, teamId: string, keyId: string 
   try {
     await client.teams.apiKeys.revoke(teamId, keyId);
   } catch (error) {
-    if (error instanceof TripwireApiError && (error.status === 404 || error.code === 'resource.not_found')) {
+    if (error instanceof TripwireApiError && (error.status === 404 || error.code === 'request.not_found')) {
       return;
     }
     throw error;

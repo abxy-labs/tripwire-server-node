@@ -2,11 +2,11 @@
   "data": [
     {
       "object": "session",
-      "id": "sid_example_one",
+      "id": "sid_0123456789abcdefghjkmnpqrs",
       "createdAt": "2026-03-24T20:00:00.000Z",
-      "latestEventId": "evt_example_one",
+      "latestEventId": "evt_23456789abcdefghjkmnpqrstv",
       "latestResult": {
-        "eventId": "evt_example_one",
+        "eventId": "evt_23456789abcdefghjkmnpqrstv",
         "verdict": "human",
         "riskScore": 9,
         "phase": "behavioral",
@@ -18,7 +18,7 @@
       },
       "fingerprint": {
         "object": "fingerprint",
-        "id": "vis_example_one",
+        "id": "vid_456789abcdefghjkmnpqrstvwx",
         "confidence": 94,
         "timestamp": "2026-03-24T20:00:05.000Z"
       },

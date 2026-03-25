@@ -2,7 +2,7 @@
   "data": [
     {
       "object": "api_key",
-      "id": "key_example",
+      "id": "key_6789abcdefghjkmnpqrstvwxyz",
       "key": "pk_live_example",
       "name": "Production",
       "isTest": false,

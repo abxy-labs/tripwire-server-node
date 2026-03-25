@@ -1,7 +1,7 @@
 {
   "data": {
     "object": "api_key",
-    "id": "key_rotated",
+    "id": "key_789abcdefghjkmnpqrstvwxyz0",
     "key": "pk_live_rotated",
     "secretKey": "sk_live_rotated",
     "name": "Production",
