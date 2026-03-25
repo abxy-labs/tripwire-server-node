@@ -1,5 +1,5 @@
 {
-  "name": "@tripwire/server",
+  "name": "@abxy/tripwire",
   "version": "0.1.0",
   "description": "Official Tripwire Node server SDK",
   "license": "MIT",
