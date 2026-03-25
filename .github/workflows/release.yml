@@ -1,0 +1,167 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_version:
+        description: Version in package.json to release
+        required: true
+        type: string
+      dry_run:
+        description: Build and verify without tagging or publishing
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+      commit_sha: ${{ steps.commit.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          registry-url: https://registry.npmjs.org
+
+      - id: commit
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Validate release inputs
+        env:
+          EXPECTED_VERSION: ${{ inputs.confirm_version }}
+          ACTUAL_VERSION: ${{ steps.version.outputs.version }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          if [ "$EXPECTED_VERSION" != "$ACTUAL_VERSION" ]; then
+            echo "Expected version $EXPECTED_VERSION, found $ACTUAL_VERSION."
+            exit 1
+          fi
+
+          if [ "$DRY_RUN" != "true" ] && [ "$REF_NAME" != "main" ]; then
+            echo "Real releases must run from main."
+            exit 1
+          fi
+
+      - name: Ensure release tag is new
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          git fetch --tags --force
+          if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+            echo "Tag $TAG already exists."
+            exit 1
+          fi
+
+      - run: npm ci
+      - run: npm run check
+
+      - name: Pack release artifact
+        run: |
+          mkdir -p artifacts
+          npm pack --pack-destination artifacts
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts
+          path: artifacts/*
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    if: ${{ !inputs.dry_run }}
+    needs: prepare
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write
+      id-token: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ needs.prepare.outputs.commit_sha }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-artifacts
+          path: artifacts
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          registry-url: https://registry.npmjs.org
+
+      - name: Ensure release is still new
+        env:
+          TAG: ${{ needs.prepare.outputs.tag }}
+        run: |
+          git fetch --tags --force
+          if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+            echo "Tag $TAG already exists."
+            exit 1
+          fi
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "GitHub release $TAG already exists."
+            exit 1
+          fi
+
+      - name: Create and push release tag
+        env:
+          TAG: ${{ needs.prepare.outputs.tag }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "Release $TAG"
+          git push origin "$TAG"
+
+      - name: Check whether npm bootstrap is required
+        id: npm_bootstrap
+        run: |
+          if curl --fail --silent https://registry.npmjs.org/@tripwire%2Fserver >/dev/null; then
+            echo "bootstrap=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "bootstrap=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Require npm bootstrap token
+        if: ${{ steps.npm_bootstrap.outputs.bootstrap == 'true' && env.NPM_PUBLISH_TOKEN == '' }}
+        run: |
+          echo "NPM_PUBLISH_TOKEN is required for the first @tripwire/server release."
+          exit 1
+
+      - name: Publish first npm release
+        if: ${{ steps.npm_bootstrap.outputs.bootstrap == 'true' }}
+        env:
+          NODE_AUTH_TOKEN: ${{ env.NPM_PUBLISH_TOKEN }}
+        run: npm publish artifacts/*.tgz --access public
+
+      - name: Publish with npm trusted publishing
+        if: ${{ steps.npm_bootstrap.outputs.bootstrap == 'false' }}
+        run: npm publish artifacts/*.tgz --access public
+
+      - name: Create GitHub release
+        env:
+          TAG: ${{ needs.prepare.outputs.tag }}
+        run: gh release create "$TAG" artifacts/* --title "$TAG" --generate-notes --verify-tag
