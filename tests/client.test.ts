@@ -78,8 +78,8 @@ describe('Tripwire client', () => {
       data: [
         {
           ...firstPage.data[0],
-          id: 'sid_example_two',
-          latestEventId: 'evt_example_two',
+          id: 'sid_123456789abcdefghjkmnpqrst',
+          latestEventId: 'evt_3456789abcdefghjkmnpqrstvw',
           lastScoredAt: '2026-03-24T20:01:05.000Z',
         },
       ],
@@ -100,18 +100,18 @@ describe('Tripwire client', () => {
       items.push(item);
     }
 
-    expect(items.map((item) => item.id)).toEqual(['sid_example_one', 'sid_example_two']);
+    expect(items.map((item) => item.id)).toEqual(['sid_0123456789abcdefghjkmnpqrs', 'sid_123456789abcdefghjkmnpqrst']);
   });
 
   it('fetches a session detail resource', async () => {
     const fixture = loadFixture<ResourceEnvelope<SessionDetail>>('public-api/sessions/detail.json');
     const fetch = createFetchMock((input) => {
-      expect(String(input)).toContain('/v1/sessions/sid_example_one');
+      expect(String(input)).toContain('/v1/sessions/sid_0123456789abcdefghjkmnpqrs');
       return jsonResponse(fixture);
     });
 
     const client = new Tripwire({ secretKey: 'sk_live_test', fetch });
-    expect(await client.sessions.get('sid_example_one')).toEqual(fixture.data);
+    expect(await client.sessions.get('sid_0123456789abcdefghjkmnpqrs')).toEqual(fixture.data);
   });
 
   it('lists and fetches fingerprints', async () => {
@@ -119,7 +119,7 @@ describe('Tripwire client', () => {
     const detailFixture = loadFixture<ResourceEnvelope<FingerprintDetail>>('public-api/fingerprints/detail.json');
     const fetch = createFetchMock((input) => {
       const url = String(input);
-      if (url.includes('/v1/fingerprints/vis_example_one')) {
+      if (url.includes('/v1/fingerprints/vid_456789abcdefghjkmnpqrstvwx')) {
         return jsonResponse(detailFixture);
       }
       return jsonResponse(listFixture);
@@ -131,20 +131,21 @@ describe('Tripwire client', () => {
       limit: 50,
       hasMore: false,
     });
-    expect(await client.fingerprints.get('vis_example_one')).toEqual(detailFixture.data);
+    expect(await client.fingerprints.get('vid_456789abcdefghjkmnpqrstvwx')).toEqual(detailFixture.data);
   });
 
   it('supports teams and api key management endpoints', async () => {
     const teamFixture = loadFixture<ResourceEnvelope<Team>>('public-api/teams/team.json');
     const createKeyFixture = loadFixture<ResourceEnvelope<IssuedApiKey>>('public-api/teams/api-key-create.json');
     const listKeyFixture = loadFixture<ResourceListEnvelope<ApiKey>>('public-api/teams/api-key-list.json');
+    const rotateKeyFixture = loadFixture<ResourceEnvelope<IssuedApiKey>>('public-api/teams/api-key-rotate.json');
 
     const fetch = createFetchMock((input, init) => {
       const url = String(input);
-      if (url.endsWith('/api-keys/key_example/rotations')) {
-        return jsonResponse(createKeyFixture);
+      if (url.endsWith('/api-keys/key_6789abcdefghjkmnpqrstvwxyz/rotations')) {
+        return jsonResponse(rotateKeyFixture, { status: 201 });
       }
-      if (url.endsWith('/api-keys/key_example')) {
+      if (url.endsWith('/api-keys/key_6789abcdefghjkmnpqrstvwxyz')) {
         return new Response(null, { status: 204 });
       }
       if (url.endsWith('/api-keys') && init?.method === 'POST') {
@@ -157,17 +158,17 @@ describe('Tripwire client', () => {
     });
 
     const client = new Tripwire({ secretKey: 'sk_live_test', fetch });
-    expect(await client.teams.get('team_example')).toEqual(teamFixture.data);
+    expect(await client.teams.get('team_56789abcdefghjkmnpqrstvwxy')).toEqual(teamFixture.data);
     expect(await client.teams.create({ name: 'Example Team', slug: 'example-team' })).toEqual(teamFixture.data);
-    expect(await client.teams.update('team_example', { name: 'Example Team' })).toEqual(teamFixture.data);
-    expect(await client.teams.apiKeys.create('team_example', { name: 'Production' })).toEqual(createKeyFixture.data);
-    expect(await client.teams.apiKeys.list('team_example')).toEqual({
+    expect(await client.teams.update('team_56789abcdefghjkmnpqrstvwxy', { name: 'Example Team' })).toEqual(teamFixture.data);
+    expect(await client.teams.apiKeys.create('team_56789abcdefghjkmnpqrstvwxy', { name: 'Production' })).toEqual(createKeyFixture.data);
+    expect(await client.teams.apiKeys.list('team_56789abcdefghjkmnpqrstvwxy')).toEqual({
       items: listKeyFixture.data,
       limit: 50,
       hasMore: false,
     });
-    await expect(client.teams.apiKeys.revoke('team_example', 'key_example')).resolves.toBeUndefined();
-    expect(await client.teams.apiKeys.rotate('team_example', 'key_example')).toEqual(createKeyFixture.data);
+    await expect(client.teams.apiKeys.revoke('team_56789abcdefghjkmnpqrstvwxy', 'key_6789abcdefghjkmnpqrstvwxyz')).resolves.toBeUndefined();
+    expect(await client.teams.apiKeys.rotate('team_56789abcdefghjkmnpqrstvwxy', 'key_6789abcdefghjkmnpqrstvwxyz')).toEqual(rotateKeyFixture.data);
   });
 
   it('parses public API errors into TripwireApiError', async () => {
@@ -181,7 +182,7 @@ describe('Tripwire client', () => {
 
     await expect(client.sessions.list({ limit: 999 })).rejects.toMatchObject({
       name: 'TripwireApiError',
-      status: 400,
+      status: 422,
       code: fixture.error.code,
       requestId: fixture.error.requestId,
       fieldErrors: fixture.error.details?.fieldErrors,

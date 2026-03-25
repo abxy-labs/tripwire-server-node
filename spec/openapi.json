@@ -31,6 +31,46 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Authentication required or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The provided key cannot access this endpoint.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid session list query.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tripwire could not load sessions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         },
         "parameters": [
@@ -74,7 +114,11 @@
               "type": "string"
             }
           }
-        ]
+        ],
+        "tags": [
+          "Sessions"
+        ],
+        "operationId": "listSessions"
       }
     },
     "/v1/sessions/{sessionId}": {
@@ -92,7 +136,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/SessionId"
             }
           }
         ],
@@ -107,6 +151,26 @@
               }
             }
           },
+          "401": {
+            "description": "Authentication required or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The provided key cannot access this endpoint.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Session not found",
             "content": {
@@ -116,8 +180,22 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Tripwire could not load the session detail.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "Sessions"
+        ],
+        "operationId": "getSession"
       }
     },
     "/v1/fingerprints": {
@@ -136,6 +214,46 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/FingerprintsListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The provided key cannot access this endpoint.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid fingerprint list query.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tripwire could not load fingerprints.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
                 }
               }
             }
@@ -181,7 +299,11 @@
               ]
             }
           }
-        ]
+        ],
+        "tags": [
+          "Fingerprints"
+        ],
+        "operationId": "listFingerprints"
       }
     },
     "/v1/fingerprints/{visitorId}": {
@@ -199,7 +321,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/FingerprintId"
             }
           }
         ],
@@ -214,6 +336,26 @@
               }
             }
           },
+          "401": {
+            "description": "Authentication required or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The provided key cannot access this endpoint.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Fingerprint not found",
             "content": {
@@ -223,8 +365,22 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Tripwire could not load the fingerprint detail.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "Fingerprints"
+        ],
+        "operationId": "getFingerprint"
       }
     },
     "/v1/teams": {
@@ -256,8 +412,62 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Authentication required or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "This endpoint requires a secret key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The requested team slug already exists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid team creation payload.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tripwire could not create the team.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "Teams"
+        ],
+        "operationId": "createTeam"
       }
     },
     "/v1/teams/{teamId}": {
@@ -274,7 +484,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/TeamId"
             }
           }
         ],
@@ -288,8 +498,52 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Authentication required or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The provided key cannot access this team.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested team was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tripwire could not load the team.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "Teams"
+        ],
+        "operationId": "getTeam"
       },
       "patch": {
         "summary": "Update a team",
@@ -304,7 +558,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/TeamId"
             }
           }
         ],
@@ -328,8 +582,62 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Authentication required or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The provided key cannot access this team.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested team was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid team update payload.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tripwire could not update the team.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "Teams"
+        ],
+        "operationId": "updateTeam"
       }
     },
     "/v1/teams/{teamId}/api-keys": {
@@ -346,8 +654,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "example": "team_0123456789abcdefghjkmnpqrst"
+              "$ref": "#/components/schemas/TeamId"
             }
           },
           {
@@ -380,8 +687,62 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Authentication required or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The provided key cannot access this team.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested team was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid API key list query.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tripwire could not load team API keys.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "API Keys"
+        ],
+        "operationId": "listTeamApiKeys"
       },
       "post": {
         "summary": "Create a team API key pair",
@@ -396,8 +757,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "example": "team_0123456789abcdefghjkmnpqrst"
+              "$ref": "#/components/schemas/TeamId"
             }
           }
         ],
@@ -421,8 +781,62 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Authentication required or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The provided key cannot access this team.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested team was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid API key creation payload.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tripwire could not create the API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "API Keys"
+        ],
+        "operationId": "createTeamApiKey"
       }
     },
     "/v1/teams/{teamId}/api-keys/{keyId}": {
@@ -439,8 +853,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "example": "team_0123456789abcdefghjkmnpqrst"
+              "$ref": "#/components/schemas/TeamId"
             }
           },
           {
@@ -448,17 +861,59 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^key_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
-              "example": "key_0123456789abcdefghjkmnpqrs"
+              "$ref": "#/components/schemas/ApiKeyId"
             }
           }
         ],
         "responses": {
           "204": {
             "description": "API key revoked"
+          },
+          "401": {
+            "description": "Authentication required or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The provided key cannot access this team.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested API key was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tripwire could not revoke the API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "API Keys"
+        ],
+        "operationId": "revokeTeamApiKey"
       }
     },
     "/v1/teams/{teamId}/api-keys/{keyId}/rotations": {
@@ -475,8 +930,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "example": "team_0123456789abcdefghjkmnpqrst"
+              "$ref": "#/components/schemas/TeamId"
             }
           },
           {
@@ -484,9 +938,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^key_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
-              "example": "key_0123456789abcdefghjkmnpqrs"
+              "$ref": "#/components/schemas/ApiKeyId"
             }
           }
         ],
@@ -500,118 +952,237 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Authentication required or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The provided key cannot access this team.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested API key was not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Tripwire could not rotate the API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "API Keys"
+        ],
+        "operationId": "rotateTeamApiKey"
       }
     }
   },
   "components": {
     "schemas": {
-      "TripwireFieldError": {
+      "ApiKey": {
         "type": "object",
         "required": [
-          "field",
-          "issue"
+          "object",
+          "id",
+          "key",
+          "name",
+          "isTest",
+          "allowedOrigins",
+          "rateLimit",
+          "status",
+          "createdAt",
+          "rotatedAt",
+          "revokedAt"
         ],
         "properties": {
-          "field": {
-            "type": "string"
-          },
-          "issue": {
-            "type": "string"
-          },
-          "expected": {
-            "type": "string"
-          },
-          "received": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "number"
-              },
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
+          "object": {
+            "type": "string",
+            "enum": [
+              "api_key"
             ]
+          },
+          "id": {
+            "$ref": "#/components/schemas/ApiKeyId"
+          },
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "isTest": {
+            "type": "boolean"
+          },
+          "allowedOrigins": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "rateLimit": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "status": {
+            "$ref": "#/components/schemas/ApiKeyStatus"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rotatedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "revokedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
           }
         }
       },
-      "TripwireErrorDetails": {
+      "ApiKeyId": {
+        "type": "string",
+        "pattern": "^key_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+        "example": "key_6789abcdefghjkmnpqrstvwxyz"
+      },
+      "ApiKeyListResponse": {
         "type": "object",
+        "required": [
+          "data",
+          "pagination"
+        ],
         "properties": {
-          "fieldErrors": {
+          "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/TripwireFieldError"
+              "$ref": "#/components/schemas/ApiKey"
             }
           },
-          "allowedValues": {
+          "pagination": {
+            "$ref": "#/components/schemas/CursorPagination"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApiKeyResponse": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/IssuedApiKey"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApiKeyStatus": {
+        "type": "string",
+        "enum": [
+          "active",
+          "revoked",
+          "rotated"
+        ]
+      },
+      "CreateApiKeyRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "isTest": {
+            "type": "boolean"
+          },
+          "allowedOrigins": {
             "type": "array",
             "items": {
               "type": "string"
             }
           },
-          "header": {
-            "type": "string"
-          },
-          "query": {
-            "type": "string"
-          },
-          "nextAction": {
-            "type": "string",
-            "enum": [
-              "retry",
-              "new_session",
-              "reload_bundle",
-              "contact_support"
-            ]
+          "rateLimit": {
+            "type": "integer",
+            "minimum": 1
           }
-        }
+        },
+        "additionalProperties": false
       },
-      "PublicError": {
+      "CreateTeamRequest": {
         "type": "object",
         "required": [
-          "code",
-          "message",
-          "status",
-          "retryable",
-          "requestId"
+          "name",
+          "slug"
         ],
         "properties": {
-          "code": {
+          "name": {
             "type": "string",
-            "example": "auth.missing_api_key"
+            "minLength": 1
           },
-          "message": {
+          "slug": {
             "type": "string",
-            "example": "Missing Authorization header. Send Authorization: Bearer <token> to authenticate this request."
-          },
-          "status": {
-            "type": "integer",
-            "example": 401
-          },
-          "retryable": {
-            "type": "boolean",
-            "example": false
-          },
-          "requestId": {
-            "type": "string",
-            "example": "req_0123456789abcdef"
-          },
-          "docsUrl": {
-            "type": "string",
-            "format": "uri",
-            "example": "https://tripwirejs.com/docs/api-reference/introduction"
-          },
-          "details": {
-            "$ref": "#/components/schemas/TripwireErrorDetails"
+            "pattern": "^[a-z0-9-]+$",
+            "minLength": 1,
+            "example": "tripwire-production"
           }
-        }
+        },
+        "additionalProperties": false
+      },
+      "CursorPagination": {
+        "type": "object",
+        "required": [
+          "limit",
+          "hasMore"
+        ],
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200
+          },
+          "hasMore": {
+            "type": "boolean"
+          },
+          "nextCursor": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
       },
       "Error": {
         "type": "object",
@@ -629,245 +1200,143 @@
             "message": "Missing Authorization header. Send Authorization: Bearer <token> to authenticate this request.",
             "status": 401,
             "retryable": false,
-            "requestId": "req_0123456789abcdef",
+            "requestId": "req_0123456789abcdef0123456789abcdef",
             "docsUrl": "https://tripwirejs.com/docs/api-reference/introduction"
           }
-        }
+        },
+        "additionalProperties": false
       },
-      "CollectSessionResponse": {
-        "type": "object",
-        "required": [
-          "sessionId",
-          "challenge",
-          "serverPublicKey",
-          "nonce"
-        ],
-        "properties": {
-          "sessionId": {
-            "type": "string"
+      "EventId": {
+        "type": "string",
+        "pattern": "^evt_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+        "example": "evt_23456789abcdefghjkmnpqrstv"
+      },
+      "FingerprintDetail": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FingerprintSummary"
           },
-          "challenge": {
-            "type": "string"
-          },
-          "serverPublicKey": {
-            "type": "string"
-          },
-          "timingNonce": {
-            "type": "string"
-          },
-          "nonce": {
-            "type": "string"
-          },
-          "canvasChallenge": {
+          {
             "type": "object",
-            "additionalProperties": true
+            "properties": {
+              "sessions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "eventId": {
+                      "$ref": "#/components/schemas/EventId"
+                    },
+                    "verdict": {
+                      "$ref": "#/components/schemas/Verdict"
+                    },
+                    "riskScore": {
+                      "type": "integer"
+                    },
+                    "scoredAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "userAgent": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "clientIp": {
+                      "type": "string"
+                    },
+                    "screenSize": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "categoryScores": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "additionalProperties": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "additionalProperties": false,
+                  "required": [
+                    "eventId",
+                    "verdict",
+                    "riskScore",
+                    "scoredAt",
+                    "userAgent",
+                    "url",
+                    "clientIp",
+                    "screenSize",
+                    "categoryScores"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "sessions"
+            ]
           }
-        }
+        ],
+        "unevaluatedProperties": false
       },
-      "CollectResultResponse": {
+      "FingerprintDetailResponse": {
         "type": "object",
         "required": [
-          "sessionId",
-          "sealedToken",
-          "nonce"
+          "data"
         ],
         "properties": {
-          "sessionId": {
-            "type": "string"
-          },
-          "sealedToken": {
-            "type": "string"
-          },
-          "nonce": {
-            "type": "string"
-          },
-          "integrity": {
-            "$ref": "#/components/schemas/ResponseIntegrity"
-          },
-          "debug": {
-            "type": "object",
-            "additionalProperties": true
+          "data": {
+            "$ref": "#/components/schemas/FingerprintDetail"
           }
-        }
+        },
+        "additionalProperties": false
       },
-      "ResultSummary": {
-        "type": "object",
-        "required": [
-          "eventId",
-          "verdict",
-          "riskScore",
-          "scoredAt"
-        ],
-        "properties": {
-          "eventId": {
-            "type": "string"
-          },
-          "verdict": {
-            "type": "string"
-          },
-          "riskScore": {
-            "type": "integer"
-          },
-          "phase": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "provisional": {
-            "type": [
-              "boolean",
-              "null"
-            ]
-          },
-          "manipulationScore": {
-            "type": [
-              "integer",
-              "null"
-            ]
-          },
-          "manipulationVerdict": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "evaluationDuration": {
-            "type": [
-              "integer",
-              "null"
-            ]
-          },
-          "scoredAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
+      "FingerprintId": {
+        "type": "string",
+        "pattern": "^vid_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+        "example": "vid_456789abcdefghjkmnpqrstvwx"
       },
-      "FingerprintLink": {
+      "FingerprintReference": {
         "type": [
           "object",
           "null"
         ],
         "properties": {
-          "visitorId": {
-            "type": "string"
+          "object": {
+            "type": "string",
+            "enum": [
+              "fingerprint"
+            ]
+          },
+          "id": {
+            "$ref": "#/components/schemas/FingerprintId"
           },
           "confidence": {
-            "type": "integer"
+            "type": [
+              "integer",
+              "null"
+            ]
           },
           "timestamp": {
-            "type": "string"
-          }
-        }
-      },
-      "SessionSummary": {
-        "type": "object",
-        "required": [
-          "object",
-          "id",
-          "createdAt",
-          "latestEventId",
-          "latestResult",
-          "fingerprint",
-          "lastScoredAt"
-        ],
-        "properties": {
-          "object": {
-            "type": "string",
-            "enum": [
-              "session"
-            ]
-          },
-          "id": {
-            "type": "string",
-            "pattern": "^key_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
-            "example": "key_0123456789abcdefghjkmnpqrs"
-          },
-          "createdAt": {
             "type": [
               "string",
               "null"
             ],
             "format": "date-time"
-          },
-          "latestEventId": {
-            "type": "string"
-          },
-          "latestResult": {
-            "$ref": "#/components/schemas/ResultSummary"
-          },
-          "fingerprint": {
-            "$ref": "#/components/schemas/FingerprintReference"
-          },
-          "lastScoredAt": {
-            "type": "string",
-            "format": "date-time"
           }
-        }
-      },
-      "SessionDetail": {
-        "type": "object",
+        },
+        "additionalProperties": false,
         "required": [
           "object",
           "id",
-          "createdAt",
-          "latestEventId",
-          "latestResult",
-          "fingerprint",
-          "resultHistory"
-        ],
-        "properties": {
-          "object": {
-            "type": "string",
-            "enum": [
-              "session"
-            ]
-          },
-          "id": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          },
-          "latestEventId": {
-            "type": "string"
-          },
-          "latestResult": {
-            "$ref": "#/components/schemas/SessionLatestResultDetail"
-          },
-          "fingerprint": {
-            "$ref": "#/components/schemas/FingerprintReference"
-          },
-          "resultHistory": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ResultSummary"
-            }
-          }
-        }
-      },
-      "SessionsListResponse": {
-        "type": "object",
-        "required": [
-          "data",
-          "pagination"
-        ],
-        "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SessionSummary"
-            }
-          },
-          "pagination": {
-            "$ref": "#/components/schemas/CursorPagination"
-          }
-        }
+          "confidence",
+          "timestamp"
+        ]
       },
       "FingerprintSummary": {
         "type": "object",
@@ -879,7 +1348,16 @@
           "seenCount",
           "lastUserAgent",
           "lastIp",
-          "expiresAt"
+          "expiresAt",
+          "anchorWebglHash",
+          "anchorParamsHash",
+          "anchorAudioHash",
+          "fingerprintVector",
+          "hasCookie",
+          "hasLs",
+          "hasIdb",
+          "hasSw",
+          "hasWn"
         ],
         "properties": {
           "object": {
@@ -889,7 +1367,7 @@
             ]
           },
           "id": {
-            "type": "string"
+            "$ref": "#/components/schemas/FingerprintId"
           },
           "firstSeenAt": {
             "type": "string",
@@ -900,7 +1378,8 @@
             "format": "date-time"
           },
           "seenCount": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 0
           },
           "lastUserAgent": {
             "type": "string"
@@ -953,63 +1432,6 @@
           }
         }
       },
-      "FingerprintDetail": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/FingerprintSummary"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "sessions": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "eventId": {
-                      "type": "string"
-                    },
-                    "verdict": {
-                      "type": "string"
-                    },
-                    "riskScore": {
-                      "type": "integer"
-                    },
-                    "scoredAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "userAgent": {
-                      "type": "string"
-                    },
-                    "url": {
-                      "type": "string"
-                    },
-                    "clientIp": {
-                      "type": "string"
-                    },
-                    "screenSize": {
-                      "type": [
-                        "string",
-                        "null"
-                      ]
-                    },
-                    "categoryScores": {
-                      "type": [
-                        "object",
-                        "null"
-                      ],
-                      "additionalProperties": {
-                        "type": "integer"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        ]
-      },
       "FingerprintsListResponse": {
         "type": "object",
         "required": [
@@ -1026,164 +1448,8 @@
           "pagination": {
             "$ref": "#/components/schemas/CursorPagination"
           }
-        }
-      },
-      "CreateTeamRequest": {
-        "type": "object",
-        "required": [
-          "name",
-          "slug"
-        ],
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "slug": {
-            "type": "string"
-          }
-        }
-      },
-      "UpdateTeamRequest": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
-          }
-        }
-      },
-      "Team": {
-        "type": "object",
-        "required": [
-          "object",
-          "id",
-          "name",
-          "slug",
-          "status",
-          "createdAt",
-          "updatedAt"
-        ],
-        "properties": {
-          "object": {
-            "type": "string",
-            "enum": [
-              "team"
-            ]
-          },
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "slug": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          }
-        }
-      },
-      "CreateApiKeyRequest": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "isTest": {
-            "type": "boolean"
-          },
-          "allowedOrigins": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "rateLimit": {
-            "type": "integer"
-          }
-        }
-      },
-      "ApiKey": {
-        "type": "object",
-        "required": [
-          "object",
-          "id",
-          "key",
-          "name",
-          "isTest",
-          "status",
-          "createdAt"
-        ],
-        "properties": {
-          "object": {
-            "type": "string",
-            "enum": [
-              "api_key"
-            ]
-          },
-          "id": {
-            "type": "string"
-          },
-          "key": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "isTest": {
-            "type": "boolean"
-          },
-          "allowedOrigins": {
-            "type": [
-              "array",
-              "null"
-            ],
-            "items": {
-              "type": "string"
-            }
-          },
-          "rateLimit": {
-            "type": [
-              "integer",
-              "null"
-            ]
-          },
-          "status": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "rotatedAt": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          },
-          "revokedAt": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          }
-        }
+        },
+        "additionalProperties": false
       },
       "IssuedApiKey": {
         "allOf": [
@@ -1201,119 +1467,223 @@
               }
             }
           }
+        ],
+        "unevaluatedProperties": false
+      },
+      "ManipulationVerdict": {
+        "type": "string",
+        "enum": [
+          "none",
+          "low",
+          "medium",
+          "high"
         ]
       },
-      "ApiKeyListResponse": {
+      "NextAction": {
+        "type": "string",
+        "enum": [
+          "retry",
+          "new_session",
+          "reload_bundle",
+          "contact_support"
+        ]
+      },
+      "PublicError": {
         "type": "object",
         "required": [
-          "data",
-          "pagination"
+          "code",
+          "message",
+          "status",
+          "retryable",
+          "requestId"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "auth.missing_api_key",
+            "description": "Tripwire public error code. See x-tripwire-known-values-ref for the documented stable set.",
+            "x-tripwire-known-values-ref": "#/components/schemas/KnownPublicErrorCode"
+          },
+          "message": {
+            "type": "string",
+            "example": "Missing Authorization header. Send Authorization: Bearer <token> to authenticate this request."
+          },
+          "status": {
+            "type": "integer",
+            "example": 401,
+            "minimum": 400,
+            "maximum": 599
+          },
+          "retryable": {
+            "type": "boolean",
+            "example": false
+          },
+          "requestId": {
+            "$ref": "#/components/schemas/RequestId",
+            "example": "req_0123456789abcdef0123456789abcdef"
+          },
+          "docsUrl": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://tripwirejs.com/docs/api-reference/introduction"
+          },
+          "details": {
+            "$ref": "#/components/schemas/TripwireErrorDetails"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RequestId": {
+        "type": "string",
+        "pattern": "^req_[0-9a-f]{32}$",
+        "example": "req_0123456789abcdef0123456789abcdef"
+      },
+      "ResultSummary": {
+        "type": "object",
+        "required": [
+          "eventId",
+          "verdict",
+          "riskScore",
+          "phase",
+          "provisional",
+          "manipulationScore",
+          "manipulationVerdict",
+          "evaluationDuration",
+          "scoredAt"
+        ],
+        "properties": {
+          "eventId": {
+            "$ref": "#/components/schemas/EventId"
+          },
+          "verdict": {
+            "$ref": "#/components/schemas/Verdict"
+          },
+          "riskScore": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "phase": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TripwirePhase"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "provisional": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "manipulationScore": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "manipulationVerdict": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ManipulationVerdict"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "evaluationDuration": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "scoredAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "SessionDetail": {
+        "type": "object",
+        "required": [
+          "object",
+          "id",
+          "createdAt",
+          "latestEventId",
+          "latestResult",
+          "ipIntel",
+          "fingerprint",
+          "resultHistory"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "session"
+            ]
+          },
+          "id": {
+            "$ref": "#/components/schemas/SessionId"
+          },
+          "createdAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "latestEventId": {
+            "$ref": "#/components/schemas/EventId"
+          },
+          "latestResult": {
+            "$ref": "#/components/schemas/SessionLatestResultDetail"
+          },
+          "fingerprint": {
+            "$ref": "#/components/schemas/FingerprintReference"
+          },
+          "resultHistory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResultSummary"
+            }
+          },
+          "ipIntel": {
+            "$ref": "#/components/schemas/SessionIpIntel"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SessionDetailResponse": {
+        "type": "object",
+        "required": [
+          "data"
         ],
         "properties": {
           "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ApiKey"
-            }
-          },
-          "pagination": {
-            "$ref": "#/components/schemas/CursorPagination"
+            "$ref": "#/components/schemas/SessionDetail"
           }
-        }
+        },
+        "additionalProperties": false
       },
-      "ResponseIntegrity": {
-        "type": "object",
-        "required": [
-          "responseHmac"
-        ],
-        "properties": {
-          "responseHmac": {
-            "type": "string"
-          }
-        }
+      "SessionId": {
+        "type": "string",
+        "pattern": "^sid_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+        "example": "sid_0123456789abcdefghjkmnpqrs"
       },
-      "CursorPagination": {
-        "type": "object",
-        "required": [
-          "limit",
-          "hasMore"
-        ],
-        "properties": {
-          "limit": {
-            "type": "integer"
-          },
-          "hasMore": {
-            "type": "boolean"
-          },
-          "nextCursor": {
-            "type": "string"
-          }
-        }
-      },
-      "CollectBatchResponse": {
-        "type": "object",
-        "required": [
-          "ack",
-          "nonce",
-          "seq"
-        ],
-        "properties": {
-          "ack": {
-            "type": "boolean"
-          },
-          "nonce": {
-            "type": "string"
-          },
-          "seq": {
-            "type": "integer"
-          },
-          "next": {
-            "type": "object",
-            "required": [
-              "intervalMs"
-            ],
-            "properties": {
-              "intervalMs": {
-                "type": "integer"
-              }
-            }
-          },
-          "debug": {
-            "type": "object",
-            "properties": {
-              "observeReduceMs": {
-                "type": "integer"
-              }
-            },
-            "additionalProperties": true
-          }
-        }
-      },
-      "CollectFingerprintResponse": {
-        "type": "object",
-        "required": [
-          "ready",
-          "timestamp",
-          "sessionId"
-        ],
-        "properties": {
-          "ready": {
-            "type": "boolean"
-          },
-          "timestamp": {
-            "type": "integer"
-          },
-          "sessionId": {
-            "type": "string"
-          },
-          "integrity": {
-            "$ref": "#/components/schemas/ResponseIntegrity"
-          },
-          "debug": {
+      "SessionIpIntel": {
+        "anyOf": [
+          {
             "type": "object",
             "additionalProperties": true
+          },
+          {
+            "type": "null"
           }
-        }
+        ]
       },
       "SessionLatestResultDetail": {
         "allOf": [
@@ -1324,9 +1694,13 @@
             "type": "object",
             "properties": {
               "visitorId": {
-                "type": [
-                  "string",
-                  "null"
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/FingerprintId"
+                  },
+                  {
+                    "type": "null"
+                  }
                 ]
               },
               "metadata": {
@@ -1356,61 +1730,126 @@
                 },
                 "additionalProperties": false
               }
-            }
+            },
+            "required": [
+              "visitorId",
+              "metadata"
+            ]
           }
-        ]
+        ],
+        "unevaluatedProperties": false
       },
-      "FingerprintReference": {
-        "type": [
+      "SessionSummary": {
+        "type": "object",
+        "required": [
           "object",
-          "null"
+          "id",
+          "createdAt",
+          "latestEventId",
+          "latestResult",
+          "fingerprint",
+          "lastScoredAt"
         ],
         "properties": {
           "object": {
             "type": "string",
             "enum": [
-              "fingerprint"
+              "session"
             ]
           },
           "id": {
-            "type": "string"
+            "$ref": "#/components/schemas/SessionId"
           },
-          "confidence": {
-            "type": [
-              "integer",
-              "null"
-            ]
-          },
-          "timestamp": {
+          "createdAt": {
             "type": [
               "string",
               "null"
             ],
             "format": "date-time"
+          },
+          "latestEventId": {
+            "$ref": "#/components/schemas/EventId"
+          },
+          "latestResult": {
+            "$ref": "#/components/schemas/ResultSummary"
+          },
+          "fingerprint": {
+            "$ref": "#/components/schemas/FingerprintReference"
+          },
+          "lastScoredAt": {
+            "type": "string",
+            "format": "date-time"
           }
-        }
+        },
+        "additionalProperties": false
       },
-      "SessionDetailResponse": {
+      "SessionsListResponse": {
         "type": "object",
         "required": [
-          "data"
+          "data",
+          "pagination"
         ],
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/SessionDetail"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SessionSummary"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/CursorPagination"
           }
-        }
+        },
+        "additionalProperties": false
       },
-      "FingerprintDetailResponse": {
+      "Team": {
         "type": "object",
         "required": [
-          "data"
+          "object",
+          "id",
+          "name",
+          "slug",
+          "status",
+          "createdAt",
+          "updatedAt"
         ],
         "properties": {
-          "data": {
-            "$ref": "#/components/schemas/FingerprintDetail"
+          "object": {
+            "type": "string",
+            "enum": [
+              "team"
+            ]
+          },
+          "id": {
+            "$ref": "#/components/schemas/TeamId"
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$",
+            "minLength": 1,
+            "example": "tripwire-production"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TeamStatus"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
           }
-        }
+        },
+        "additionalProperties": false
+      },
+      "TeamId": {
+        "type": "string",
+        "pattern": "^team_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+        "example": "team_56789abcdefghjkmnpqrstvwxy"
       },
       "TeamResponse": {
         "type": "object",
@@ -1421,18 +1860,108 @@
           "data": {
             "$ref": "#/components/schemas/Team"
           }
-        }
+        },
+        "additionalProperties": false
       },
-      "ApiKeyResponse": {
+      "TeamStatus": {
+        "type": "string",
+        "enum": [
+          "active",
+          "suspended",
+          "deleted"
+        ]
+      },
+      "TripwireErrorDetails": {
+        "type": "object",
+        "properties": {
+          "fieldErrors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TripwireFieldError"
+            }
+          },
+          "allowedValues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "header": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "nextAction": {
+            "$ref": "#/components/schemas/NextAction"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TripwireFieldError": {
         "type": "object",
         "required": [
-          "data"
+          "field",
+          "issue"
         ],
         "properties": {
-          "data": {
-            "$ref": "#/components/schemas/IssuedApiKey"
+          "field": {
+            "type": "string",
+            "minLength": 1
+          },
+          "issue": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected": {
+            "type": "string"
+          },
+          "received": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
-        }
+        },
+        "additionalProperties": false
+      },
+      "TripwirePhase": {
+        "type": "string",
+        "enum": [
+          "snapshot",
+          "behavioral"
+        ]
+      },
+      "UpdateTeamRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "$ref": "#/components/schemas/TeamStatus"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Verdict": {
+        "type": "string",
+        "enum": [
+          "bot",
+          "human",
+          "inconclusive"
+        ]
       }
     },
     "securitySchemes": {
