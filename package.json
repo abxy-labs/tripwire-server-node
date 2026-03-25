@@ -4,11 +4,11 @@
   "description": "Official Tripwire Node server SDK",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/abxy-labs/tripwire-server-node.git"
+    "url": "git+https://github.com/abxy-labs/node-sdk.git"
   },
-  "homepage": "https://github.com/abxy-labs/tripwire-server-node#readme",
+  "homepage": "https://github.com/abxy-labs/node-sdk#readme",
   "bugs": {
-    "url": "https://github.com/abxy-labs/tripwire-server-node/issues"
+    "url": "https://github.com/abxy-labs/node-sdk/issues"
   },
   "type": "module",
   "sideEffects": false,
