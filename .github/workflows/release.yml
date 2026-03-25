@@ -151,15 +151,26 @@ jobs:
           echo "NPM_PUBLISH_TOKEN is required for the first @abxy/tripwire-server release."
           exit 1
 
+      - name: Resolve packed tarball
+        id: tarball
+        run: |
+          shopt -s nullglob
+          files=(artifacts/*.tgz)
+          if [ "${#files[@]}" -ne 1 ]; then
+            echo "Expected exactly one packed tarball in artifacts/, found ${#files[@]}."
+            exit 1
+          fi
+          echo "path=./${files[0]}" >> "$GITHUB_OUTPUT"
+
       - name: Publish first npm release
         if: ${{ steps.npm_bootstrap.outputs.bootstrap == 'true' }}
         env:
           NODE_AUTH_TOKEN: ${{ env.NPM_PUBLISH_TOKEN }}
-        run: npm publish artifacts/*.tgz --access public
+        run: npm publish "${{ steps.tarball.outputs.path }}" --access public
 
       - name: Publish with npm trusted publishing
         if: ${{ steps.npm_bootstrap.outputs.bootstrap == 'false' }}
-        run: npm publish artifacts/*.tgz --access public
+        run: npm publish "${{ steps.tarball.outputs.path }}" --access public
 
       - name: Create GitHub release
         env:
