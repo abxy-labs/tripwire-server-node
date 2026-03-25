@@ -11,15 +11,12 @@ on:
 permissions:
   contents: read
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
-
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: 20
           cache: npm
@@ -29,7 +26,7 @@ jobs:
   spec-sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Check synced spec
         run: bash ./scripts/check-spec-sync.sh
 
@@ -43,8 +40,8 @@ jobs:
       TRIPWIRE_SMOKE_TEAM_ID: ${{ secrets.TRIPWIRE_SMOKE_TEAM_ID }}
       TRIPWIRE_SMOKE_BASE_URL: ${{ secrets.TRIPWIRE_SMOKE_BASE_URL }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: 20
           cache: npm
