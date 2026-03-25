@@ -14,7 +14,7 @@ The library also provides:
 
 ## Documentation
 
-See the [Tripwire docs](https://tripwire.com/docs) and [API reference](https://tripwire.com/docs/api-reference/introduction).
+See the [Tripwire docs](https://tripwirejs.com/docs) and [API reference](https://tripwirejs.com/docs/api-reference/introduction).
 
 ## Installation
 
@@ -110,4 +110,4 @@ try {
 
 ## Support
 
-If you need help integrating Tripwire, start with [tripwire.com/docs](https://tripwire.com/docs).
+If you need help integrating Tripwire, start with [tripwirejs.com/docs](https://tripwirejs.com/docs).
