@@ -1,0 +1,10 @@
+{
+  "error": {
+    "code": "auth.missing_api_key",
+    "message": "Missing Authorization header. Send Authorization: Bearer <token> to authenticate this request.",
+    "status": 401,
+    "retryable": false,
+    "requestId": "req_missing_api_key",
+    "docsUrl": "https://tripwire.com/docs/api-reference/introduction"
+  }
+}

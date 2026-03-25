@@ -1,0 +1,11 @@
+{
+  "data": {
+    "object": "team",
+    "id": "team_example",
+    "name": "Example Team",
+    "slug": "example-team",
+    "status": "active",
+    "createdAt": "2026-03-24T19:00:00.000Z",
+    "updatedAt": "2026-03-24T19:10:00.000Z"
+  }
+}

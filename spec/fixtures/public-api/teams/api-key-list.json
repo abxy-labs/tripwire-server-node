@@ -1,0 +1,23 @@
+{
+  "data": [
+    {
+      "object": "api_key",
+      "id": "key_example",
+      "key": "pk_live_example",
+      "name": "Production",
+      "isTest": false,
+      "allowedOrigins": [
+        "https://example.com"
+      ],
+      "rateLimit": 600,
+      "status": "active",
+      "createdAt": "2026-03-24T19:00:00.000Z",
+      "rotatedAt": null,
+      "revokedAt": null
+    }
+  ],
+  "pagination": {
+    "limit": 50,
+    "hasMore": false
+  }
+}

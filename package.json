@@ -1,0 +1,49 @@
+{
+  "name": "@tripwire/server",
+  "version": "0.1.0",
+  "description": "Official Tripwire Node server SDK",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abxy-labs/tripwire-server-node.git"
+  },
+  "homepage": "https://github.com/abxy-labs/tripwire-server-node#readme",
+  "bugs": {
+    "url": "https://github.com/abxy-labs/tripwire-server-node/issues"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "spec"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:packaging": "node ./scripts/check-packaging.mjs",
+    "check": "npm run typecheck && npm run test && npm run build && npm run test:packaging"
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.1",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.0"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "data": [
+    {
+      "object": "session",
+      "id": "sid_example_one",
+      "createdAt": "2026-03-24T20:00:00.000Z",
+      "latestEventId": "evt_example_one",
+      "latestResult": {
+        "eventId": "evt_example_one",
+        "verdict": "human",
+        "riskScore": 9,
+        "phase": "behavioral",
+        "provisional": false,
+        "manipulationScore": 0,
+        "manipulationVerdict": "none",
+        "evaluationDuration": 142,
+        "scoredAt": "2026-03-24T20:00:05.000Z"
+      },
+      "fingerprint": {
+        "object": "fingerprint",
+        "id": "vis_example_one",
+        "confidence": 94,
+        "timestamp": "2026-03-24T20:00:05.000Z"
+      },
+      "lastScoredAt": "2026-03-24T20:00:05.000Z"
+    }
+  ],
+  "pagination": {
+    "limit": 50,
+    "hasMore": true,
+    "nextCursor": "cur_sessions_page_2"
+  }
+}

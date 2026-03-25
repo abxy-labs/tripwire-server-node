@@ -1,0 +1,1435 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Tripwire Server SDK API",
+    "description": "Customer-facing server-side Tripwire APIs for the public SDK surface.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.tripwirejs.com",
+      "description": "Managed Tripwire API"
+    }
+  ],
+  "paths": {
+    "/v1/sessions": {
+      "get": {
+        "summary": "List durable session result summaries",
+        "description": "Requires a secret key.",
+        "security": [
+          {
+            "apiKeyHeader": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Session list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionsListResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "default": 50
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "verdict",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "bot",
+                "human",
+                "inconclusive"
+              ]
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/v1/sessions/{sessionId}": {
+      "get": {
+        "summary": "Retrieve durable session detail",
+        "description": "Requires a secret key.",
+        "security": [
+          {
+            "apiKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Session detail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDetailResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/fingerprints": {
+      "get": {
+        "summary": "List durable visitor fingerprints",
+        "description": "Requires a secret key.",
+        "security": [
+          {
+            "apiKeyHeader": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fingerprint list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FingerprintsListResponse"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "default": 50
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "seen_count",
+                "first_seen"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "/v1/fingerprints/{visitorId}": {
+      "get": {
+        "summary": "Retrieve durable fingerprint detail",
+        "description": "Requires a secret key.",
+        "security": [
+          {
+            "apiKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "visitorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fingerprint detail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FingerprintDetailResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Fingerprint not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/teams": {
+      "post": {
+        "summary": "Create a team",
+        "description": "Requires a secret key.",
+        "security": [
+          {
+            "apiKeyHeader": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTeamRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Team created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeamResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/teams/{teamId}": {
+      "get": {
+        "summary": "Retrieve a team",
+        "security": [
+          {
+            "apiKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Team detail",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeamResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a team",
+        "security": [
+          {
+            "apiKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTeamRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Team updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeamResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/teams/{teamId}/api-keys": {
+      "get": {
+        "summary": "List team API keys",
+        "security": [
+          {
+            "apiKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "default": 50
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "API keys",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiKeyListResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a team API key pair",
+        "security": [
+          {
+            "apiKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateApiKeyRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "API key pair created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiKeyResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/teams/{teamId}/api-keys/{keyId}": {
+      "delete": {
+        "summary": "Revoke a team API key",
+        "security": [
+          {
+            "apiKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "keyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "API key revoked"
+          }
+        }
+      }
+    },
+    "/v1/teams/{teamId}/api-keys/{keyId}/rotations": {
+      "post": {
+        "summary": "Rotate a team API key pair",
+        "security": [
+          {
+            "apiKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "keyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "API key pair rotated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiKeyResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TripwireFieldError": {
+        "type": "object",
+        "required": [
+          "field",
+          "issue"
+        ],
+        "properties": {
+          "field": {
+            "type": "string"
+          },
+          "issue": {
+            "type": "string"
+          },
+          "expected": {
+            "type": "string"
+          },
+          "received": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "TripwireErrorDetails": {
+        "type": "object",
+        "properties": {
+          "fieldErrors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TripwireFieldError"
+            }
+          },
+          "allowedValues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "header": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "nextAction": {
+            "type": "string",
+            "enum": [
+              "retry",
+              "new_session",
+              "reload_bundle",
+              "contact_support"
+            ]
+          }
+        }
+      },
+      "PublicError": {
+        "type": "object",
+        "required": [
+          "code",
+          "message",
+          "status",
+          "retryable",
+          "requestId"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "auth.missing_api_key"
+          },
+          "message": {
+            "type": "string",
+            "example": "Missing Authorization header. Send Authorization: Bearer <token> to authenticate this request."
+          },
+          "status": {
+            "type": "integer",
+            "example": 401
+          },
+          "retryable": {
+            "type": "boolean",
+            "example": false
+          },
+          "requestId": {
+            "type": "string",
+            "example": "req_0123456789abcdef"
+          },
+          "docsUrl": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://tripwirejs.com/docs/api-reference/introduction"
+          },
+          "details": {
+            "$ref": "#/components/schemas/TripwireErrorDetails"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/PublicError"
+          }
+        },
+        "example": {
+          "error": {
+            "code": "auth.missing_api_key",
+            "message": "Missing Authorization header. Send Authorization: Bearer <token> to authenticate this request.",
+            "status": 401,
+            "retryable": false,
+            "requestId": "req_0123456789abcdef",
+            "docsUrl": "https://tripwirejs.com/docs/api-reference/introduction"
+          }
+        }
+      },
+      "CollectSessionResponse": {
+        "type": "object",
+        "required": [
+          "sessionId",
+          "challenge",
+          "serverPublicKey",
+          "nonce"
+        ],
+        "properties": {
+          "sessionId": {
+            "type": "string"
+          },
+          "challenge": {
+            "type": "string"
+          },
+          "serverPublicKey": {
+            "type": "string"
+          },
+          "timingNonce": {
+            "type": "string"
+          },
+          "nonce": {
+            "type": "string"
+          },
+          "canvasChallenge": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "CollectResultResponse": {
+        "type": "object",
+        "required": [
+          "sessionId",
+          "sealedToken",
+          "nonce"
+        ],
+        "properties": {
+          "sessionId": {
+            "type": "string"
+          },
+          "sealedToken": {
+            "type": "string"
+          },
+          "nonce": {
+            "type": "string"
+          },
+          "integrity": {
+            "$ref": "#/components/schemas/ResponseIntegrity"
+          },
+          "debug": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "ResultSummary": {
+        "type": "object",
+        "required": [
+          "eventId",
+          "verdict",
+          "riskScore",
+          "scoredAt"
+        ],
+        "properties": {
+          "eventId": {
+            "type": "string"
+          },
+          "verdict": {
+            "type": "string"
+          },
+          "riskScore": {
+            "type": "integer"
+          },
+          "phase": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "provisional": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "manipulationScore": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "manipulationVerdict": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "evaluationDuration": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "scoredAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "FingerprintLink": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "visitorId": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "integer"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        }
+      },
+      "SessionSummary": {
+        "type": "object",
+        "required": [
+          "object",
+          "id",
+          "createdAt",
+          "latestEventId",
+          "latestResult",
+          "fingerprint",
+          "lastScoredAt"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "session"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "latestEventId": {
+            "type": "string"
+          },
+          "latestResult": {
+            "$ref": "#/components/schemas/ResultSummary"
+          },
+          "fingerprint": {
+            "$ref": "#/components/schemas/FingerprintReference"
+          },
+          "lastScoredAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "SessionDetail": {
+        "type": "object",
+        "required": [
+          "object",
+          "id",
+          "createdAt",
+          "latestEventId",
+          "latestResult",
+          "fingerprint",
+          "resultHistory"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "session"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "latestEventId": {
+            "type": "string"
+          },
+          "latestResult": {
+            "$ref": "#/components/schemas/SessionLatestResultDetail"
+          },
+          "fingerprint": {
+            "$ref": "#/components/schemas/FingerprintReference"
+          },
+          "resultHistory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResultSummary"
+            }
+          }
+        }
+      },
+      "SessionsListResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "pagination"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SessionSummary"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/CursorPagination"
+          }
+        }
+      },
+      "FingerprintSummary": {
+        "type": "object",
+        "required": [
+          "object",
+          "id",
+          "firstSeenAt",
+          "lastSeenAt",
+          "seenCount",
+          "lastUserAgent",
+          "lastIp",
+          "expiresAt"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "fingerprint"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "firstSeenAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastSeenAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "seenCount": {
+            "type": "integer"
+          },
+          "lastUserAgent": {
+            "type": "string"
+          },
+          "lastIp": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "anchorWebglHash": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "anchorParamsHash": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "anchorAudioHash": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fingerprintVector": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "hasCookie": {
+            "type": "boolean"
+          },
+          "hasLs": {
+            "type": "boolean"
+          },
+          "hasIdb": {
+            "type": "boolean"
+          },
+          "hasSw": {
+            "type": "boolean"
+          },
+          "hasWn": {
+            "type": "boolean"
+          }
+        }
+      },
+      "FingerprintDetail": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FingerprintSummary"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "sessions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "eventId": {
+                      "type": "string"
+                    },
+                    "verdict": {
+                      "type": "string"
+                    },
+                    "riskScore": {
+                      "type": "integer"
+                    },
+                    "scoredAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "userAgent": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "clientIp": {
+                      "type": "string"
+                    },
+                    "screenSize": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "categoryScores": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "additionalProperties": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "FingerprintsListResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "pagination"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FingerprintSummary"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/CursorPagination"
+          }
+        }
+      },
+      "CreateTeamRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "slug"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateTeamRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "Team": {
+        "type": "object",
+        "required": [
+          "object",
+          "id",
+          "name",
+          "slug",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "team"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateApiKeyRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "isTest": {
+            "type": "boolean"
+          },
+          "allowedOrigins": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "rateLimit": {
+            "type": "integer"
+          }
+        }
+      },
+      "ApiKey": {
+        "type": "object",
+        "required": [
+          "object",
+          "id",
+          "key",
+          "name",
+          "isTest",
+          "status",
+          "createdAt"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "api_key"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "isTest": {
+            "type": "boolean"
+          },
+          "allowedOrigins": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "rateLimit": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rotatedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "revokedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "IssuedApiKey": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ApiKey"
+          },
+          {
+            "type": "object",
+            "required": [
+              "secretKey"
+            ],
+            "properties": {
+              "secretKey": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "ApiKeyListResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "pagination"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiKey"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/CursorPagination"
+          }
+        }
+      },
+      "ResponseIntegrity": {
+        "type": "object",
+        "required": [
+          "responseHmac"
+        ],
+        "properties": {
+          "responseHmac": {
+            "type": "string"
+          }
+        }
+      },
+      "CursorPagination": {
+        "type": "object",
+        "required": [
+          "limit",
+          "hasMore"
+        ],
+        "properties": {
+          "limit": {
+            "type": "integer"
+          },
+          "hasMore": {
+            "type": "boolean"
+          },
+          "nextCursor": {
+            "type": "string"
+          }
+        }
+      },
+      "CollectBatchResponse": {
+        "type": "object",
+        "required": [
+          "ack",
+          "nonce",
+          "seq"
+        ],
+        "properties": {
+          "ack": {
+            "type": "boolean"
+          },
+          "nonce": {
+            "type": "string"
+          },
+          "seq": {
+            "type": "integer"
+          },
+          "next": {
+            "type": "object",
+            "required": [
+              "intervalMs"
+            ],
+            "properties": {
+              "intervalMs": {
+                "type": "integer"
+              }
+            }
+          },
+          "debug": {
+            "type": "object",
+            "properties": {
+              "observeReduceMs": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "CollectFingerprintResponse": {
+        "type": "object",
+        "required": [
+          "ready",
+          "timestamp",
+          "sessionId"
+        ],
+        "properties": {
+          "ready": {
+            "type": "boolean"
+          },
+          "timestamp": {
+            "type": "integer"
+          },
+          "sessionId": {
+            "type": "string"
+          },
+          "integrity": {
+            "$ref": "#/components/schemas/ResponseIntegrity"
+          },
+          "debug": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "SessionLatestResultDetail": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ResultSummary"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "visitorId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "metadata": {
+                "type": "object",
+                "properties": {
+                  "userAgent": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  },
+                  "screenSize": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "touchDevice": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  },
+                  "clientIp": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        ]
+      },
+      "FingerprintReference": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "fingerprint"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "timestamp": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "SessionDetailResponse": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/SessionDetail"
+          }
+        }
+      },
+      "FingerprintDetailResponse": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/FingerprintDetail"
+          }
+        }
+      },
+      "TeamResponse": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Team"
+          }
+        }
+      },
+      "ApiKeyResponse": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/IssuedApiKey"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "apiKeyHeader": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "secretKey": "sk_live_fixture_secret",
+  "secretHash": "c173e2c1467e446744e3b6aba8fc07e639008fdf3c4b82e32dceef9b41217dc3",
+  "token": "Ae06cX3X+GJm5kIEpWCttcHCIVI9o3Y0HWX/clGdryb0XO2K0eIIsEkh3bdtCTKJMfykSJGkECwhajrvmYFjPSPMbs7gSfUeUnKYHX/4hV1SZNkGby8hHvrhPGiXuxOeqwBfTokfhpJrUIMVLhH3DArgNBi9su6VFrdYNoSf9ca8ttWY/mq2fDvQdHoNg8Kg8VNnCTEALVcOOf4TwtLqbp59GRto59rDPQpFtWFtGcCDNCvGsMoBqqdm3gcEsD38nGIiWhasFlr9/1h26qJhDl7Jy4ZYIjhSxLQRv8O/Xj+YBbQvM5NkhgqfrvTVdzQkpuvM3HZawOXw9PP5MowhzLLKWEEPwgJnWbLXqxVmB1IXU6yovT9jNPiYW9bNlAb0QzhNVHfJWsy247VGMVSXEO7FKu3L3JVhuU7HzoV+DNjQXjp3KzwNw7AbzGTEqJGrEgc8WgkbDSpWl86X+jJv6igFf308BT49QcP7GlpklYM+c9olYThBy1+L8Mw=",
+  "payload": {
+    "eventId": "evt_fixture",
+    "sessionId": "sid_fixture",
+    "verdict": "human",
+    "score": 7,
+    "manipulationScore": 0,
+    "manipulationVerdict": "none",
+    "evaluationDuration": 123,
+    "scoredAt": 1711310400000,
+    "metadata": {
+      "userAgent": "Mozilla/5.0",
+      "url": "https://example.com/signup",
+      "screenSize": "1440x900",
+      "touchDevice": false,
+      "clientIp": "203.0.113.9"
+    },
+    "signals": [
+      {
+        "id": "E6",
+        "category": "environment",
+        "confidence": "low",
+        "score": 20
+      }
+    ],
+    "categoryScores": {
+      "behavioral": 9,
+      "environment": 20
+    },
+    "botAttribution": null,
+    "visitorId": "vis_fixture",
+    "visitorIdConfidence": 94,
+    "embedContext": null,
+    "phase": "behavioral",
+    "provisional": false
+  }
+}

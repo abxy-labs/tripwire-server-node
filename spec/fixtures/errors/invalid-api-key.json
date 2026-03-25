@@ -1,0 +1,10 @@
+{
+  "error": {
+    "code": "auth.invalid_api_key",
+    "message": "The provided API key is invalid. Check the key and retry.",
+    "status": 401,
+    "retryable": false,
+    "requestId": "req_invalid_api_key",
+    "docsUrl": "https://tripwire.com/docs/api-reference/introduction"
+  }
+}

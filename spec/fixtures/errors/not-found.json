@@ -1,0 +1,10 @@
+{
+  "error": {
+    "code": "resource.not_found",
+    "message": "The requested session was not found.",
+    "status": 404,
+    "retryable": false,
+    "requestId": "req_not_found",
+    "docsUrl": "https://tripwire.com/docs/api-reference/sessions"
+  }
+}
