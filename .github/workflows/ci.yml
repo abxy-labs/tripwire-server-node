@@ -34,6 +34,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test, spec-sync]
     if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
+    env:
+      TRIPWIRE_LIVE_SMOKE: "1"
+      TRIPWIRE_SMOKE_SECRET_KEY: ${{ secrets.TRIPWIRE_SMOKE_SECRET_KEY }}
+      TRIPWIRE_SMOKE_TEAM_ID: ${{ secrets.TRIPWIRE_SMOKE_TEAM_ID }}
+      TRIPWIRE_SMOKE_BASE_URL: ${{ secrets.TRIPWIRE_SMOKE_BASE_URL }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -41,15 +46,10 @@ jobs:
           node-version: 20
           cache: npm
       - name: Require smoke secrets
-        if: ${{ secrets.TRIPWIRE_SMOKE_SECRET_KEY == '' || secrets.TRIPWIRE_SMOKE_TEAM_ID == '' }}
+        if: ${{ env.TRIPWIRE_SMOKE_SECRET_KEY == '' || env.TRIPWIRE_SMOKE_TEAM_ID == '' }}
         run: |
           echo "TRIPWIRE_SMOKE_SECRET_KEY and TRIPWIRE_SMOKE_TEAM_ID are required for live smoke tests."
           exit 1
       - run: npm ci
       - name: Run live smoke suite
-        env:
-          TRIPWIRE_LIVE_SMOKE: "1"
-          TRIPWIRE_SMOKE_SECRET_KEY: ${{ secrets.TRIPWIRE_SMOKE_SECRET_KEY }}
-          TRIPWIRE_SMOKE_TEAM_ID: ${{ secrets.TRIPWIRE_SMOKE_TEAM_ID }}
-          TRIPWIRE_SMOKE_BASE_URL: ${{ secrets.TRIPWIRE_SMOKE_BASE_URL }}
         run: npm run test:live
