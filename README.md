@@ -21,7 +21,7 @@ See the [Tripwire docs](https://tripwirejs.com/docs) and [API reference](https:/
 You don't need this source code unless you want to modify the package. If you just want to use the package, run:
 
 ```bash
-npm install @tripwire/server
+npm install @abxy/tripwire-server
 ```
 
 ## Requirements
@@ -33,7 +33,7 @@ npm install @tripwire/server
 The library needs to be configured with your account's secret key. Set `TRIPWIRE_SECRET_KEY` in your environment or pass `secretKey` directly:
 
 ```ts
-import { Tripwire } from "@tripwire/server";
+import { Tripwire } from "@abxy/tripwire-server";
 
 const client = new Tripwire({
   secretKey: process.env.TRIPWIRE_SECRET_KEY,
@@ -46,7 +46,7 @@ const session = await client.sessions.get("sid_123");
 ### Sealed token verification
 
 ```ts
-import { safeVerifyTripwireToken } from "@tripwire/server";
+import { safeVerifyTripwireToken } from "@abxy/tripwire-server";
 
 const result = safeVerifyTripwireToken(
   sealedToken,
@@ -97,7 +97,7 @@ await client.teams.apiKeys.revoke("team_123", created.id);
 ### Error handling
 
 ```ts
-import { TripwireApiError } from "@tripwire/server";
+import { TripwireApiError } from "@abxy/tripwire-server";
 
 try {
   await client.sessions.list({ limit: 999 });

@@ -23,7 +23,7 @@ import type {
 
 const DEFAULT_BASE_URL = 'https://api.tripwirejs.com';
 const DEFAULT_TIMEOUT_MS = 30_000;
-const SDK_CLIENT_HEADER = '@tripwire/server';
+const SDK_CLIENT_HEADER = '@abxy/tripwire-server';
 
 type QueryValue = string | number | boolean | undefined | null;
 
