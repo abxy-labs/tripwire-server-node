@@ -2,13 +2,14 @@
   "name": "@tripwire/server",
   "version": "0.1.0",
   "description": "Official Tripwire Node server SDK",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/abxy-labs/node-sdk.git"
+    "url": "git+https://github.com/abxy-labs/tripwire-server-node.git"
   },
-  "homepage": "https://github.com/abxy-labs/node-sdk#readme",
+  "homepage": "https://github.com/abxy-labs/tripwire-server-node#readme",
   "bugs": {
-    "url": "https://github.com/abxy-labs/node-sdk/issues"
+    "url": "https://github.com/abxy-labs/tripwire-server-node/issues"
   },
   "type": "module",
   "sideEffects": false,
