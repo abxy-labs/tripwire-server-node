@@ -41,6 +41,9 @@ const client = new Tripwire({
 
 const page = await client.sessions.list({ verdict: "bot", limit: 25 });
 const session = await client.sessions.get("sid_123");
+
+console.log(page.has_more, page.next_cursor);
+console.log(session.decision.risk_score, session.highlights[0]?.summary);
 ```
 
 ### Sealed token verification
@@ -58,14 +61,14 @@ if (!result.ok) {
   return;
 }
 
-console.log(result.data.verdict, result.data.score);
+console.log(result.data.decision.verdict, result.data.decision.risk_score);
 ```
 
 ### Pagination
 
 ```ts
 for await (const session of client.sessions.iter({ search: "signup" })) {
-  console.log(session.id, session.latestResult.verdict);
+  console.log(session.id, session.latest_decision.verdict);
 }
 ```
 
@@ -73,7 +76,9 @@ for await (const session of client.sessions.iter({ search: "signup" })) {
 
 ```ts
 const page = await client.fingerprints.list({ sort: "seen_count" });
-const fingerprint = await client.fingerprints.get("vis_123");
+const fingerprint = await client.fingerprints.get("vid_123");
+
+console.log(fingerprint.lifecycle.last_seen_at);
 ```
 
 ### Teams
@@ -88,7 +93,8 @@ const updated = await client.teams.update("team_123", { name: "New Name" });
 ```ts
 const created = await client.teams.apiKeys.create("team_123", {
   name: "Production",
-  allowedOrigins: ["https://example.com"],
+  environment: "live",
+  allowed_origins: ["https://example.com"],
 });
 
 await client.teams.apiKeys.revoke("team_123", created.id);

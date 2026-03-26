@@ -2,82 +2,45 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Tripwire Server SDK API",
-    "description": "Customer-facing server-side Tripwire APIs for the public SDK surface.",
-    "version": "1.0.0"
+    "version": "2026-03-25",
+    "description": "Customer-facing server-side Tripwire APIs for the public SDK surface."
   },
   "servers": [
     {
       "url": "https://api.tripwirejs.com",
-      "description": "Managed Tripwire API"
+      "description": "Production"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Sessions",
+      "description": "Durable session readback endpoints."
+    },
+    {
+      "name": "Visitor fingerprints",
+      "description": "Durable visitor fingerprint readback endpoints."
+    },
+    {
+      "name": "Teams",
+      "description": "Team lifecycle endpoints."
+    },
+    {
+      "name": "API Keys",
+      "description": "Team API key lifecycle endpoints."
     }
   ],
   "paths": {
     "/v1/sessions": {
       "get": {
-        "summary": "List durable session result summaries",
-        "description": "Requires a secret key.",
-        "security": [
-          {
-            "apiKeyHeader": []
-          }
+        "tags": [
+          "Sessions"
         ],
-        "responses": {
-          "200": {
-            "description": "Session list",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SessionsListResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication required or invalid.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "The provided key cannot access this endpoint.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Invalid session list query.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Tripwire could not load sessions.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
+        "operationId": "listSessions",
+        "summary": "List sessions",
         "parameters": [
           {
             "name": "limit",
             "in": "query",
-            "required": false,
             "schema": {
               "type": "integer",
               "minimum": 1,
@@ -88,7 +51,6 @@
           {
             "name": "cursor",
             "in": "query",
-            "required": false,
             "schema": {
               "type": "string"
             }
@@ -96,40 +58,69 @@
           {
             "name": "verdict",
             "in": "query",
-            "required": false,
             "schema": {
-              "type": "string",
-              "enum": [
-                "bot",
-                "human",
-                "inconclusive"
-              ]
+              "$ref": "#/components/schemas/Verdict"
             }
           },
           {
             "name": "search",
             "in": "query",
-            "required": false,
             "schema": {
               "type": "string"
             }
           }
         ],
-        "tags": [
-          "Sessions"
-        ],
-        "operationId": "listSessions"
+        "responses": {
+          "200": {
+            "description": "Session list response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Secret key required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid query parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/v1/sessions/{sessionId}": {
       "get": {
-        "summary": "Retrieve durable session detail",
-        "description": "Requires a secret key.",
-        "security": [
-          {
-            "apiKeyHeader": []
-          }
+        "tags": [
+          "Sessions"
         ],
+        "operationId": "getSession",
+        "summary": "Retrieve one session",
         "parameters": [
           {
             "name": "sessionId",
@@ -142,7 +133,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Session detail",
+            "description": "Session detail response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -152,118 +143,49 @@
             }
           },
           "401": {
-            "description": "Authentication required or invalid.",
+            "description": "Missing or invalid API key.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "403": {
-            "description": "The provided key cannot access this endpoint.",
+            "description": "Secret key required.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "404": {
-            "description": "Session not found",
+            "description": "Session not found.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Tripwire could not load the session detail.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           }
-        },
-        "tags": [
-          "Sessions"
-        ],
-        "operationId": "getSession"
+        }
       }
     },
     "/v1/fingerprints": {
       "get": {
-        "summary": "List durable visitor fingerprints",
-        "description": "Requires a secret key.",
-        "security": [
-          {
-            "apiKeyHeader": []
-          }
+        "tags": [
+          "Visitor fingerprints"
         ],
-        "responses": {
-          "200": {
-            "description": "Fingerprint list",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FingerprintsListResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Authentication required or invalid.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "The provided key cannot access this endpoint.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Invalid fingerprint list query.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Tripwire could not load fingerprints.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
+        "operationId": "listVisitorFingerprints",
+        "summary": "List visitor fingerprints",
         "parameters": [
           {
             "name": "limit",
             "in": "query",
-            "required": false,
             "schema": {
               "type": "integer",
               "minimum": 1,
@@ -274,7 +196,6 @@
           {
             "name": "cursor",
             "in": "query",
-            "required": false,
             "schema": {
               "type": "string"
             }
@@ -282,7 +203,6 @@
           {
             "name": "search",
             "in": "query",
-            "required": false,
             "schema": {
               "type": "string"
             }
@@ -290,7 +210,6 @@
           {
             "name": "sort",
             "in": "query",
-            "required": false,
             "schema": {
               "type": "string",
               "enum": [
@@ -300,21 +219,57 @@
             }
           }
         ],
-        "tags": [
-          "Fingerprints"
-        ],
-        "operationId": "listFingerprints"
+        "responses": {
+          "200": {
+            "description": "Visitor fingerprint list response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VisitorFingerprintListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Secret key required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid query parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/v1/fingerprints/{visitorId}": {
       "get": {
-        "summary": "Retrieve durable fingerprint detail",
-        "description": "Requires a secret key.",
-        "security": [
-          {
-            "apiKeyHeader": []
-          }
+        "tags": [
+          "Visitor fingerprints"
         ],
+        "operationId": "getVisitorFingerprint",
+        "summary": "Retrieve one visitor fingerprint",
         "parameters": [
           {
             "name": "visitorId",
@@ -327,71 +282,55 @@
         ],
         "responses": {
           "200": {
-            "description": "Fingerprint detail",
+            "description": "Visitor fingerprint detail response.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FingerprintDetailResponse"
+                  "$ref": "#/components/schemas/VisitorFingerprintDetailResponse"
                 }
               }
             }
           },
           "401": {
-            "description": "Authentication required or invalid.",
+            "description": "Missing or invalid API key.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "403": {
-            "description": "The provided key cannot access this endpoint.",
+            "description": "Secret key required.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "404": {
-            "description": "Fingerprint not found",
+            "description": "Visitor fingerprint not found.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Tripwire could not load the fingerprint detail.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           }
-        },
-        "tags": [
-          "Fingerprints"
-        ],
-        "operationId": "getFingerprint"
+        }
       }
     },
     "/v1/teams": {
       "post": {
-        "summary": "Create a team",
-        "description": "Requires a secret key.",
-        "security": [
-          {
-            "apiKeyHeader": []
-          }
+        "tags": [
+          "Teams"
         ],
+        "operationId": "createTeam",
+        "summary": "Create a team",
         "requestBody": {
           "required": true,
           "content": {
@@ -404,7 +343,7 @@
         },
         "responses": {
           "201": {
-            "description": "Team created",
+            "description": "Team created.",
             "content": {
               "application/json": {
                 "schema": {
@@ -414,70 +353,55 @@
             }
           },
           "401": {
-            "description": "Authentication required or invalid.",
+            "description": "Missing or invalid API key.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "403": {
-            "description": "This endpoint requires a secret key.",
+            "description": "Secret key required.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "409": {
-            "description": "The requested team slug already exists.",
+            "description": "Conflict.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "422": {
-            "description": "Invalid team creation payload.",
+            "description": "Validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Tripwire could not create the team.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           }
-        },
-        "tags": [
-          "Teams"
-        ],
-        "operationId": "createTeam"
+        }
       }
     },
     "/v1/teams/{teamId}": {
       "get": {
-        "summary": "Retrieve a team",
-        "security": [
-          {
-            "apiKeyHeader": []
-          }
+        "tags": [
+          "Teams"
         ],
+        "operationId": "getTeam",
+        "summary": "Retrieve one team",
         "parameters": [
           {
             "name": "teamId",
@@ -490,7 +414,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Team detail",
+            "description": "Team response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -500,58 +424,43 @@
             }
           },
           "401": {
-            "description": "Authentication required or invalid.",
+            "description": "Missing or invalid API key.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "403": {
-            "description": "The provided key cannot access this team.",
+            "description": "Team access denied.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "404": {
-            "description": "The requested team was not found.",
+            "description": "Team not found.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Tripwire could not load the team.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           }
-        },
+        }
+      },
+      "patch": {
         "tags": [
           "Teams"
         ],
-        "operationId": "getTeam"
-      },
-      "patch": {
+        "operationId": "updateTeam",
         "summary": "Update a team",
-        "security": [
-          {
-            "apiKeyHeader": []
-          }
-        ],
         "parameters": [
           {
             "name": "teamId",
@@ -574,7 +483,7 @@
         },
         "responses": {
           "200": {
-            "description": "Team updated",
+            "description": "Updated team response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -584,70 +493,55 @@
             }
           },
           "401": {
-            "description": "Authentication required or invalid.",
+            "description": "Missing or invalid API key.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "403": {
-            "description": "The provided key cannot access this team.",
+            "description": "Team access denied.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "404": {
-            "description": "The requested team was not found.",
+            "description": "Team not found.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "422": {
-            "description": "Invalid team update payload.",
+            "description": "Validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Tripwire could not update the team.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           }
-        },
-        "tags": [
-          "Teams"
-        ],
-        "operationId": "updateTeam"
+        }
       }
     },
     "/v1/teams/{teamId}/api-keys": {
       "get": {
-        "summary": "List team API keys",
-        "security": [
-          {
-            "apiKeyHeader": []
-          }
+        "tags": [
+          "API Keys"
         ],
+        "operationId": "listTeamApiKeys",
+        "summary": "List team API keys",
         "parameters": [
           {
             "name": "teamId",
@@ -660,7 +554,6 @@
           {
             "name": "limit",
             "in": "query",
-            "required": false,
             "schema": {
               "type": "integer",
               "minimum": 1,
@@ -671,7 +564,6 @@
           {
             "name": "cursor",
             "in": "query",
-            "required": false,
             "schema": {
               "type": "string"
             }
@@ -679,7 +571,7 @@
         ],
         "responses": {
           "200": {
-            "description": "API keys",
+            "description": "API key list response.",
             "content": {
               "application/json": {
                 "schema": {
@@ -689,68 +581,53 @@
             }
           },
           "401": {
-            "description": "Authentication required or invalid.",
+            "description": "Missing or invalid API key.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "403": {
-            "description": "The provided key cannot access this team.",
+            "description": "Team access denied.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "404": {
-            "description": "The requested team was not found.",
+            "description": "Team not found.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "422": {
-            "description": "Invalid API key list query.",
+            "description": "Invalid query parameters.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Tripwire could not load team API keys.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           }
-        },
+        }
+      },
+      "post": {
         "tags": [
           "API Keys"
         ],
-        "operationId": "listTeamApiKeys"
-      },
-      "post": {
-        "summary": "Create a team API key pair",
-        "security": [
-          {
-            "apiKeyHeader": []
-          }
-        ],
+        "operationId": "createTeamApiKey",
+        "summary": "Create a team API key",
         "parameters": [
           {
             "name": "teamId",
@@ -762,7 +639,7 @@
           }
         ],
         "requestBody": {
-          "required": true,
+          "required": false,
           "content": {
             "application/json": {
               "schema": {
@@ -773,80 +650,65 @@
         },
         "responses": {
           "201": {
-            "description": "API key pair created",
+            "description": "Issued API key response.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiKeyResponse"
+                  "$ref": "#/components/schemas/IssuedApiKeyResponse"
                 }
               }
             }
           },
           "401": {
-            "description": "Authentication required or invalid.",
+            "description": "Missing or invalid API key.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "403": {
-            "description": "The provided key cannot access this team.",
+            "description": "Team access denied.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "404": {
-            "description": "The requested team was not found.",
+            "description": "Team not found.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "422": {
-            "description": "Invalid API key creation payload.",
+            "description": "Validation failed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Tripwire could not create the API key.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           }
-        },
-        "tags": [
-          "API Keys"
-        ],
-        "operationId": "createTeamApiKey"
+        }
       }
     },
     "/v1/teams/{teamId}/api-keys/{keyId}": {
       "delete": {
-        "summary": "Revoke a team API key",
-        "security": [
-          {
-            "apiKeyHeader": []
-          }
+        "tags": [
+          "API Keys"
         ],
+        "operationId": "revokeTeamApiKey",
+        "summary": "Revoke a team API key",
         "parameters": [
           {
             "name": "teamId",
@@ -866,64 +728,56 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "API key revoked"
-          },
-          "401": {
-            "description": "Authentication required or invalid.",
+          "200": {
+            "description": "Revoked API key response.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiKeyResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "403": {
-            "description": "The provided key cannot access this team.",
+            "description": "Team access denied.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "404": {
-            "description": "The requested API key was not found.",
+            "description": "API key not found.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Tripwire could not revoke the API key.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           }
-        },
-        "tags": [
-          "API Keys"
-        ],
-        "operationId": "revokeTeamApiKey"
+        }
       }
     },
     "/v1/teams/{teamId}/api-keys/{keyId}/rotations": {
       "post": {
-        "summary": "Rotate a team API key pair",
-        "security": [
-          {
-            "apiKeyHeader": []
-          }
+        "tags": [
+          "API Keys"
         ],
+        "operationId": "rotateTeamApiKey",
+        "summary": "Rotate a team API key",
         "parameters": [
           {
             "name": "teamId",
@@ -944,248 +798,87 @@
         ],
         "responses": {
           "201": {
-            "description": "API key pair rotated",
+            "description": "Rotated API key response.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiKeyResponse"
+                  "$ref": "#/components/schemas/IssuedApiKeyResponse"
                 }
               }
             }
           },
           "401": {
-            "description": "Authentication required or invalid.",
+            "description": "Missing or invalid API key.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "403": {
-            "description": "The provided key cannot access this team.",
+            "description": "Team access denied.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           },
           "404": {
-            "description": "The requested API key was not found.",
+            "description": "API key not found.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Tripwire could not rotate the API key.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
                 }
               }
             }
           }
-        },
-        "tags": [
-          "API Keys"
-        ],
-        "operationId": "rotateTeamApiKey"
+        }
       }
     }
   },
   "components": {
     "schemas": {
-      "ApiKey": {
+      "ApiErrorDetails": {
         "type": "object",
-        "required": [
-          "object",
-          "id",
-          "key",
-          "name",
-          "isTest",
-          "allowedOrigins",
-          "rateLimit",
-          "status",
-          "createdAt",
-          "rotatedAt",
-          "revokedAt"
-        ],
         "properties": {
-          "object": {
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiFieldIssue"
+            }
+          },
+          "allowed_values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "header_name": {
+            "type": "string"
+          },
+          "parameter_set": {
+            "type": "string"
+          },
+          "next_action": {
             "type": "string",
             "enum": [
-              "api_key"
+              "retry",
+              "new_session",
+              "reload_bundle",
+              "contact_support"
             ]
-          },
-          "id": {
-            "$ref": "#/components/schemas/ApiKeyId"
-          },
-          "key": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "isTest": {
-            "type": "boolean"
-          },
-          "allowedOrigins": {
-            "type": [
-              "array",
-              "null"
-            ],
-            "items": {
-              "type": "string"
-            }
-          },
-          "rateLimit": {
-            "type": [
-              "integer",
-              "null"
-            ]
-          },
-          "status": {
-            "$ref": "#/components/schemas/ApiKeyStatus"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "rotatedAt": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          },
-          "revokedAt": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          }
-        }
-      },
-      "ApiKeyId": {
-        "type": "string",
-        "pattern": "^key_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
-        "example": "key_6789abcdefghjkmnpqrstvwxyz"
-      },
-      "ApiKeyListResponse": {
-        "type": "object",
-        "required": [
-          "data",
-          "pagination"
-        ],
-        "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ApiKey"
-            }
-          },
-          "pagination": {
-            "$ref": "#/components/schemas/CursorPagination"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": true
       },
-      "ApiKeyResponse": {
+      "ApiErrorEnvelope": {
         "type": "object",
-        "required": [
-          "data"
-        ],
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/IssuedApiKey"
-          }
-        },
-        "additionalProperties": false
-      },
-      "ApiKeyStatus": {
-        "type": "string",
-        "enum": [
-          "active",
-          "revoked",
-          "rotated"
-        ]
-      },
-      "CreateApiKeyRequest": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 1
-          },
-          "isTest": {
-            "type": "boolean"
-          },
-          "allowedOrigins": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "rateLimit": {
-            "type": "integer",
-            "minimum": 1
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreateTeamRequest": {
-        "type": "object",
-        "required": [
-          "name",
-          "slug"
-        ],
-        "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 1
-          },
-          "slug": {
-            "type": "string",
-            "pattern": "^[a-z0-9-]+$",
-            "minLength": 1,
-            "example": "tripwire-production"
-          }
-        },
-        "additionalProperties": false
-      },
-      "CursorPagination": {
-        "type": "object",
-        "required": [
-          "limit",
-          "hasMore"
-        ],
-        "properties": {
-          "limit": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 200
-          },
-          "hasMore": {
-            "type": "boolean"
-          },
-          "nextCursor": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        "additionalProperties": false
-      },
-      "Error": {
-        "type": "object",
+        "additionalProperties": false,
         "required": [
           "error"
         ],
@@ -1193,731 +886,27 @@
           "error": {
             "$ref": "#/components/schemas/PublicError"
           }
-        },
-        "example": {
-          "error": {
-            "code": "auth.missing_api_key",
-            "message": "Missing Authorization header. Send Authorization: Bearer <token> to authenticate this request.",
-            "status": 401,
-            "retryable": false,
-            "requestId": "req_0123456789abcdef0123456789abcdef",
-            "docsUrl": "https://tripwirejs.com/docs/api-reference/introduction"
-          }
-        },
-        "additionalProperties": false
+        }
       },
-      "EventId": {
-        "type": "string",
-        "pattern": "^evt_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
-        "example": "evt_23456789abcdefghjkmnpqrstv"
-      },
-      "FingerprintDetail": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/FingerprintSummary"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "sessions": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "eventId": {
-                      "$ref": "#/components/schemas/EventId"
-                    },
-                    "verdict": {
-                      "$ref": "#/components/schemas/Verdict"
-                    },
-                    "riskScore": {
-                      "type": "integer"
-                    },
-                    "scoredAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "userAgent": {
-                      "type": "string"
-                    },
-                    "url": {
-                      "type": "string"
-                    },
-                    "clientIp": {
-                      "type": "string"
-                    },
-                    "screenSize": {
-                      "type": [
-                        "string",
-                        "null"
-                      ]
-                    },
-                    "categoryScores": {
-                      "type": [
-                        "object",
-                        "null"
-                      ],
-                      "additionalProperties": {
-                        "type": "integer"
-                      }
-                    }
-                  },
-                  "additionalProperties": false,
-                  "required": [
-                    "eventId",
-                    "verdict",
-                    "riskScore",
-                    "scoredAt",
-                    "userAgent",
-                    "url",
-                    "clientIp",
-                    "screenSize",
-                    "categoryScores"
-                  ]
-                }
-              }
-            },
-            "required": [
-              "sessions"
-            ]
-          }
-        ],
-        "unevaluatedProperties": false
-      },
-      "FingerprintDetailResponse": {
+      "ApiFieldIssue": {
         "type": "object",
-        "required": [
-          "data"
-        ],
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/FingerprintDetail"
-          }
-        },
-        "additionalProperties": false
-      },
-      "FingerprintId": {
-        "type": "string",
-        "pattern": "^vid_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
-        "example": "vid_456789abcdefghjkmnpqrstvwx"
-      },
-      "FingerprintReference": {
-        "type": [
-          "object",
-          "null"
-        ],
-        "properties": {
-          "object": {
-            "type": "string",
-            "enum": [
-              "fingerprint"
-            ]
-          },
-          "id": {
-            "$ref": "#/components/schemas/FingerprintId"
-          },
-          "confidence": {
-            "type": [
-              "integer",
-              "null"
-            ]
-          },
-          "timestamp": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          }
-        },
         "additionalProperties": false,
         "required": [
-          "object",
-          "id",
-          "confidence",
-          "timestamp"
-        ]
-      },
-      "FingerprintSummary": {
-        "type": "object",
-        "required": [
-          "object",
-          "id",
-          "firstSeenAt",
-          "lastSeenAt",
-          "seenCount",
-          "lastUserAgent",
-          "lastIp",
-          "expiresAt",
-          "anchorWebglHash",
-          "anchorParamsHash",
-          "anchorAudioHash",
-          "fingerprintVector",
-          "hasCookie",
-          "hasLs",
-          "hasIdb",
-          "hasSw",
-          "hasWn"
-        ],
-        "properties": {
-          "object": {
-            "type": "string",
-            "enum": [
-              "fingerprint"
-            ]
-          },
-          "id": {
-            "$ref": "#/components/schemas/FingerprintId"
-          },
-          "firstSeenAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "lastSeenAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "seenCount": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "lastUserAgent": {
-            "type": "string"
-          },
-          "lastIp": {
-            "type": "string"
-          },
-          "expiresAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "anchorWebglHash": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "anchorParamsHash": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "anchorAudioHash": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "fingerprintVector": {
-            "type": "array",
-            "items": {
-              "type": "number"
-            }
-          },
-          "hasCookie": {
-            "type": "boolean"
-          },
-          "hasLs": {
-            "type": "boolean"
-          },
-          "hasIdb": {
-            "type": "boolean"
-          },
-          "hasSw": {
-            "type": "boolean"
-          },
-          "hasWn": {
-            "type": "boolean"
-          }
-        }
-      },
-      "FingerprintsListResponse": {
-        "type": "object",
-        "required": [
-          "data",
-          "pagination"
-        ],
-        "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FingerprintSummary"
-            }
-          },
-          "pagination": {
-            "$ref": "#/components/schemas/CursorPagination"
-          }
-        },
-        "additionalProperties": false
-      },
-      "IssuedApiKey": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/ApiKey"
-          },
-          {
-            "type": "object",
-            "required": [
-              "secretKey"
-            ],
-            "properties": {
-              "secretKey": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "unevaluatedProperties": false
-      },
-      "ManipulationVerdict": {
-        "type": "string",
-        "enum": [
-          "none",
-          "low",
-          "medium",
-          "high"
-        ]
-      },
-      "NextAction": {
-        "type": "string",
-        "enum": [
-          "retry",
-          "new_session",
-          "reload_bundle",
-          "contact_support"
-        ]
-      },
-      "PublicError": {
-        "type": "object",
-        "required": [
-          "code",
-          "message",
-          "status",
-          "retryable",
-          "requestId"
-        ],
-        "properties": {
-          "code": {
-            "type": "string",
-            "example": "auth.missing_api_key",
-            "description": "Tripwire public error code. See x-tripwire-known-values-ref for the documented stable set.",
-            "x-tripwire-known-values-ref": "#/components/schemas/KnownPublicErrorCode"
-          },
-          "message": {
-            "type": "string",
-            "example": "Missing Authorization header. Send Authorization: Bearer <token> to authenticate this request."
-          },
-          "status": {
-            "type": "integer",
-            "example": 401,
-            "minimum": 400,
-            "maximum": 599
-          },
-          "retryable": {
-            "type": "boolean",
-            "example": false
-          },
-          "requestId": {
-            "$ref": "#/components/schemas/RequestId",
-            "example": "req_0123456789abcdef0123456789abcdef"
-          },
-          "docsUrl": {
-            "type": "string",
-            "format": "uri",
-            "example": "https://tripwirejs.com/docs/api-reference/introduction"
-          },
-          "details": {
-            "$ref": "#/components/schemas/TripwireErrorDetails"
-          }
-        },
-        "additionalProperties": false
-      },
-      "RequestId": {
-        "type": "string",
-        "pattern": "^req_[0-9a-f]{32}$",
-        "example": "req_0123456789abcdef0123456789abcdef"
-      },
-      "ResultSummary": {
-        "type": "object",
-        "required": [
-          "eventId",
-          "verdict",
-          "riskScore",
-          "phase",
-          "provisional",
-          "manipulationScore",
-          "manipulationVerdict",
-          "evaluationDuration",
-          "scoredAt"
-        ],
-        "properties": {
-          "eventId": {
-            "$ref": "#/components/schemas/EventId"
-          },
-          "verdict": {
-            "$ref": "#/components/schemas/Verdict"
-          },
-          "riskScore": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "phase": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/TripwirePhase"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "provisional": {
-            "type": [
-              "boolean",
-              "null"
-            ]
-          },
-          "manipulationScore": {
-            "type": [
-              "integer",
-              "null"
-            ]
-          },
-          "manipulationVerdict": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/ManipulationVerdict"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "evaluationDuration": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "scoredAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "SessionDetail": {
-        "type": "object",
-        "required": [
-          "object",
-          "id",
-          "createdAt",
-          "latestEventId",
-          "latestResult",
-          "ipIntel",
-          "fingerprint",
-          "resultHistory"
-        ],
-        "properties": {
-          "object": {
-            "type": "string",
-            "enum": [
-              "session"
-            ]
-          },
-          "id": {
-            "$ref": "#/components/schemas/SessionId"
-          },
-          "createdAt": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          },
-          "latestEventId": {
-            "$ref": "#/components/schemas/EventId"
-          },
-          "latestResult": {
-            "$ref": "#/components/schemas/SessionLatestResultDetail"
-          },
-          "fingerprint": {
-            "$ref": "#/components/schemas/FingerprintReference"
-          },
-          "resultHistory": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ResultSummary"
-            }
-          },
-          "ipIntel": {
-            "$ref": "#/components/schemas/SessionIpIntel"
-          }
-        },
-        "additionalProperties": false
-      },
-      "SessionDetailResponse": {
-        "type": "object",
-        "required": [
-          "data"
-        ],
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/SessionDetail"
-          }
-        },
-        "additionalProperties": false
-      },
-      "SessionId": {
-        "type": "string",
-        "pattern": "^sid_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
-        "example": "sid_0123456789abcdefghjkmnpqrs"
-      },
-      "SessionIpIntel": {
-        "anyOf": [
-          {
-            "type": "object",
-            "additionalProperties": true
-          },
-          {
-            "type": "null"
-          }
-        ]
-      },
-      "SessionLatestResultDetail": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/ResultSummary"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "visitorId": {
-                "anyOf": [
-                  {
-                    "$ref": "#/components/schemas/FingerprintId"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "metadata": {
-                "type": "object",
-                "properties": {
-                  "userAgent": {
-                    "type": "string"
-                  },
-                  "url": {
-                    "type": "string"
-                  },
-                  "screenSize": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "touchDevice": {
-                    "type": [
-                      "boolean",
-                      "null"
-                    ]
-                  },
-                  "clientIp": {
-                    "type": "string"
-                  }
-                },
-                "additionalProperties": false
-              }
-            },
-            "required": [
-              "visitorId",
-              "metadata"
-            ]
-          }
-        ],
-        "unevaluatedProperties": false
-      },
-      "SessionSummary": {
-        "type": "object",
-        "required": [
-          "object",
-          "id",
-          "createdAt",
-          "latestEventId",
-          "latestResult",
-          "fingerprint",
-          "lastScoredAt"
-        ],
-        "properties": {
-          "object": {
-            "type": "string",
-            "enum": [
-              "session"
-            ]
-          },
-          "id": {
-            "$ref": "#/components/schemas/SessionId"
-          },
-          "createdAt": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          },
-          "latestEventId": {
-            "$ref": "#/components/schemas/EventId"
-          },
-          "latestResult": {
-            "$ref": "#/components/schemas/ResultSummary"
-          },
-          "fingerprint": {
-            "$ref": "#/components/schemas/FingerprintReference"
-          },
-          "lastScoredAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
-      "SessionsListResponse": {
-        "type": "object",
-        "required": [
-          "data",
-          "pagination"
-        ],
-        "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SessionSummary"
-            }
-          },
-          "pagination": {
-            "$ref": "#/components/schemas/CursorPagination"
-          }
-        },
-        "additionalProperties": false
-      },
-      "Team": {
-        "type": "object",
-        "required": [
-          "object",
-          "id",
           "name",
-          "slug",
-          "status",
-          "createdAt",
-          "updatedAt"
-        ],
-        "properties": {
-          "object": {
-            "type": "string",
-            "enum": [
-              "team"
-            ]
-          },
-          "id": {
-            "$ref": "#/components/schemas/TeamId"
-          },
-          "name": {
-            "type": "string"
-          },
-          "slug": {
-            "type": "string",
-            "pattern": "^[a-z0-9-]+$",
-            "minLength": 1,
-            "example": "tripwire-production"
-          },
-          "status": {
-            "$ref": "#/components/schemas/TeamStatus"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
-      "TeamId": {
-        "type": "string",
-        "pattern": "^team_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
-        "example": "team_56789abcdefghjkmnpqrstvwxy"
-      },
-      "TeamResponse": {
-        "type": "object",
-        "required": [
-          "data"
-        ],
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/Team"
-          }
-        },
-        "additionalProperties": false
-      },
-      "TeamStatus": {
-        "type": "string",
-        "enum": [
-          "active",
-          "suspended",
-          "deleted"
-        ]
-      },
-      "TripwireErrorDetails": {
-        "type": "object",
-        "properties": {
-          "fieldErrors": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TripwireFieldError"
-            }
-          },
-          "allowedValues": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "header": {
-            "type": "string"
-          },
-          "query": {
-            "type": "string"
-          },
-          "nextAction": {
-            "$ref": "#/components/schemas/NextAction"
-          }
-        },
-        "additionalProperties": false
-      },
-      "TripwireFieldError": {
-        "type": "object",
-        "required": [
-          "field",
           "issue"
         ],
         "properties": {
-          "field": {
-            "type": "string",
-            "minLength": 1
+          "name": {
+            "type": "string"
           },
           "issue": {
-            "type": "string",
-            "minLength": 1
+            "type": "string"
           },
           "expected": {
             "type": "string"
           },
           "received": {
-            "oneOf": [
+            "anyOf": [
               {
                 "type": "string"
               },
@@ -1932,18 +921,2378 @@
               }
             ]
           }
-        },
-        "additionalProperties": false
+        }
       },
-      "TripwirePhase": {
+      "ApiKey": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "object",
+          "id",
+          "public_key",
+          "name",
+          "environment",
+          "allowed_origins",
+          "rate_limit",
+          "status",
+          "created_at",
+          "rotated_at",
+          "revoked_at"
+        ],
+        "properties": {
+          "object": {
+            "const": "api_key"
+          },
+          "id": {
+            "$ref": "#/components/schemas/ApiKeyId"
+          },
+          "public_key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "environment": {
+            "$ref": "#/components/schemas/ApiKeyEnvironment"
+          },
+          "allowed_origins": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rate_limit": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "$ref": "#/components/schemas/ApiKeyStatus"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rotated_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "revoked_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiKeyEnvironment": {
+        "type": "string",
+        "enum": [
+          "live",
+          "test"
+        ]
+      },
+      "ApiKeyId": {
+        "type": "string",
+        "pattern": "^key_[0123456789abcdefghjkmnpqrstvwxyz]{26}$"
+      },
+      "ApiKeyListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "pagination",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiKey"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/CursorPagination"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "ApiKeyResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ApiKey"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "ApiKeyStatus": {
+        "type": "string",
+        "enum": [
+          "active",
+          "revoked",
+          "rotated"
+        ]
+      },
+      "CreateApiKeyRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "environment": {
+            "$ref": "#/components/schemas/ApiKeyEnvironment"
+          },
+          "allowed_origins": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "rate_limit": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "CreateTeamRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "slug"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "slug": {
+            "$ref": "#/components/schemas/Slug"
+          }
+        }
+      },
+      "CursorPagination": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "limit",
+          "has_more"
+        ],
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200
+          },
+          "has_more": {
+            "type": "boolean"
+          },
+          "next_cursor": {
+            "type": "string"
+          }
+        }
+      },
+      "Decision": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "event_id",
+          "verdict",
+          "risk_score",
+          "phase",
+          "is_provisional",
+          "manipulation",
+          "evaluation_duration_ms",
+          "evaluated_at"
+        ],
+        "properties": {
+          "event_id": {
+            "$ref": "#/components/schemas/EventId"
+          },
+          "verdict": {
+            "$ref": "#/components/schemas/Verdict"
+          },
+          "risk_score": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "phase": {
+            "$ref": "#/components/schemas/Phase"
+          },
+          "is_provisional": {
+            "type": "boolean"
+          },
+          "manipulation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ManipulationSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "evaluation_duration_ms": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "evaluated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "EventId": {
+        "type": "string",
+        "pattern": "^evt_[0123456789abcdefghjkmnpqrstvwxyz]{26}$"
+      },
+      "FingerprintId": {
+        "type": "string",
+        "pattern": "^vid_[0123456789abcdefghjkmnpqrstvwxyz]{26}$"
+      },
+      "IssuedApiKey": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "object",
+          "id",
+          "public_key",
+          "name",
+          "environment",
+          "allowed_origins",
+          "rate_limit",
+          "status",
+          "created_at",
+          "rotated_at",
+          "revoked_at",
+          "secret_key"
+        ],
+        "properties": {
+          "object": {
+            "const": "api_key"
+          },
+          "id": {
+            "$ref": "#/components/schemas/ApiKeyId"
+          },
+          "public_key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "environment": {
+            "$ref": "#/components/schemas/ApiKeyEnvironment"
+          },
+          "allowed_origins": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rate_limit": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "$ref": "#/components/schemas/ApiKeyStatus"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rotated_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "revoked_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "secret_key": {
+            "type": "string"
+          }
+        }
+      },
+      "IssuedApiKeyResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/IssuedApiKey"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "ManipulationSummary": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "score",
+          "verdict"
+        ],
+        "properties": {
+          "score": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "verdict": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ManipulationVerdict"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "ManipulationVerdict": {
+        "type": "string",
+        "enum": [
+          "none",
+          "low",
+          "medium",
+          "high"
+        ]
+      },
+      "ObservationHash": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "Phase": {
         "type": "string",
         "enum": [
           "snapshot",
           "behavioral"
         ]
       },
+      "PublicError": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "message",
+          "status",
+          "retryable",
+          "request_id"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "x-tripwire-known-values-ref": "#/components/schemas/KnownPublicErrorCode"
+          },
+          "message": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "retryable": {
+            "type": "boolean"
+          },
+          "request_id": {
+            "$ref": "#/components/schemas/RequestId"
+          },
+          "docs_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "details": {
+            "$ref": "#/components/schemas/ApiErrorDetails"
+          }
+        }
+      },
+      "RequestContext": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "url",
+          "user_agent",
+          "ip_address",
+          "screen_size",
+          "is_touch_capable"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "user_agent": {
+            "type": "string"
+          },
+          "ip_address": {
+            "type": "string"
+          },
+          "screen_size": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "is_touch_capable": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        }
+      },
+      "RequestId": {
+        "type": "string",
+        "pattern": "^req_[0-9a-f]{32}$"
+      },
+      "ResponseMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "request_id"
+        ],
+        "properties": {
+          "request_id": {
+            "$ref": "#/components/schemas/RequestId"
+          }
+        }
+      },
+      "ScoreBreakdown": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "categories"
+        ],
+        "properties": {
+          "categories": {
+            "anyOf": [
+              {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "SessionAnalysisCoverage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "browser",
+          "device",
+          "network",
+          "runtime",
+          "behavioral",
+          "visitor_identity"
+        ],
+        "properties": {
+          "browser": {
+            "type": "boolean"
+          },
+          "device": {
+            "type": "boolean"
+          },
+          "network": {
+            "type": "boolean"
+          },
+          "runtime": {
+            "type": "boolean"
+          },
+          "behavioral": {
+            "type": "boolean"
+          },
+          "visitor_identity": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SessionAutomation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "category",
+          "confidence",
+          "provider",
+          "product",
+          "framework",
+          "concealment_style",
+          "organization",
+          "facets"
+        ],
+        "properties": {
+          "category": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "provider": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "product": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "framework": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "concealment_style": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "organization": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "facets": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/SessionAutomationFacet"
+            }
+          }
+        }
+      },
+      "SessionAutomationFacet": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "value",
+          "confidence",
+          "relation"
+        ],
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "relation": {
+            "type": "string"
+          }
+        }
+      },
+      "SessionBrowser": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "version",
+          "major_version",
+          "engine"
+        ],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "major_version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "engine": {
+            "type": "string"
+          }
+        }
+      },
+      "SessionClientTelemetry": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "Curated lower-level client telemetry grouped for investigation and analysis.",
+        "required": [
+          "navigator",
+          "storage",
+          "canvas",
+          "graphics",
+          "audio",
+          "fonts",
+          "media"
+        ],
+        "properties": {
+          "navigator": {
+            "$ref": "#/components/schemas/SessionRawDeviceNavigator"
+          },
+          "storage": {
+            "$ref": "#/components/schemas/SessionRawDeviceStorage"
+          },
+          "canvas": {
+            "$ref": "#/components/schemas/SessionRawDeviceCanvas"
+          },
+          "graphics": {
+            "$ref": "#/components/schemas/SessionRawDeviceGraphics"
+          },
+          "audio": {
+            "$ref": "#/components/schemas/SessionRawDeviceAudio"
+          },
+          "fonts": {
+            "$ref": "#/components/schemas/SessionRawDeviceFonts"
+          },
+          "media": {
+            "$ref": "#/components/schemas/SessionRawDeviceMedia"
+          }
+        }
+      },
+      "SessionConnectionFingerprint": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ja4",
+          "http2",
+          "user_agent_alignment"
+        ],
+        "properties": {
+          "ja4": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "hash",
+              "profile",
+              "family",
+              "product",
+              "confidence",
+              "deterministic"
+            ],
+            "properties": {
+              "hash": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "profile": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "family": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "product": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "confidence": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "deterministic": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              }
+            }
+          },
+          "http2": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "akamai_fingerprint",
+              "profile"
+            ],
+            "properties": {
+              "akamai_fingerprint": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "profile": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "user_agent_alignment": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "match",
+                  "mismatch",
+                  "unknown"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "SessionDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "object",
+          "id",
+          "created_at",
+          "decision",
+          "highlights",
+          "automation",
+          "web_bot_auth",
+          "network",
+          "runtime_integrity",
+          "visitor_fingerprint",
+          "connection_fingerprint",
+          "previous_decisions",
+          "request",
+          "browser",
+          "device",
+          "analysis_coverage",
+          "signals_fired",
+          "client_telemetry"
+        ],
+        "properties": {
+          "object": {
+            "const": "session"
+          },
+          "id": {
+            "$ref": "#/components/schemas/SessionId"
+          },
+          "created_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "decision": {
+            "$ref": "#/components/schemas/SessionDetailDecision"
+          },
+          "highlights": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SessionHighlight"
+            }
+          },
+          "automation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SessionAutomation"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "web_bot_auth": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SessionWebBotAuth"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "network": {
+            "$ref": "#/components/schemas/SessionNetwork"
+          },
+          "runtime_integrity": {
+            "$ref": "#/components/schemas/SessionRuntimeIntegrity"
+          },
+          "visitor_fingerprint": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SessionDetailVisitorFingerprint"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "connection_fingerprint": {
+            "$ref": "#/components/schemas/SessionConnectionFingerprint"
+          },
+          "previous_decisions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SessionDetailDecision"
+            }
+          },
+          "request": {
+            "$ref": "#/components/schemas/SessionDetailRequest"
+          },
+          "browser": {
+            "$ref": "#/components/schemas/SessionBrowser"
+          },
+          "device": {
+            "$ref": "#/components/schemas/SessionDevice"
+          },
+          "analysis_coverage": {
+            "$ref": "#/components/schemas/SessionAnalysisCoverage"
+          },
+          "signals_fired": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SessionSignalFired"
+            }
+          },
+          "client_telemetry": {
+            "$ref": "#/components/schemas/SessionClientTelemetry"
+          }
+        }
+      },
+      "SessionDetailDecision": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "event_id",
+          "automation_status",
+          "risk_score",
+          "evaluation_phase",
+          "decision_status",
+          "evaluated_at"
+        ],
+        "properties": {
+          "event_id": {
+            "$ref": "#/components/schemas/EventId"
+          },
+          "automation_status": {
+            "type": "string",
+            "enum": [
+              "automated",
+              "human",
+              "uncertain"
+            ]
+          },
+          "risk_score": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "evaluation_phase": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Phase"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "decision_status": {
+            "type": "string",
+            "enum": [
+              "preliminary",
+              "final"
+            ]
+          },
+          "evaluated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "SessionDetailRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "url",
+          "referrer",
+          "user_agent"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "referrer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "user_agent": {
+            "type": "string"
+          }
+        }
+      },
+      "SessionDetailResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/SessionDetail"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "SessionDetailVisitorFingerprint": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "object",
+          "id",
+          "confidence",
+          "identified_at",
+          "lifecycle"
+        ],
+        "properties": {
+          "object": {
+            "const": "visitor_fingerprint"
+          },
+          "id": {
+            "$ref": "#/components/schemas/FingerprintId"
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "identified_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "lifecycle": {
+            "$ref": "#/components/schemas/SessionDetailVisitorFingerprintLifecycle"
+          }
+        }
+      },
+      "SessionDetailVisitorFingerprintLifecycle": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "first_seen_at",
+          "last_seen_at",
+          "seen_count"
+        ],
+        "properties": {
+          "first_seen_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "last_seen_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "seen_count": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "SessionDevice": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "form_factor",
+          "operating_system",
+          "architecture",
+          "screen",
+          "locale",
+          "capabilities"
+        ],
+        "properties": {
+          "form_factor": {
+            "type": "string"
+          },
+          "operating_system": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "version"
+            ],
+            "properties": {
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "version": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "architecture": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "screen": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "size",
+              "color_depth",
+              "pixel_ratio",
+              "orientation_type"
+            ],
+            "properties": {
+              "size": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "color_depth": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "pixel_ratio": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "orientation_type": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "locale": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "timezone",
+              "primary_language",
+              "languages"
+            ],
+            "properties": {
+              "timezone": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "primary_language": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "languages": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "capabilities": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "touch",
+              "storage",
+              "webgpu",
+              "platform_authenticator",
+              "media_devices",
+              "speech_synthesis"
+            ],
+            "properties": {
+              "touch": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "available",
+                  "max_touch_points"
+                ],
+                "properties": {
+                  "available": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  },
+                  "max_touch_points": {
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              },
+              "storage": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "cookies",
+                  "local_storage",
+                  "indexed_db",
+                  "service_worker",
+                  "window_name"
+                ],
+                "properties": {
+                  "cookies": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  },
+                  "local_storage": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  },
+                  "indexed_db": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  },
+                  "service_worker": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  },
+                  "window_name": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  }
+                }
+              },
+              "webgpu": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "available"
+                ],
+                "properties": {
+                  "available": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  }
+                }
+              },
+              "platform_authenticator": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "available",
+                  "conditional_mediation"
+                ],
+                "properties": {
+                  "available": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  },
+                  "conditional_mediation": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  }
+                }
+              },
+              "media_devices": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "available"
+                ],
+                "properties": {
+                  "available": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  }
+                }
+              },
+              "speech_synthesis": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "available"
+                ],
+                "properties": {
+                  "available": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "SessionHighlight": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "key",
+          "effect",
+          "importance",
+          "summary"
+        ],
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "effect": {
+            "type": "string",
+            "enum": [
+              "increases_risk",
+              "reduces_risk",
+              "context"
+            ]
+          },
+          "importance": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "summary": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SessionHighlightEvidence"
+            }
+          }
+        }
+      },
+      "SessionHighlightEvidence": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "signal",
+          "name"
+        ],
+        "properties": {
+          "signal": {
+            "type": "string",
+            "examples": [
+              "webdriver_detected"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "examples": [
+              "WebDriver detected"
+            ]
+          }
+        }
+      },
+      "SessionId": {
+        "type": "string",
+        "pattern": "^sid_[0123456789abcdefghjkmnpqrstvwxyz]{26}$"
+      },
+      "SessionListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "pagination",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SessionSummary"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/CursorPagination"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "SessionNetwork": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ip_address",
+          "ip_version",
+          "status",
+          "summary",
+          "location",
+          "routing",
+          "anonymity",
+          "reputation",
+          "evidence",
+          "evaluated_at"
+        ],
+        "properties": {
+          "ip_address": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ip_version": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "ipv4",
+                  "ipv6"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "ready",
+              "skipped",
+              "error"
+            ]
+          },
+          "summary": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "location": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SessionNetworkLocation"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "routing": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "asn",
+              "organization"
+            ],
+            "properties": {
+              "asn": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "organization": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "anonymity": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "vpn",
+              "proxy",
+              "tor",
+              "relay",
+              "hosting",
+              "residential_proxy",
+              "callback_proxy",
+              "provider"
+            ],
+            "properties": {
+              "vpn": {
+                "type": "boolean"
+              },
+              "proxy": {
+                "type": "boolean"
+              },
+              "tor": {
+                "type": "boolean"
+              },
+              "relay": {
+                "type": "boolean"
+              },
+              "hosting": {
+                "type": "boolean"
+              },
+              "residential_proxy": {
+                "type": "boolean"
+              },
+              "callback_proxy": {
+                "type": "boolean"
+              },
+              "provider": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "reputation": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "listed",
+              "categories",
+              "suspicious_network"
+            ],
+            "properties": {
+              "listed": {
+                "type": "boolean"
+              },
+              "categories": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "suspicious_network": {
+                "type": "boolean"
+              }
+            }
+          },
+          "evidence": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "risk_signals",
+              "operator_tags",
+              "client_types",
+              "client_count"
+            ],
+            "properties": {
+              "risk_signals": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "operator_tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "client_types": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "client_count": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          },
+          "evaluated_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "SessionNetworkLocation": {
+        "anyOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "city",
+              "region",
+              "country",
+              "country_code",
+              "latitude",
+              "longitude",
+              "timezone",
+              "postal_code",
+              "accuracy_radius_km"
+            ],
+            "properties": {
+              "city": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "region": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "country": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "country_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "latitude": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "longitude": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "timezone": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "postal_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "accuracy_radius_km": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0
+              }
+            }
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "SessionRawDeviceAudio": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "hash",
+          "sample_rate",
+          "channel_count",
+          "voice_count",
+          "local_voice_count",
+          "default_voice_lang",
+          "noise_detected"
+        ],
+        "properties": {
+          "hash": {
+            "$ref": "#/components/schemas/ObservationHash"
+          },
+          "sample_rate": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "channel_count": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "voice_count": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "local_voice_count": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "default_voice_lang": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "noise_detected": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        }
+      },
+      "SessionRawDeviceCanvas": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "hash",
+          "geometry_hash",
+          "text_hash",
+          "winding",
+          "noise_detected",
+          "offscreen_consistent"
+        ],
+        "properties": {
+          "hash": {
+            "$ref": "#/components/schemas/ObservationHash"
+          },
+          "geometry_hash": {
+            "$ref": "#/components/schemas/ObservationHash"
+          },
+          "text_hash": {
+            "$ref": "#/components/schemas/ObservationHash"
+          },
+          "winding": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "noise_detected": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "offscreen_consistent": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        }
+      },
+      "SessionRawDeviceFonts": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "detected_count",
+          "tested_count",
+          "enumeration_hash",
+          "metrics_hash",
+          "preferences_hash",
+          "emoji_hash"
+        ],
+        "properties": {
+          "detected_count": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "tested_count": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "enumeration_hash": {
+            "$ref": "#/components/schemas/ObservationHash"
+          },
+          "metrics_hash": {
+            "$ref": "#/components/schemas/ObservationHash"
+          },
+          "preferences_hash": {
+            "$ref": "#/components/schemas/ObservationHash"
+          },
+          "emoji_hash": {
+            "$ref": "#/components/schemas/ObservationHash"
+          }
+        }
+      },
+      "SessionRawDeviceGraphics": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "webgl",
+          "webgpu"
+        ],
+        "properties": {
+          "webgl": {
+            "$ref": "#/components/schemas/SessionRawDeviceGraphicsWebgl"
+          },
+          "webgpu": {
+            "$ref": "#/components/schemas/SessionRawDeviceGraphicsWebgpu"
+          }
+        }
+      },
+      "SessionRawDeviceGraphicsWebgl": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "vendor",
+          "renderer",
+          "version",
+          "shading_language_version",
+          "parameters_hash",
+          "extensions_hash",
+          "extension_parameters_hash",
+          "shader_precision_hash"
+        ],
+        "properties": {
+          "vendor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "renderer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "shading_language_version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameters_hash": {
+            "$ref": "#/components/schemas/ObservationHash"
+          },
+          "extensions_hash": {
+            "$ref": "#/components/schemas/ObservationHash"
+          },
+          "extension_parameters_hash": {
+            "$ref": "#/components/schemas/ObservationHash"
+          },
+          "shader_precision_hash": {
+            "$ref": "#/components/schemas/ObservationHash"
+          }
+        }
+      },
+      "SessionRawDeviceGraphicsWebgpu": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "available",
+          "adapter_vendor",
+          "adapter_architecture",
+          "fallback_adapter",
+          "features_hash",
+          "limits_hash"
+        ],
+        "properties": {
+          "available": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "adapter_vendor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "adapter_architecture": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fallback_adapter": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "features_hash": {
+            "$ref": "#/components/schemas/ObservationHash"
+          },
+          "limits_hash": {
+            "$ref": "#/components/schemas/ObservationHash"
+          }
+        }
+      },
+      "SessionRawDeviceMedia": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "device_count",
+          "counts_by_kind",
+          "blank_label_count",
+          "topology_hash"
+        ],
+        "properties": {
+          "device_count": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "counts_by_kind": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "blank_label_count": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "topology_hash": {
+            "$ref": "#/components/schemas/ObservationHash"
+          }
+        }
+      },
+      "SessionRawDeviceNavigator": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "platform",
+          "vendor",
+          "hardware_concurrency",
+          "device_memory",
+          "max_touch_points",
+          "pdf_viewer_enabled",
+          "cookie_enabled",
+          "product_sub",
+          "primary_language",
+          "languages",
+          "mime_types_count",
+          "plugins"
+        ],
+        "properties": {
+          "platform": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "vendor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "hardware_concurrency": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "device_memory": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "max_touch_points": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "pdf_viewer_enabled": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "cookie_enabled": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "product_sub": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "primary_language": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mime_types_count": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "plugins": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "SessionRawDeviceStorage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "cookies",
+          "local_storage",
+          "session_storage",
+          "indexed_db",
+          "service_worker",
+          "window_name"
+        ],
+        "properties": {
+          "cookies": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "local_storage": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "session_storage": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "indexed_db": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "service_worker": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "window_name": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        }
+      },
+      "SessionRuntimeIntegrity": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "tampering_detected",
+          "developer_tools_detected",
+          "emulation_suspected",
+          "virtualization_suspected",
+          "privacy_hardening_suspected"
+        ],
+        "properties": {
+          "tampering_detected": {
+            "type": "boolean"
+          },
+          "developer_tools_detected": {
+            "type": "boolean"
+          },
+          "emulation_suspected": {
+            "type": "boolean"
+          },
+          "virtualization_suspected": {
+            "type": "boolean"
+          },
+          "privacy_hardening_suspected": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SessionSignalFired": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "signal",
+          "role",
+          "category",
+          "strength",
+          "signal_score"
+        ],
+        "properties": {
+          "signal": {
+            "type": "string",
+            "examples": [
+              "webdriver_detected"
+            ]
+          },
+          "role": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "strength": {
+            "type": "string"
+          },
+          "signal_score": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          }
+        }
+      },
+      "SessionSummary": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "object",
+          "id",
+          "created_at",
+          "latest_decision",
+          "visitor_fingerprint"
+        ],
+        "properties": {
+          "object": {
+            "const": "session"
+          },
+          "id": {
+            "$ref": "#/components/schemas/SessionId"
+          },
+          "created_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "latest_decision": {
+            "$ref": "#/components/schemas/Decision"
+          },
+          "visitor_fingerprint": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/VisitorFingerprintLink"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "SessionWebBotAuth": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status",
+          "domain"
+        ],
+        "properties": {
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "domain": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "Slug": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      },
+      "Team": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "object",
+          "id",
+          "name",
+          "slug",
+          "status",
+          "created_at",
+          "updated_at"
+        ],
+        "properties": {
+          "object": {
+            "const": "team"
+          },
+          "id": {
+            "$ref": "#/components/schemas/TeamId"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "slug": {
+            "$ref": "#/components/schemas/Slug"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TeamStatus"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "TeamId": {
+        "type": "string",
+        "pattern": "^team_[0123456789abcdefghjkmnpqrstvwxyz]{26}$"
+      },
+      "TeamResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Team"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "TeamStatus": {
+        "type": "string",
+        "enum": [
+          "active",
+          "suspended",
+          "deleted"
+        ]
+      },
       "UpdateTeamRequest": {
         "type": "object",
+        "additionalProperties": false,
+        "minProperties": 1,
         "properties": {
           "name": {
             "type": "string",
@@ -1952,8 +3301,7 @@
           "status": {
             "$ref": "#/components/schemas/TeamStatus"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "Verdict": {
         "type": "string",
@@ -1962,12 +3310,309 @@
           "human",
           "inconclusive"
         ]
-      }
-    },
-    "securitySchemes": {
-      "apiKeyHeader": {
-        "type": "http",
-        "scheme": "bearer"
+      },
+      "VisitorFingerprintActivity": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sessions"
+        ],
+        "properties": {
+          "sessions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VisitorFingerprintActivitySession"
+            }
+          }
+        }
+      },
+      "VisitorFingerprintActivitySession": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "session_id",
+          "decision",
+          "request",
+          "score_breakdown"
+        ],
+        "properties": {
+          "session_id": {
+            "$ref": "#/components/schemas/SessionId"
+          },
+          "decision": {
+            "$ref": "#/components/schemas/Decision"
+          },
+          "request": {
+            "$ref": "#/components/schemas/RequestContext"
+          },
+          "score_breakdown": {
+            "$ref": "#/components/schemas/ScoreBreakdown"
+          }
+        }
+      },
+      "VisitorFingerprintAnchors": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "webgl_hash",
+          "parameters_hash",
+          "audio_hash"
+        ],
+        "properties": {
+          "webgl_hash": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parameters_hash": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "audio_hash": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "VisitorFingerprintComponents": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "vector"
+        ],
+        "properties": {
+          "vector": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "VisitorFingerprintDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "object",
+          "id",
+          "lifecycle",
+          "latest_request",
+          "storage",
+          "anchors",
+          "components",
+          "activity"
+        ],
+        "properties": {
+          "object": {
+            "const": "visitor_fingerprint"
+          },
+          "id": {
+            "$ref": "#/components/schemas/FingerprintId"
+          },
+          "lifecycle": {
+            "$ref": "#/components/schemas/VisitorFingerprintLifecycle"
+          },
+          "latest_request": {
+            "$ref": "#/components/schemas/VisitorFingerprintLatestRequest"
+          },
+          "storage": {
+            "$ref": "#/components/schemas/VisitorFingerprintStorage"
+          },
+          "anchors": {
+            "$ref": "#/components/schemas/VisitorFingerprintAnchors"
+          },
+          "components": {
+            "$ref": "#/components/schemas/VisitorFingerprintComponents"
+          },
+          "activity": {
+            "$ref": "#/components/schemas/VisitorFingerprintActivity"
+          }
+        }
+      },
+      "VisitorFingerprintDetailResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/VisitorFingerprintDetail"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "VisitorFingerprintLatestRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "user_agent",
+          "ip_address"
+        ],
+        "properties": {
+          "user_agent": {
+            "type": "string"
+          },
+          "ip_address": {
+            "type": "string"
+          }
+        }
+      },
+      "VisitorFingerprintLifecycle": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "first_seen_at",
+          "last_seen_at",
+          "seen_count",
+          "expires_at"
+        ],
+        "properties": {
+          "first_seen_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_seen_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "seen_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "VisitorFingerprintLink": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "object",
+          "id",
+          "confidence",
+          "identified_at"
+        ],
+        "properties": {
+          "object": {
+            "const": "visitor_fingerprint"
+          },
+          "id": {
+            "$ref": "#/components/schemas/FingerprintId"
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "identified_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "VisitorFingerprintListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "pagination",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VisitorFingerprintSummary"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/CursorPagination"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "VisitorFingerprintStorage": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "cookies",
+          "local_storage",
+          "indexed_db",
+          "service_worker",
+          "window_name"
+        ],
+        "properties": {
+          "cookies": {
+            "type": "boolean"
+          },
+          "local_storage": {
+            "type": "boolean"
+          },
+          "indexed_db": {
+            "type": "boolean"
+          },
+          "service_worker": {
+            "type": "boolean"
+          },
+          "window_name": {
+            "type": "boolean"
+          }
+        }
+      },
+      "VisitorFingerprintSummary": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "object",
+          "id",
+          "lifecycle",
+          "latest_request",
+          "storage",
+          "anchors"
+        ],
+        "properties": {
+          "object": {
+            "const": "visitor_fingerprint"
+          },
+          "id": {
+            "$ref": "#/components/schemas/FingerprintId"
+          },
+          "lifecycle": {
+            "$ref": "#/components/schemas/VisitorFingerprintLifecycle"
+          },
+          "latest_request": {
+            "$ref": "#/components/schemas/VisitorFingerprintLatestRequest"
+          },
+          "storage": {
+            "$ref": "#/components/schemas/VisitorFingerprintStorage"
+          },
+          "anchors": {
+            "$ref": "#/components/schemas/VisitorFingerprintAnchors"
+          }
+        }
       }
     }
   }

@@ -13,133 +13,429 @@ export interface RequestOptions {
 export interface ListResult<T> {
   items: T[];
   limit: number;
-  hasMore: boolean;
-  nextCursor?: string;
+  has_more: boolean;
+  next_cursor?: string;
 }
 
 export interface CursorPagination {
   limit: number;
-  hasMore: boolean;
-  nextCursor?: string;
+  has_more: boolean;
+  next_cursor?: string;
+}
+
+export interface ResponseMeta {
+  request_id: string;
 }
 
 export interface TripwireFieldError {
-  field: string;
+  name: string;
   issue: string;
   expected?: string;
   received?: string | number | boolean | null;
 }
 
 export interface TripwireErrorDetails {
-  fieldErrors?: TripwireFieldError[];
-  allowedValues?: string[];
-  header?: string;
-  query?: string;
-  nextAction?: 'retry' | 'new_session' | 'reload_bundle' | 'contact_support';
+  fields?: TripwireFieldError[];
+  allowed_values?: string[];
+  header_name?: string;
+  parameter_set?: string;
+  next_action?: 'retry' | 'new_session' | 'reload_bundle' | 'contact_support';
   [key: string]: unknown;
 }
 
-export interface PublicErrorBody {
+export interface ApiErrorBody {
   code: string;
   message: string;
   status: number;
   retryable: boolean;
-  requestId: string;
-  docsUrl?: string;
+  request_id: string;
+  docs_url?: string;
   details?: TripwireErrorDetails;
 }
 
-export interface PublicErrorEnvelope {
-  error: PublicErrorBody;
+export interface ApiErrorEnvelope {
+  error: ApiErrorBody;
 }
 
-export interface ResultSummary {
-  eventId: string;
-  verdict: string;
-  riskScore: number;
+export interface Decision {
+  event_id: string;
+  verdict: 'bot' | 'human' | 'inconclusive';
+  risk_score: number;
   phase: 'snapshot' | 'behavioral' | null;
-  provisional: boolean | null;
-  manipulationScore: number | null;
-  manipulationVerdict: string | null;
-  evaluationDuration: number | null;
-  scoredAt: string;
+  is_provisional: boolean | null;
+  manipulation: {
+    score: number | null;
+    verdict: 'none' | 'low' | 'medium' | 'high' | null;
+  } | null;
+  evaluation_duration_ms: number | null;
+  evaluated_at: string;
 }
 
-export interface FingerprintReference {
-  object: 'fingerprint';
+export interface RequestContext {
+  user_agent: string;
+  url: string;
+  screen_size: string | null;
+  is_touch_capable: boolean | null;
+  ip_address: string;
+}
+
+export interface SessionDetailRequest {
+  url: string;
+  referrer: string | null;
+  user_agent: string;
+}
+
+export interface SessionBrowser {
+  name: string | null;
+  version: string | null;
+  major_version: string | null;
+  engine: 'blink' | 'gecko' | 'webkit' | 'unknown';
+}
+
+export interface SessionDevice {
+  form_factor: 'desktop' | 'phone' | 'tablet' | 'unknown';
+  operating_system: {
+    name: string | null;
+    version: string | null;
+  };
+  architecture: string | null;
+  screen: {
+    size: string | null;
+    color_depth: number | null;
+    pixel_ratio: number | null;
+    orientation_type: string | null;
+  };
+  locale: {
+    timezone: string | null;
+    primary_language: string | null;
+    languages: string[];
+  };
+  capabilities: {
+    touch: {
+      available: boolean | null;
+      max_touch_points: number | null;
+    };
+    storage: {
+      cookies: boolean | null;
+      local_storage: boolean | null;
+      indexed_db: boolean | null;
+      service_worker: boolean | null;
+      window_name: boolean | null;
+    };
+    webgpu: {
+      available: boolean | null;
+    };
+    platform_authenticator: {
+      available: boolean | null;
+      conditional_mediation: boolean | null;
+    };
+    media_devices: {
+      available: boolean | null;
+    };
+    speech_synthesis: {
+      available: boolean | null;
+    };
+  };
+}
+
+export interface SessionNetwork {
+  ip_address: string | null;
+  ip_version: 'ipv4' | 'ipv6' | null;
+  status: 'pending' | 'ready' | 'skipped' | 'error';
+  summary: string | null;
+  location: {
+    city: string | null;
+    region: string | null;
+    country: string | null;
+    country_code: string | null;
+    latitude: number | null;
+    longitude: number | null;
+    timezone: string | null;
+    postal_code: string | null;
+    accuracy_radius_km: number | null;
+  } | null;
+  routing: {
+    asn: string | null;
+    organization: string | null;
+  };
+  anonymity: {
+    vpn: boolean;
+    proxy: boolean;
+    tor: boolean;
+    relay: boolean;
+    hosting: boolean;
+    residential_proxy: boolean;
+    callback_proxy: boolean;
+    provider: string | null;
+  };
+  reputation: {
+    listed: boolean;
+    categories: string[];
+    suspicious_network: boolean;
+  };
+  evidence: {
+    risk_signals: string[];
+    operator_tags: string[];
+    client_types: string[];
+    client_count: number | null;
+  };
+  evaluated_at: string | null;
+}
+
+export type ObservationHash = string | number | null;
+
+export interface SessionClientTelemetry {
+  navigator: {
+    platform: string | null;
+    vendor: string | null;
+    hardware_concurrency: number | null;
+    device_memory: number | null;
+    max_touch_points: number | null;
+    pdf_viewer_enabled: boolean | null;
+    cookie_enabled: boolean | null;
+    product_sub: string | null;
+    primary_language: string | null;
+    languages: string[];
+    mime_types_count: number | null;
+    plugins: string[];
+  };
+  storage: {
+    cookies: boolean | null;
+    local_storage: boolean | null;
+    session_storage: boolean | null;
+    indexed_db: boolean | null;
+    service_worker: boolean | null;
+    window_name: boolean | null;
+  };
+  canvas: {
+    hash: ObservationHash;
+    geometry_hash: ObservationHash;
+    text_hash: ObservationHash;
+    winding: boolean | null;
+    noise_detected: boolean | null;
+    offscreen_consistent: boolean | null;
+  };
+  graphics: {
+    webgl: {
+      vendor: string | null;
+      renderer: string | null;
+      version: string | null;
+      shading_language_version: string | null;
+      parameters_hash: ObservationHash;
+      extensions_hash: ObservationHash;
+      extension_parameters_hash: ObservationHash;
+      shader_precision_hash: ObservationHash;
+    };
+    webgpu: {
+      available: boolean | null;
+      adapter_vendor: string | null;
+      adapter_architecture: string | null;
+      fallback_adapter: boolean | null;
+      features_hash: ObservationHash;
+      limits_hash: ObservationHash;
+    };
+  };
+  audio: {
+    hash: ObservationHash;
+    sample_rate: number | null;
+    channel_count: number | null;
+    voice_count: number | null;
+    local_voice_count: number | null;
+    default_voice_lang: string | null;
+    noise_detected: boolean | null;
+  };
+  fonts: {
+    detected_count: number | null;
+    tested_count: number | null;
+    enumeration_hash: ObservationHash;
+    metrics_hash: ObservationHash;
+    preferences_hash: ObservationHash;
+    emoji_hash: ObservationHash;
+  };
+  media: {
+    device_count: number | null;
+    counts_by_kind: Record<string, number>;
+    blank_label_count: number | null;
+    topology_hash: ObservationHash;
+  };
+}
+
+export interface SessionHighlightEvidence {
+  signal: string;
+  name: string;
+}
+
+export interface SessionHighlight {
+  key: string;
+  effect: 'increases_risk' | 'reduces_risk' | 'context';
+  importance: 'high' | 'medium' | 'low';
+  summary: string;
+  evidence?: SessionHighlightEvidence[];
+}
+
+export interface SessionDecision {
+  event_id: string;
+  automation_status: 'automated' | 'human' | 'uncertain';
+  risk_score: number;
+  evaluation_phase: 'snapshot' | 'behavioral' | null;
+  decision_status: 'preliminary' | 'final';
+  evaluated_at: string;
+}
+
+export interface SessionAutomationFacet {
+  value: string;
+  confidence: number;
+  relation: string;
+}
+
+export interface SessionAutomation {
+  category: string | null;
+  confidence: number | null;
+  provider: string | null;
+  product: string | null;
+  framework: string | null;
+  concealment_style: string | null;
+  organization: string | null;
+  facets: Record<string, SessionAutomationFacet>;
+}
+
+export interface SessionWebBotAuth {
+  status: string | null;
+  domain: string | null;
+}
+
+export interface SessionRuntimeIntegrity {
+  tampering_detected: boolean;
+  developer_tools_detected: boolean;
+  emulation_suspected: boolean;
+  virtualization_suspected: boolean;
+  privacy_hardening_suspected: boolean;
+}
+
+export interface VisitorFingerprintLink {
+  object: 'visitor_fingerprint';
   id: string;
   confidence: number | null;
-  timestamp: string | null;
+  identified_at: string | null;
 }
 
-export interface SessionMetadata {
-  userAgent: string;
-  url: string;
-  screenSize: string | null;
-  touchDevice: boolean | null;
-  clientIp: string;
+export interface SessionDetailVisitorFingerprint {
+  object: 'visitor_fingerprint';
+  id: string;
+  confidence: number | null;
+  identified_at: string | null;
+  lifecycle: {
+    first_seen_at: string | null;
+    last_seen_at: string | null;
+    seen_count: number | null;
+  };
 }
 
-export interface SessionLatestResultDetail extends ResultSummary {
-  visitorId: string | null;
-  metadata: SessionMetadata;
+export interface SessionConnectionFingerprint {
+  ja4: {
+    hash: string | null;
+    profile: string | null;
+    family: string | null;
+    product: string | null;
+    confidence: string | null;
+    deterministic: boolean | null;
+  };
+  http2: {
+    akamai_fingerprint: string | null;
+    profile: string | null;
+  };
+  user_agent_alignment: 'match' | 'mismatch' | 'unknown' | null;
+}
+
+export interface SessionAnalysisCoverage {
+  browser: boolean;
+  device: boolean;
+  network: boolean;
+  runtime: boolean;
+  behavioral: boolean;
+  visitor_identity: boolean;
+}
+
+export interface SessionSignalFired {
+  signal: string;
+  role: string;
+  category: string;
+  strength: string;
+  signal_score: number;
 }
 
 export interface SessionSummary {
   object: 'session';
   id: string;
-  createdAt: string | null;
-  latestEventId: string;
-  latestResult: ResultSummary;
-  fingerprint: FingerprintReference | null;
-  lastScoredAt: string;
+  created_at: string | null;
+  latest_decision: Decision;
+  visitor_fingerprint: VisitorFingerprintLink | null;
 }
 
 export interface SessionDetail {
   object: 'session';
   id: string;
-  createdAt: string | null;
-  latestEventId: string;
-  latestResult: SessionLatestResultDetail;
-  ipIntel: Record<string, unknown> | null;
-  fingerprint: FingerprintReference | null;
-  resultHistory: ResultSummary[];
+  created_at: string | null;
+  decision: SessionDecision;
+  highlights: SessionHighlight[];
+  automation: SessionAutomation | null;
+  web_bot_auth: SessionWebBotAuth | null;
+  network: SessionNetwork;
+  runtime_integrity: SessionRuntimeIntegrity;
+  visitor_fingerprint: SessionDetailVisitorFingerprint | null;
+  connection_fingerprint: SessionConnectionFingerprint;
+  previous_decisions: SessionDecision[];
+  request: SessionDetailRequest;
+  browser: SessionBrowser;
+  device: SessionDevice;
+  analysis_coverage: SessionAnalysisCoverage;
+  signals_fired: SessionSignalFired[];
+  client_telemetry: SessionClientTelemetry;
 }
 
-export interface FingerprintSummary {
-  object: 'fingerprint';
+export interface VisitorFingerprintSummary {
+  object: 'visitor_fingerprint';
   id: string;
-  firstSeenAt: string;
-  lastSeenAt: string;
-  seenCount: number;
-  lastUserAgent: string;
-  lastIp: string;
-  expiresAt: string;
-  anchorWebglHash?: string | null;
-  anchorParamsHash?: string | null;
-  anchorAudioHash?: string | null;
-  fingerprintVector?: number[];
-  hasCookie?: boolean;
-  hasLs?: boolean;
-  hasIdb?: boolean;
-  hasSw?: boolean;
-  hasWn?: boolean;
+  lifecycle: {
+    first_seen_at: string;
+    last_seen_at: string;
+    seen_count: number;
+    expires_at: string;
+  };
+  latest_request: {
+    user_agent: string;
+    ip_address: string;
+  };
+  storage: {
+    cookies: boolean;
+    local_storage: boolean;
+    indexed_db: boolean;
+    service_worker: boolean;
+    window_name: boolean;
+  };
+  anchors: {
+    webgl_hash: string | null;
+    parameters_hash: string | null;
+    audio_hash: string | null;
+  };
 }
 
-export interface FingerprintSessionSummary {
-  eventId: string;
-  verdict: string;
-  riskScore: number;
-  scoredAt: string;
-  userAgent: string;
-  url: string;
-  clientIp: string;
-  screenSize: string | null;
-  categoryScores: Record<string, number> | null;
+export interface VisitorFingerprintActivitySession {
+  session_id: string;
+  decision: Decision;
+  request: RequestContext;
+  score_breakdown: {
+    categories: Record<string, number> | null;
+  };
 }
 
-export interface FingerprintDetail extends FingerprintSummary {
-  sessions: FingerprintSessionSummary[];
+export interface VisitorFingerprintDetail extends VisitorFingerprintSummary {
+  components: {
+    vector: number[] | null;
+  };
+  activity: {
+    sessions: VisitorFingerprintActivitySession[];
+  };
 }
 
 export interface Team {
@@ -147,27 +443,27 @@ export interface Team {
   id: string;
   name: string;
   slug: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string | null;
+  status: 'active' | 'suspended' | 'deleted';
+  created_at: string;
+  updated_at: string | null;
 }
 
 export interface ApiKey {
   object: 'api_key';
   id: string;
-  key: string;
+  public_key: string;
   name: string;
-  isTest: boolean;
-  allowedOrigins: string[] | null;
-  rateLimit: number | null;
-  status: string;
-  createdAt: string;
-  rotatedAt: string | null;
-  revokedAt: string | null;
+  environment: 'live' | 'test';
+  allowed_origins: string[] | null;
+  rate_limit: number | null;
+  status: 'active' | 'revoked' | 'rotated';
+  created_at: string;
+  rotated_at: string | null;
+  revoked_at: string | null;
 }
 
 export interface IssuedApiKey extends ApiKey {
-  secretKey: string;
+  secret_key: string;
 }
 
 export interface SessionListParams extends RequestOptions {
@@ -201,9 +497,9 @@ export interface UpdateTeamRequest extends RequestOptions {
 
 export interface CreateApiKeyRequest extends RequestOptions {
   name?: string;
-  isTest?: boolean;
-  allowedOrigins?: string[];
-  rateLimit?: number;
+  environment?: 'live' | 'test';
+  allowed_origins?: string[];
+  rate_limit?: number;
 }
 
 export interface VerifiedTripwireSignal {
@@ -215,31 +511,44 @@ export interface VerifiedTripwireSignal {
 }
 
 export interface VerifiedTripwireToken {
-  eventId: string;
-  sessionId: string;
-  verdict: string;
-  score: number;
-  manipulationScore?: number;
-  manipulationVerdict?: string | null;
-  evaluationDuration?: number | null;
-  scoredAt: number;
-  metadata: SessionMetadata;
+  object: 'session_verification';
+  session_id: string;
+  decision: Decision;
+  request: RequestContext;
+  visitor_fingerprint: VisitorFingerprintLink | null;
   signals: VerifiedTripwireSignal[];
-  categoryScores: Record<string, number>;
-  botAttribution?: Record<string, unknown> | null;
-  visitorId?: string | null;
-  visitorIdConfidence?: number | null;
-  embedContext?: Record<string, unknown> | null;
-  phase?: 'snapshot' | 'behavioral' | null;
-  provisional?: boolean | null;
+  score_breakdown: {
+    categories: Record<string, number>;
+  };
+  attribution: {
+    bot: Record<string, unknown> | null;
+    [key: string]: unknown;
+  };
+  embed: Record<string, unknown> | null;
   [key: string]: unknown;
 }
 
+export interface SafeVerifyTripwireTokenSuccess {
+  ok: true;
+  data: VerifiedTripwireToken;
+}
+
+export interface SafeVerifyTripwireTokenFailure {
+  ok: false;
+  error: Error;
+}
+
+export type SafeVerifyTripwireTokenResult =
+  | SafeVerifyTripwireTokenSuccess
+  | SafeVerifyTripwireTokenFailure;
+
 export interface ResourceEnvelope<T> {
   data: T;
+  meta: ResponseMeta;
 }
 
 export interface ResourceListEnvelope<T> {
   data: T[];
   pagination: CursorPagination;
+  meta: ResponseMeta;
 }

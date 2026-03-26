@@ -2,40 +2,53 @@
   "version": 1,
   "secretKey": "sk_live_fixture_secret",
   "secretHash": "c173e2c1467e446744e3b6aba8fc07e639008fdf3c4b82e32dceef9b41217dc3",
-  "token": "Ae06cX3X+GJm5kIEpWCttcHCIVI9o3Y0HWX/clGdryb0XO2K0eIIsEkh3bdtCTKJMfykSJGkECwhajrvmYFjPSPMbs7gSfUeUnKYHX/4hV1SZNkGby8hHvrhPGiXuxOeqwBfTokfhpJrUIMVLhH3DArgNBi9su6VFrdYNoSf9ca8ttWY/mq2fDvQdHoNg8Kg8VNnCTEALVcOOf4TwtLqbp59GRto59rDPQpFtWFtGcCDNCvGsMoBqqdm3gcEsD38nGIiWhasFlr9/1h26qJhDl7Jy4ZYIjhSxLQRv8O/Xj+YBbQvM5NkhgqfrvTVdzQkpuvM3HZawOXw9PP5MowhzLLKWEEPwgJnWbLXqxVmB1IXU6yovT9jNPiYW9bNlAb0QzhNVHfJWsy247VGMVSXEO7FKu3L3JVhuU7HzoV+DNjQXjp3KzwNw7AbzGTEqJGrEgc8WgkbDSpWl86X+jJv6igFf308BT49QcP7GlpklYM+c9olYThBy1+L8Mw=",
+  "token": "AQyvpqAj2Es6mvd4vsMZGi4SpmWM/C8VAuASfl/6rQR6kAg2dFEXuWcfLojx8obJCYopv8H+v/b/FPn/+q80KRIFA5+cdsIPmjrHY0Z/rcrB2VIBrm1g0+wMkQnTEJb3VbtlobShig+pa4UQhMohhse30n1bzrGbH+8qVbwKbczz/UowIY+uQ7OI8iBWE3ev+wp9u0kvFDMyJMpgRJHuLSvm3oVBgO+MBmvSTyIrVI5o8f2gKtHuFu0whSgMkvaD9iYmWb6OgHvQdcI8QjkNRMniree81af/sw6p175ntU2lwFCsS+P4hHdUKl4doDJjpZiUnRCGeHrmPtxC02M1oNMfpAGH7y130EsNxl8KVuIyAf5wSr546n0rAOUNtwQtUe6CFg7DdyYgdHJMgUmreGARMQJbHf66ykNLV307UpbfM4IzU7kWD7ampH34HLBLoRBgZhkRfhy5LNsKUEBzVxEEGPJwcJxOOhpqlQEblAdaWduSvbOtPOm8kcNNJTitdjejZOctBtMb/X1QjjdHOxURf9XaXlS3v8y2+vJwPjEa/F+oUj5V/z6tLqm029VHU/snUzhdEs7MQ+Y8ACMQTyWhHLcwBGpo3IWVTv/xl4pz7c0PVKQ=",
   "payload": {
-    "eventId": "evt_fixture",
-    "sessionId": "sid_fixture",
-    "verdict": "human",
-    "score": 7,
-    "manipulationScore": 0,
-    "manipulationVerdict": "none",
-    "evaluationDuration": 123,
-    "scoredAt": 1711310400000,
-    "metadata": {
-      "userAgent": "Mozilla/5.0",
+    "object": "session_verification",
+    "session_id": "sid_0123456789abcdefghjkmnpqrs",
+    "decision": {
+      "event_id": "evt_0123456789abcdefghjkmnpqrs",
+      "verdict": "human",
+      "risk_score": 7,
+      "phase": "behavioral",
+      "is_provisional": false,
+      "manipulation": {
+        "score": 0,
+        "verdict": "none"
+      },
+      "evaluation_duration_ms": 123,
+      "evaluated_at": "2026-03-24T20:00:00.000Z"
+    },
+    "request": {
+      "user_agent": "Mozilla/5.0",
       "url": "https://example.com/signup",
-      "screenSize": "1440x900",
-      "touchDevice": false,
-      "clientIp": "203.0.113.9"
+      "screen_size": "1440x900",
+      "is_touch_capable": false,
+      "ip_address": "203.0.113.9"
+    },
+    "visitor_fingerprint": {
+      "object": "visitor_fingerprint",
+      "id": "vid_0123456789abcdefghjkmnpqrs",
+      "confidence": 94,
+      "identified_at": "2026-03-24T19:59:59.000Z"
     },
     "signals": [
       {
         "id": "E6",
         "category": "environment",
-        "confidence": "low",
+        "confidence": "strong",
         "score": 20
       }
     ],
-    "categoryScores": {
-      "behavioral": 9,
-      "environment": 20
+    "score_breakdown": {
+      "categories": {
+        "behavioral": 9,
+        "environment": 20
+      }
     },
-    "botAttribution": null,
-    "visitorId": "vis_fixture",
-    "visitorIdConfidence": 94,
-    "embedContext": null,
-    "phase": "behavioral",
-    "provisional": false
+    "attribution": {
+      "bot": null
+    },
+    "embed": null
   }
 }

@@ -1,21 +1,20 @@
 {
   "error": {
     "code": "request.validation_failed",
-    "message": "Session list query parameters are invalid. Check limit, cursor, and verdict before retrying.",
+    "message": "Invalid session list query. Use limit between 1 and 200 and the supported cursor/search/verdict filters only.",
     "status": 422,
     "retryable": false,
-    "requestId": "req_33333333333333333333333333333333",
-    "docsUrl": "https://tripwirejs.com/docs/api-reference/sessions",
+    "request_id": "req_0123456789abcdef0123456789abcdef",
     "details": {
-      "fieldErrors": [
+      "fields": [
         {
-          "field": "limit",
+          "name": "limit",
           "issue": "invalid_integer",
           "expected": "integer between 1 and 200",
           "received": "999"
         }
       ],
-      "query": "sessions"
+      "parameter_set": "sessions"
     }
   }
 }

@@ -1,4 +1,4 @@
-import type { PublicErrorBody, PublicErrorEnvelope, TripwireFieldError } from './types';
+import type { ApiErrorBody, ApiErrorEnvelope, TripwireFieldError } from './types';
 
 export class TripwireConfigurationError extends Error {
   constructor(message: string) {
@@ -20,27 +20,27 @@ export class TripwireTokenVerificationError extends Error {
 export class TripwireApiError extends Error {
   readonly status: number;
   readonly code: string;
-  readonly requestId: string | null;
-  readonly fieldErrors: TripwireFieldError[];
-  readonly docsUrl: string | null;
-  readonly body: PublicErrorBody | PublicErrorEnvelope | unknown;
+  readonly request_id: string | null;
+  readonly field_errors: TripwireFieldError[];
+  readonly docs_url: string | null;
+  readonly body: ApiErrorBody | ApiErrorEnvelope | unknown;
 
   constructor(options: {
     status: number;
     code: string;
     message: string;
-    requestId?: string | null;
-    fieldErrors?: TripwireFieldError[];
-    docsUrl?: string | null;
-    body?: PublicErrorBody | PublicErrorEnvelope | unknown;
+    request_id?: string | null;
+    field_errors?: TripwireFieldError[];
+    docs_url?: string | null;
+    body?: ApiErrorBody | ApiErrorEnvelope | unknown;
   }) {
     super(options.message);
     this.name = 'TripwireApiError';
     this.status = options.status;
     this.code = options.code;
-    this.requestId = options.requestId ?? null;
-    this.fieldErrors = options.fieldErrors ?? [];
-    this.docsUrl = options.docsUrl ?? null;
+    this.request_id = options.request_id ?? null;
+    this.field_errors = options.field_errors ?? [];
+    this.docs_url = options.docs_url ?? null;
     this.body = options.body;
   }
 }
