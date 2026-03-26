@@ -7,7 +7,7 @@ This document is the language-agnostic contract for verifying those tokens in pu
 ## Overview
 
 - Input: a base64-encoded sealed token string
-- Output: a JSON payload describing the scored Tripwire result for the current action
+- Output: a JSON payload describing the verified Tripwire session decision for the current action
 - Confidentiality and integrity: AES-256-GCM
 - Compression: zlib deflate/inflate
 
@@ -65,23 +65,42 @@ Any failure in decoding, parsing, authentication, decompression, or JSON parsing
 
 The decrypted JSON payload currently includes:
 
-- `eventId`
-- `sessionId`
-- `verdict`
-- `score`
-- `manipulationScore`
-- `manipulationVerdict`
-- `evaluationDuration`
-- `scoredAt`
-- `metadata`
+- `object`
+- `session_id`
+- `decision`
+- `request`
+- `visitor_fingerprint`
 - `signals`
-- `categoryScores`
-- `botAttribution`
-- `visitorId`
-- `visitorIdConfidence`
-- `embedContext`
-- `phase`
-- `provisional`
+- `score_breakdown`
+- `attribution`
+- `embed`
+
+The payload is aligned to the same public vocabulary as the Sessions API:
+
+- `decision`
+  - `event_id`
+  - `verdict`
+  - `risk_score`
+  - `phase`
+  - `is_provisional`
+  - `manipulation`
+  - `evaluation_duration_ms`
+  - `evaluated_at`
+- `request`
+  - `url`
+  - `user_agent`
+  - `ip_address`
+  - `screen_size`
+  - `is_touch_capable`
+- `visitor_fingerprint`
+  - `object`
+  - `id`
+  - `confidence`
+  - `identified_at`
+- `score_breakdown`
+  - `categories`
+- `attribution`
+  - `bot`
 
 Public SDKs should treat the payload as forward-compatible:
 

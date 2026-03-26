@@ -1,0 +1,405 @@
+{
+  "data": {
+    "object": "session",
+    "id": "sid_0123456789abcdefghjkmnpqrs",
+    "created_at": "2026-03-24T20:00:00.000Z",
+    "decision": {
+      "event_id": "evt_23456789abcdefghjkmnpqrstv",
+      "automation_status": "automated",
+      "risk_score": 94,
+      "evaluation_phase": "behavioral",
+      "decision_status": "final",
+      "evaluated_at": "2026-03-24T20:00:05.000Z"
+    },
+    "highlights": [
+      {
+        "key": "browser_automation",
+        "effect": "increases_risk",
+        "importance": "high",
+        "summary": "Browser automation markers were detected.",
+        "evidence": [
+          {
+            "signal": "webdriver_detected",
+            "name": "WebDriver detected"
+          },
+          {
+            "signal": "anti_detect_browser_indicators",
+            "name": "Anti-detect browser indicators"
+          }
+        ]
+      },
+      {
+        "key": "network_anonymity",
+        "effect": "increases_risk",
+        "importance": "medium",
+        "summary": "This session originated from a VPN-associated network.",
+        "evidence": [
+          {
+            "signal": "vpn_associated_ip",
+            "name": "VPN-associated IP"
+          }
+        ]
+      },
+      {
+        "key": "runtime_anomalies",
+        "effect": "increases_risk",
+        "importance": "medium",
+        "summary": "Runtime integrity checks found suspicious environment traits.",
+        "evidence": [
+          {
+            "signal": "virtualization_indicators",
+            "name": "Virtualization indicators"
+          },
+          {
+            "signal": "developer_tools_detected",
+            "name": "Developer tools detected"
+          },
+          {
+            "signal": "privacy_hardening_indicators",
+            "name": "Privacy hardening indicators"
+          }
+        ]
+      },
+      {
+        "key": "browser_profile_consistent",
+        "effect": "reduces_risk",
+        "importance": "medium",
+        "summary": "Browser identity and device capabilities are internally consistent for a desktop Chromium environment."
+      },
+      {
+        "key": "known_visitor_fingerprint",
+        "effect": "context",
+        "importance": "medium",
+        "summary": "This visitor fingerprint has been seen before.",
+        "evidence": [
+          {
+            "signal": "returning_visitor_fingerprint",
+            "name": "Seen 14 times"
+          }
+        ]
+      }
+    ],
+    "automation": {
+      "category": "automation",
+      "confidence": 0.97,
+      "provider": "browserless",
+      "product": "playwright",
+      "framework": "playwright",
+      "concealment_style": "stealth",
+      "organization": "Browserless",
+      "facets": {
+        "category": {
+          "value": "automation",
+          "confidence": 0.97,
+          "relation": "is"
+        },
+        "provider_family": {
+          "value": "browserless",
+          "confidence": 0.92,
+          "relation": "resembles"
+        },
+        "product_identity": {
+          "value": "playwright",
+          "confidence": 0.89,
+          "relation": "is"
+        },
+        "execution_framework": {
+          "value": "playwright",
+          "confidence": 0.89,
+          "relation": "is"
+        },
+        "concealment_style": {
+          "value": "stealth",
+          "confidence": 0.73,
+          "relation": "is"
+        },
+        "organization": {
+          "value": "Browserless",
+          "confidence": 0.68,
+          "relation": "is"
+        }
+      }
+    },
+    "web_bot_auth": {
+      "status": "verified",
+      "domain": "browserless.io"
+    },
+    "network": {
+      "ip_address": "203.0.113.9",
+      "ip_version": "ipv4",
+      "status": "ready",
+      "summary": "This IP appears associated with VPN traffic.",
+      "location": {
+        "city": "San Francisco",
+        "region": "California",
+        "country": "United States",
+        "country_code": "US",
+        "latitude": 37.7749,
+        "longitude": -122.4194,
+        "timezone": "America/Los_Angeles",
+        "postal_code": "94103",
+        "accuracy_radius_km": 10
+      },
+      "routing": {
+        "asn": "64512",
+        "organization": "Example Networks"
+      },
+      "anonymity": {
+        "vpn": true,
+        "proxy": false,
+        "tor": false,
+        "relay": false,
+        "hosting": false,
+        "residential_proxy": false,
+        "callback_proxy": false,
+        "provider": "Example VPN"
+      },
+      "reputation": {
+        "listed": true,
+        "categories": [
+          "vpn"
+        ],
+        "suspicious_network": false
+      },
+      "evidence": {
+        "risk_signals": [
+          "vpn"
+        ],
+        "operator_tags": [
+          "vpn"
+        ],
+        "client_types": [
+          "consumer"
+        ],
+        "client_count": 3
+      },
+      "evaluated_at": "2026-03-24T20:00:05.000Z"
+    },
+    "runtime_integrity": {
+      "tampering_detected": true,
+      "developer_tools_detected": true,
+      "emulation_suspected": false,
+      "virtualization_suspected": true,
+      "privacy_hardening_suspected": true
+    },
+    "visitor_fingerprint": {
+      "object": "visitor_fingerprint",
+      "id": "vid_456789abcdefghjkmnpqrstvwx",
+      "confidence": 93,
+      "identified_at": "2026-03-24T20:00:01.000Z",
+      "lifecycle": {
+        "first_seen_at": "2026-03-01T18:22:11.000Z",
+        "last_seen_at": "2026-03-24T20:00:05.000Z",
+        "seen_count": 14
+      }
+    },
+    "connection_fingerprint": {
+      "ja4": {
+        "hash": "t13d1516h2_8daaf6152771_02713d6af862",
+        "profile": "chrome",
+        "family": "chromium",
+        "product": "edge",
+        "confidence": "exact",
+        "deterministic": true
+      },
+      "http2": {
+        "akamai_fingerprint": "1:65536;4:131072;5:16384|12517377|0|m,p,a,s",
+        "profile": "chrome"
+      },
+      "user_agent_alignment": "match"
+    },
+    "previous_decisions": [
+      {
+        "event_id": "evt_3456789abcdefghjkmnpqrstvw",
+        "automation_status": "uncertain",
+        "risk_score": 41,
+        "evaluation_phase": "snapshot",
+        "decision_status": "preliminary",
+        "evaluated_at": "2026-03-24T20:00:01.000Z"
+      }
+    ],
+    "request": {
+      "url": "https://example.com/signup",
+      "referrer": "https://example.com/",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.6312.86 Safari/537.36"
+    },
+    "browser": {
+      "name": "Chromium",
+      "version": "123.0.0.0",
+      "major_version": "123",
+      "engine": "blink"
+    },
+    "device": {
+      "form_factor": "desktop",
+      "operating_system": {
+        "name": "macOS",
+        "version": "14.4.0"
+      },
+      "architecture": "arm",
+      "screen": {
+        "size": "1440x900",
+        "color_depth": 24,
+        "pixel_ratio": 2,
+        "orientation_type": "landscape-primary"
+      },
+      "locale": {
+        "timezone": "America/Los_Angeles",
+        "primary_language": "en-US",
+        "languages": [
+          "en-US",
+          "en"
+        ]
+      },
+      "capabilities": {
+        "touch": {
+          "available": false,
+          "max_touch_points": 0
+        },
+        "storage": {
+          "cookies": true,
+          "local_storage": true,
+          "indexed_db": true,
+          "service_worker": true,
+          "window_name": true
+        },
+        "webgpu": {
+          "available": false
+        },
+        "platform_authenticator": {
+          "available": true,
+          "conditional_mediation": true
+        },
+        "media_devices": {
+          "available": true
+        },
+        "speech_synthesis": {
+          "available": false
+        }
+      }
+    },
+    "analysis_coverage": {
+      "browser": true,
+      "device": true,
+      "network": true,
+      "runtime": true,
+      "behavioral": true,
+      "visitor_identity": true
+    },
+    "signals_fired": [
+      {
+        "signal": "webdriver_detected",
+        "role": "risk",
+        "category": "environment",
+        "strength": "definitive",
+        "signal_score": 100
+      },
+      {
+        "signal": "anti_detect_browser_indicators",
+        "role": "risk",
+        "category": "environment",
+        "strength": "strong",
+        "signal_score": 84
+      },
+      {
+        "signal": "software_rendered_graphics_path",
+        "role": "risk",
+        "category": "fingerprint",
+        "strength": "strong",
+        "signal_score": 73
+      },
+      {
+        "signal": "virtualization_indicators",
+        "role": "risk",
+        "category": "environment",
+        "strength": "strong",
+        "signal_score": 61
+      }
+    ],
+    "client_telemetry": {
+      "navigator": {
+        "platform": "macOS",
+        "vendor": "Google Inc.",
+        "hardware_concurrency": null,
+        "device_memory": null,
+        "max_touch_points": 0,
+        "pdf_viewer_enabled": true,
+        "cookie_enabled": true,
+        "product_sub": "20030107",
+        "primary_language": "en-US",
+        "languages": [
+          "en-US",
+          "en"
+        ],
+        "mime_types_count": 5,
+        "plugins": [
+          "PDF Viewer",
+          "Chrome PDF Viewer"
+        ]
+      },
+      "storage": {
+        "cookies": true,
+        "local_storage": true,
+        "session_storage": true,
+        "indexed_db": true,
+        "service_worker": true,
+        "window_name": true
+      },
+      "canvas": {
+        "hash": 123456,
+        "geometry_hash": 998877,
+        "text_hash": 112233,
+        "winding": null,
+        "noise_detected": true,
+        "offscreen_consistent": true
+      },
+      "graphics": {
+        "webgl": {
+          "vendor": "Google Inc.",
+          "renderer": "ANGLE (Apple, ANGLE Metal Renderer)",
+          "version": "WebGL 1.0",
+          "shading_language_version": "WebGL GLSL ES 1.0",
+          "parameters_hash": "params_123",
+          "extensions_hash": 333444,
+          "extension_parameters_hash": "webgl2_456",
+          "shader_precision_hash": 777888
+        },
+        "webgpu": {
+          "available": false,
+          "adapter_vendor": "Apple",
+          "adapter_architecture": "metal",
+          "fallback_adapter": false,
+          "features_hash": 0,
+          "limits_hash": 0
+        }
+      },
+      "audio": {
+        "hash": 124.0434,
+        "sample_rate": 48000,
+        "channel_count": null,
+        "voice_count": 3,
+        "local_voice_count": 2,
+        "default_voice_lang": "en-US",
+        "noise_detected": true
+      },
+      "fonts": {
+        "detected_count": 2,
+        "tested_count": null,
+        "enumeration_hash": 3649417752,
+        "metrics_hash": 223344,
+        "preferences_hash": null,
+        "emoji_hash": 112233
+      },
+      "media": {
+        "device_count": 1,
+        "counts_by_kind": {
+          "audiooutput": 1
+        },
+        "blank_label_count": 1,
+        "topology_hash": 123
+      }
+    }
+  },
+  "meta": {
+    "request_id": "req_0123456789abcdef0123456789abcdef"
+  }
+}

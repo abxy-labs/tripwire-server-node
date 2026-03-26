@@ -25,71 +25,70 @@
       "status": "422"
     },
     {
-      "file": "public-api/sessions/list.json",
+      "file": "api/sessions/list.json",
       "path": "/v1/sessions",
       "method": "get",
       "status": "200"
     },
     {
-      "file": "public-api/sessions/detail.json",
+      "file": "api/sessions/detail.json",
       "path": "/v1/sessions/{sessionId}",
       "method": "get",
       "status": "200"
     },
     {
-      "file": "public-api/fingerprints/list.json",
+      "file": "api/fingerprints/list.json",
       "path": "/v1/fingerprints",
       "method": "get",
       "status": "200"
     },
     {
-      "file": "public-api/fingerprints/detail.json",
+      "file": "api/fingerprints/detail.json",
       "path": "/v1/fingerprints/{visitorId}",
       "method": "get",
       "status": "200"
     },
     {
-      "file": "public-api/teams/team.json",
+      "file": "api/teams/team.json",
       "path": "/v1/teams/{teamId}",
       "method": "get",
       "status": "200"
     },
     {
-      "file": "public-api/teams/team-create.json",
+      "file": "api/teams/team-create.json",
       "path": "/v1/teams",
       "method": "post",
       "status": "201"
     },
     {
-      "file": "public-api/teams/team-update.json",
+      "file": "api/teams/team-update.json",
       "path": "/v1/teams/{teamId}",
       "method": "patch",
       "status": "200"
     },
     {
-      "file": "public-api/teams/api-key-create.json",
+      "file": "api/teams/api-key-create.json",
       "path": "/v1/teams/{teamId}/api-keys",
       "method": "post",
       "status": "201"
     },
     {
-      "file": "public-api/teams/api-key-list.json",
+      "file": "api/teams/api-key-list.json",
       "path": "/v1/teams/{teamId}/api-keys",
       "method": "get",
       "status": "200"
     },
     {
-      "file": "public-api/teams/api-key-rotate.json",
+      "file": "api/teams/api-key-rotate.json",
       "path": "/v1/teams/{teamId}/api-keys/{keyId}/rotations",
       "method": "post",
       "status": "201"
     },
     {
-      "file": "public-api/teams/api-key-revoke.json",
+      "file": "api/teams/api-key-revoke.json",
       "path": "/v1/teams/{teamId}/api-keys/{keyId}",
       "method": "delete",
-      "status": "204",
-      "body": "none"
+      "status": "200"
     }
   ]
 }

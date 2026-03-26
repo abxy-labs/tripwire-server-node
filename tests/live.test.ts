@@ -21,8 +21,8 @@ async function findApiKey(client: Tripwire, teamId: string, keyId: string): Prom
     const page = await client.teams.apiKeys.list(teamId, { limit: 100, ...(cursor ? { cursor } : {}) });
     const found = page.items.find((item) => item.id === keyId);
     if (found) return found;
-    if (!page.hasMore || !page.nextCursor) return null;
-    cursor = page.nextCursor;
+    if (!page.has_more || !page.next_cursor) return null;
+    cursor = page.next_cursor;
   }
 }
 
@@ -90,17 +90,17 @@ describeLive('live API smoke', () => {
 
       const created = await client.teams.apiKeys.create(teamId, {
         name: `sdk-smoke-${Date.now().toString(36)}`,
-        isTest: true,
+        environment: 'test',
       });
       createdKeyId = created.id;
-      expect(created.secretKey.startsWith('sk_')).toBe(true);
+      expect(created.secret_key.startsWith('sk_')).toBe(true);
 
       const listedCreatedKey = await findApiKey(client, teamId, created.id);
       expect(listedCreatedKey?.id).toBe(created.id);
 
       const rotated = await client.teams.apiKeys.rotate(teamId, created.id);
       rotatedKeyId = rotated.id;
-      expect(rotated.secretKey.startsWith('sk_')).toBe(true);
+      expect(rotated.secret_key.startsWith('sk_')).toBe(true);
 
       const fixture = loadFixture<{
         secretKey: string;
@@ -110,7 +110,8 @@ describeLive('live API smoke', () => {
       const verified = safeVerifyTripwireToken(fixture.token, fixture.secretKey);
       expect(verified.ok).toBe(true);
       if (verified.ok) {
-        expect(verified.data.eventId).toBe(fixture.payload.eventId);
+        expect(verified.data.session_id).toBe(fixture.payload.session_id);
+        expect(verified.data.decision.event_id).toBe(fixture.payload.decision.event_id);
       }
     } finally {
       await bestEffortRevoke(client, teamId, rotatedKeyId);

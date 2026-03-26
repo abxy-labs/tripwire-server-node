@@ -4,12 +4,10 @@ import type {
   ApiKeyListParams,
   CreateApiKeyRequest,
   CreateTeamRequest,
-  FingerprintDetail,
   FingerprintListParams,
-  FingerprintSummary,
   IssuedApiKey,
   ListResult,
-  PublicErrorEnvelope,
+  ApiErrorEnvelope,
   RequestOptions,
   ResourceEnvelope,
   ResourceListEnvelope,
@@ -19,6 +17,8 @@ import type {
   Team,
   TripwireOptions,
   UpdateTeamRequest,
+  VisitorFingerprintDetail,
+  VisitorFingerprintSummary,
 } from './types';
 
 const DEFAULT_BASE_URL = 'https://api.tripwirejs.com';
@@ -60,7 +60,7 @@ function resolveOptions(options: TripwireOptions = {}): ResolvedOptions {
 
   return {
     secretKey,
-    baseUrl: options.baseUrl ?? DEFAULT_BASE_URL,
+    baseUrl: options.baseUrl && options.baseUrl !== '' ? options.baseUrl : DEFAULT_BASE_URL,
     timeoutMs: options.timeoutMs ?? DEFAULT_TIMEOUT_MS,
     fetch: fetchImpl,
     userAgent: options.userAgent,
@@ -104,7 +104,7 @@ function createAbortSignal(timeoutMs: number, signal?: AbortSignal) {
   };
 }
 
-function isPublicErrorEnvelope(value: unknown): value is PublicErrorEnvelope {
+function isApiErrorEnvelope(value: unknown): value is ApiErrorEnvelope {
   return typeof value === 'object'
     && value !== null
     && 'error' in value
@@ -116,8 +116,8 @@ function normalizeListEnvelope<T>(envelope: ResourceListEnvelope<T>): ListResult
   return {
     items: envelope.data,
     limit: envelope.pagination.limit,
-    hasMore: envelope.pagination.hasMore,
-    ...(envelope.pagination.nextCursor ? { nextCursor: envelope.pagination.nextCursor } : {}),
+    has_more: envelope.pagination.has_more,
+    ...(envelope.pagination.next_cursor ? { next_cursor: envelope.pagination.next_cursor } : {}),
   };
 }
 
@@ -145,14 +145,14 @@ class HttpClient {
 
       if (!response.ok) {
         const requestId = response.headers.get('x-request-id');
-        if (isPublicErrorEnvelope(payload)) {
+        if (isApiErrorEnvelope(payload)) {
           throw new TripwireApiError({
             status: response.status,
             code: payload.error.code,
             message: payload.error.message,
-            requestId: requestId ?? payload.error.requestId ?? null,
-            fieldErrors: payload.error.details?.fieldErrors ?? [],
-            docsUrl: payload.error.docsUrl ?? null,
+            request_id: requestId ?? payload.error.request_id ?? null,
+            field_errors: payload.error.details?.fields ?? [],
+            docs_url: payload.error.docs_url ?? null,
             body: payload,
           });
         }
@@ -161,7 +161,7 @@ class HttpClient {
           status: response.status,
           code: 'request.failed',
           message: response.statusText || 'Tripwire request failed.',
-          requestId,
+          request_id: requestId,
           body: payload,
         });
       }
@@ -185,9 +185,6 @@ class HttpClient {
     }
   }
 
-  async requestVoid(config: RequestConfig): Promise<void> {
-    await this.request<unknown>(config);
-  }
 }
 
 async function* iterateCursor<T, TParams extends { cursor?: string } & RequestOptions>(
@@ -200,10 +197,10 @@ async function* iterateCursor<T, TParams extends { cursor?: string } & RequestOp
     for (const item of page.items) {
       yield item;
     }
-    if (!page.hasMore || !page.nextCursor) {
+    if (!page.has_more || !page.next_cursor) {
       return;
     }
-    cursor = page.nextCursor;
+    cursor = page.next_cursor;
   }
 }
 
@@ -217,9 +214,9 @@ export class Tripwire {
   };
 
   readonly fingerprints: {
-    list: (params?: FingerprintListParams) => Promise<ListResult<FingerprintSummary>>;
-    get: (visitorId: string, options?: RequestOptions) => Promise<FingerprintDetail>;
-    iter: (params?: Omit<FingerprintListParams, 'cursor'>) => AsyncGenerator<FingerprintSummary, void, void>;
+    list: (params?: FingerprintListParams) => Promise<ListResult<VisitorFingerprintSummary>>;
+    get: (visitorId: string, options?: RequestOptions) => Promise<VisitorFingerprintDetail>;
+    iter: (params?: Omit<FingerprintListParams, 'cursor'>) => AsyncGenerator<VisitorFingerprintSummary, void, void>;
   };
 
   readonly teams: {
@@ -229,7 +226,7 @@ export class Tripwire {
     apiKeys: {
       create: (teamId: string, body: CreateApiKeyRequest) => Promise<IssuedApiKey>;
       list: (teamId: string, params?: ApiKeyListParams) => Promise<ListResult<ApiKey>>;
-      revoke: (teamId: string, keyId: string, options?: RequestOptions) => Promise<void>;
+      revoke: (teamId: string, keyId: string, options?: RequestOptions) => Promise<ApiKey>;
       rotate: (teamId: string, keyId: string, options?: RequestOptions) => Promise<IssuedApiKey>;
     };
   };
@@ -263,7 +260,7 @@ export class Tripwire {
     this.fingerprints = {
       list: async (params = {}) => {
         const { signal, ...query } = params;
-        const response = await this.http.request<ResourceListEnvelope<FingerprintSummary>>({
+        const response = await this.http.request<ResourceListEnvelope<VisitorFingerprintSummary>>({
           path: '/v1/fingerprints',
           query,
           signal,
@@ -271,14 +268,14 @@ export class Tripwire {
         return normalizeListEnvelope(response);
       },
       get: async (visitorId, options = {}) => {
-        const response = await this.http.request<ResourceEnvelope<FingerprintDetail>>({
+        const response = await this.http.request<ResourceEnvelope<VisitorFingerprintDetail>>({
           path: `/v1/fingerprints/${encodeURIComponent(visitorId)}`,
           signal: options.signal,
         });
         return response.data;
       },
       iter: async function* (params = {}) {
-        yield* iterateCursor<FingerprintSummary, FingerprintListParams>(this.list, params);
+        yield* iterateCursor<VisitorFingerprintSummary, FingerprintListParams>(this.list, params);
       },
     };
     this.fingerprints.iter = this.fingerprints.iter.bind(this.fingerprints);
@@ -332,11 +329,12 @@ export class Tripwire {
           return normalizeListEnvelope(response);
         },
         revoke: async (teamId, keyId, options = {}) => {
-          await this.http.requestVoid({
+          const response = await this.http.request<ResourceEnvelope<ApiKey>>({
             path: `/v1/teams/${encodeURIComponent(teamId)}/api-keys/${encodeURIComponent(keyId)}`,
             method: 'DELETE',
             signal: options.signal,
           });
+          return response.data;
         },
         rotate: async (teamId, keyId, options = {}) => {
           const response = await this.http.request<ResourceEnvelope<IssuedApiKey>>({

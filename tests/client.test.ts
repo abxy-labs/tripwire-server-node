@@ -2,16 +2,16 @@ import { describe, expect, it, vi } from 'vitest';
 import { Tripwire } from '../src/client';
 import { TripwireApiError, TripwireConfigurationError } from '../src/errors';
 import type {
-  PublicErrorEnvelope,
+  ApiKey,
+  IssuedApiKey,
+  ApiErrorEnvelope,
   ResourceEnvelope,
   ResourceListEnvelope,
   SessionDetail,
   SessionSummary,
-  FingerprintDetail,
-  FingerprintSummary,
   Team,
-  ApiKey,
-  IssuedApiKey,
+  VisitorFingerprintDetail,
+  VisitorFingerprintSummary,
 } from '../src/types';
 import { jsonResponse, loadFixture } from './helpers';
 
@@ -25,7 +25,7 @@ describe('Tripwire client', () => {
   it('uses the env secret key by default', async () => {
     const original = process.env.TRIPWIRE_SECRET_KEY;
     process.env.TRIPWIRE_SECRET_KEY = 'sk_env_default';
-    const fixture = loadFixture<ResourceListEnvelope<SessionSummary>>('public-api/sessions/list.json');
+    const fixture = loadFixture<ResourceListEnvelope<SessionSummary>>('api/sessions/list.json');
     const fetch = createFetchMock(() => jsonResponse(fixture));
 
     try {
@@ -49,7 +49,7 @@ describe('Tripwire client', () => {
   });
 
   it('lists sessions with normalized pagination and auth headers', async () => {
-    const fixture = loadFixture<ResourceListEnvelope<SessionSummary>>('public-api/sessions/list.json');
+    const fixture = loadFixture<ResourceListEnvelope<SessionSummary>>('api/sessions/list.json');
     const fetch = createFetchMock((input, init) => {
       const url = new URL(String(input));
       expect(url.pathname).toBe('/v1/sessions');
@@ -67,25 +67,31 @@ describe('Tripwire client', () => {
     expect(result).toEqual({
       items: fixture.data,
       limit: 50,
-      hasMore: true,
-      nextCursor: 'cur_sessions_page_2',
+      has_more: true,
+      next_cursor: 'cur_sessions_page_2',
     });
   });
 
   it('iterates through paginated session results', async () => {
-    const firstPage = loadFixture<ResourceListEnvelope<SessionSummary>>('public-api/sessions/list.json');
+    const firstPage = loadFixture<ResourceListEnvelope<SessionSummary>>('api/sessions/list.json');
     const secondPage: ResourceListEnvelope<SessionSummary> = {
       data: [
         {
           ...firstPage.data[0],
           id: 'sid_123456789abcdefghjkmnpqrst',
-          latestEventId: 'evt_3456789abcdefghjkmnpqrstvw',
-          lastScoredAt: '2026-03-24T20:01:05.000Z',
+          latest_decision: {
+            ...firstPage.data[0].latest_decision,
+            event_id: 'evt_3456789abcdefghjkmnpqrstvw',
+            evaluated_at: '2026-03-24T20:01:05.000Z',
+          },
         },
       ],
       pagination: {
         limit: 50,
-        hasMore: false,
+        has_more: false,
+      },
+      meta: {
+        request_id: 'req_0123456789abcdef0123456789abcdef',
       },
     };
 
@@ -104,7 +110,7 @@ describe('Tripwire client', () => {
   });
 
   it('fetches a session detail resource', async () => {
-    const fixture = loadFixture<ResourceEnvelope<SessionDetail>>('public-api/sessions/detail.json');
+    const fixture = loadFixture<ResourceEnvelope<SessionDetail>>('api/sessions/detail.json');
     const fetch = createFetchMock((input) => {
       expect(String(input)).toContain('/v1/sessions/sid_0123456789abcdefghjkmnpqrs');
       return jsonResponse(fixture);
@@ -115,8 +121,8 @@ describe('Tripwire client', () => {
   });
 
   it('lists and fetches fingerprints', async () => {
-    const listFixture = loadFixture<ResourceListEnvelope<FingerprintSummary>>('public-api/fingerprints/list.json');
-    const detailFixture = loadFixture<ResourceEnvelope<FingerprintDetail>>('public-api/fingerprints/detail.json');
+    const listFixture = loadFixture<ResourceListEnvelope<VisitorFingerprintSummary>>('api/fingerprints/list.json');
+    const detailFixture = loadFixture<ResourceEnvelope<VisitorFingerprintDetail>>('api/fingerprints/detail.json');
     const fetch = createFetchMock((input) => {
       const url = String(input);
       if (url.includes('/v1/fingerprints/vid_456789abcdefghjkmnpqrstvwx')) {
@@ -129,16 +135,17 @@ describe('Tripwire client', () => {
     expect(await client.fingerprints.list()).toEqual({
       items: listFixture.data,
       limit: 50,
-      hasMore: false,
+      has_more: false,
     });
     expect(await client.fingerprints.get('vid_456789abcdefghjkmnpqrstvwx')).toEqual(detailFixture.data);
   });
 
   it('supports teams and api key management endpoints', async () => {
-    const teamFixture = loadFixture<ResourceEnvelope<Team>>('public-api/teams/team.json');
-    const createKeyFixture = loadFixture<ResourceEnvelope<IssuedApiKey>>('public-api/teams/api-key-create.json');
-    const listKeyFixture = loadFixture<ResourceListEnvelope<ApiKey>>('public-api/teams/api-key-list.json');
-    const rotateKeyFixture = loadFixture<ResourceEnvelope<IssuedApiKey>>('public-api/teams/api-key-rotate.json');
+    const teamFixture = loadFixture<ResourceEnvelope<Team>>('api/teams/team.json');
+    const createKeyFixture = loadFixture<ResourceEnvelope<IssuedApiKey>>('api/teams/api-key-create.json');
+    const listKeyFixture = loadFixture<ResourceListEnvelope<ApiKey>>('api/teams/api-key-list.json');
+    const revokeKeyFixture = loadFixture<ResourceEnvelope<ApiKey>>('api/teams/api-key-revoke.json');
+    const rotateKeyFixture = loadFixture<ResourceEnvelope<IssuedApiKey>>('api/teams/api-key-rotate.json');
 
     const fetch = createFetchMock((input, init) => {
       const url = String(input);
@@ -146,7 +153,7 @@ describe('Tripwire client', () => {
         return jsonResponse(rotateKeyFixture, { status: 201 });
       }
       if (url.endsWith('/api-keys/key_6789abcdefghjkmnpqrstvwxyz')) {
-        return new Response(null, { status: 204 });
+        return jsonResponse(revokeKeyFixture);
       }
       if (url.endsWith('/api-keys') && init?.method === 'POST') {
         return jsonResponse(createKeyFixture, { status: 201 });
@@ -165,17 +172,17 @@ describe('Tripwire client', () => {
     expect(await client.teams.apiKeys.list('team_56789abcdefghjkmnpqrstvwxy')).toEqual({
       items: listKeyFixture.data,
       limit: 50,
-      hasMore: false,
+      has_more: false,
     });
-    await expect(client.teams.apiKeys.revoke('team_56789abcdefghjkmnpqrstvwxy', 'key_6789abcdefghjkmnpqrstvwxyz')).resolves.toBeUndefined();
+    await expect(client.teams.apiKeys.revoke('team_56789abcdefghjkmnpqrstvwxy', 'key_6789abcdefghjkmnpqrstvwxyz')).resolves.toEqual(revokeKeyFixture.data);
     expect(await client.teams.apiKeys.rotate('team_56789abcdefghjkmnpqrstvwxy', 'key_6789abcdefghjkmnpqrstvwxyz')).toEqual(rotateKeyFixture.data);
   });
 
-  it('parses public API errors into TripwireApiError', async () => {
-    const fixture = loadFixture<PublicErrorEnvelope>('errors/validation-error.json');
+  it('parses API errors into TripwireApiError', async () => {
+    const fixture = loadFixture<ApiErrorEnvelope>('errors/validation-error.json');
     const fetch = createFetchMock(() => jsonResponse(fixture, {
       status: fixture.error.status,
-      headers: { 'x-request-id': fixture.error.requestId },
+      headers: { 'x-request-id': fixture.error.request_id },
     }));
 
     const client = new Tripwire({ secretKey: 'sk_live_test', fetch });
@@ -184,9 +191,9 @@ describe('Tripwire client', () => {
       name: 'TripwireApiError',
       status: 422,
       code: fixture.error.code,
-      requestId: fixture.error.requestId,
-      fieldErrors: fixture.error.details?.fieldErrors,
-      docsUrl: fixture.error.docsUrl,
+      request_id: fixture.error.request_id,
+      field_errors: fixture.error.details?.fields,
+      docs_url: fixture.error.docs_url ?? null,
     } satisfies Partial<TripwireApiError>);
   });
 });

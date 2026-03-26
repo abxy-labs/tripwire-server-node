@@ -54,8 +54,41 @@ describe('server SDK contract', () => {
     });
     expect(schemas.TeamStatus.enum).toEqual(['active', 'suspended', 'deleted']);
     expect(schemas.ApiKeyStatus.enum).toEqual(['active', 'revoked', 'rotated']);
-    expect(schemas.SessionDetail.required).toEqual(expect.arrayContaining(['id', 'latestResult', 'ipIntel']));
-    expect(schemas.ApiKey.required).toEqual(expect.arrayContaining(['allowedOrigins', 'rateLimit', 'rotatedAt', 'revokedAt']));
+    expect(schemas.SessionDetail.required).toEqual(
+      expect.arrayContaining([
+        'id',
+        'decision',
+        'highlights',
+        'automation',
+        'web_bot_auth',
+        'network',
+        'runtime_integrity',
+        'visitor_fingerprint',
+        'connection_fingerprint',
+        'previous_decisions',
+        'request',
+        'browser',
+        'device',
+        'analysis_coverage',
+        'signals_fired',
+        'client_telemetry',
+      ]),
+    );
+    expect(schemas.SessionDetail.properties?.request).toEqual({ $ref: '#/components/schemas/SessionDetailRequest' });
+    expect(schemas.SessionDetail.properties?.client_telemetry).toEqual({
+      $ref: '#/components/schemas/SessionClientTelemetry',
+    });
+    expect(schemas.SessionDetail.properties?.automation).toEqual({
+      anyOf: [{ $ref: '#/components/schemas/SessionAutomation' }, { type: 'null' }],
+    });
+    expect(schemas.SessionDetail.properties?.signals_fired).toEqual({
+      type: 'array',
+      items: { $ref: '#/components/schemas/SessionSignalFired' },
+    });
+    expect(schemas.SessionSignalFired.properties?.signal).toMatchObject({
+      type: 'string',
+    });
+    expect(schemas.ApiKey.required).toEqual(expect.arrayContaining(['allowed_origins', 'rate_limit', 'rotated_at', 'revoked_at']));
     expect(schemas.CollectBatchResponse).toBeUndefined();
   });
 
@@ -65,8 +98,8 @@ describe('server SDK contract', () => {
       tags: ['Sessions'],
     });
     expect(spec.paths['/v1/fingerprints/{visitorId}'].get).toMatchObject({
-      operationId: 'getFingerprint',
-      tags: ['Fingerprints'],
+      operationId: 'getVisitorFingerprint',
+      tags: ['Visitor fingerprints'],
     });
     expect(spec.paths['/v1/teams/{teamId}'].patch).toMatchObject({
       operationId: 'updateTeam',

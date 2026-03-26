@@ -1,7 +1,7 @@
 import { createDecipheriv, createHash } from 'node:crypto';
 import { inflateSync } from 'node:zlib';
 import { TripwireConfigurationError, TripwireTokenVerificationError } from './errors';
-import type { VerifiedTripwireToken } from './types';
+import type { SafeVerifyTripwireTokenResult, VerifiedTripwireToken } from './types';
 
 const VERSION = 0x01;
 
@@ -64,7 +64,7 @@ export function verifyTripwireToken(
 export function safeVerifyTripwireToken(
   sealedToken: string,
   secretKey?: string,
-): { ok: true; data: VerifiedTripwireToken } | { ok: false; error: TripwireConfigurationError | TripwireTokenVerificationError } {
+): SafeVerifyTripwireTokenResult {
   try {
     return { ok: true, data: verifyTripwireToken(sealedToken, secretKey) };
   } catch (error) {

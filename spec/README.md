@@ -4,13 +4,13 @@ This directory is the authoritative cross-language contract for Tripwire server 
 
 It defines:
 
-- the supported public server API surface
+- the supported server API surface
 - the shared sealed token verification behavior
 - golden fixtures for success, error, and pagination flows
 
 ## Scope
 
-Server SDKs include only customer-facing public APIs:
+Server SDKs include only customer-facing APIs:
 
 - `/v1/sessions`
 - `/v1/fingerprints`
@@ -74,7 +74,7 @@ The underlying API responses remain cursor-based. SDKs may expose helper iterato
 
 ## Error Model
 
-SDKs should parse public API failures into structured errors with, at minimum:
+SDKs should parse API failures into structured errors with, at minimum:
 
 - `status`
 - `code`
@@ -123,7 +123,7 @@ When changing any server SDK:
   - `limit`
   - `has_more`
   - `next_cursor`
-- preserve structured public API errors
+- preserve structured API errors
 - keep sealed token golden-vector coverage
 - keep one live smoke suite per SDK
 - only update the vendored SDK `spec/` copies or the monorepo submodule pointer after the relevant CI is green

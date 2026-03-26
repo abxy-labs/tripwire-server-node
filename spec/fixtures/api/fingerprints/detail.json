@@ -1,0 +1,70 @@
+{
+  "data": {
+    "object": "visitor_fingerprint",
+    "id": "vid_456789abcdefghjkmnpqrstvwx",
+    "lifecycle": {
+      "first_seen_at": "2026-03-24T19:58:00.000Z",
+      "last_seen_at": "2026-03-24T20:00:05.000Z",
+      "seen_count": 3,
+      "expires_at": "2026-06-22T20:00:05.000Z"
+    },
+    "latest_request": {
+      "user_agent": "Mozilla/5.0",
+      "ip_address": "203.0.113.9"
+    },
+    "storage": {
+      "cookies": true,
+      "local_storage": true,
+      "indexed_db": true,
+      "service_worker": false,
+      "window_name": false
+    },
+    "anchors": {
+      "webgl_hash": null,
+      "parameters_hash": null,
+      "audio_hash": null
+    },
+    "components": {
+      "vector": [
+        1,
+        0,
+        1
+      ]
+    },
+    "activity": {
+      "sessions": [
+        {
+          "session_id": "sid_0123456789abcdefghjkmnpqrs",
+          "decision": {
+            "event_id": "evt_23456789abcdefghjkmnpqrstv",
+            "verdict": "human",
+            "risk_score": 9,
+            "phase": "behavioral",
+            "is_provisional": false,
+            "manipulation": {
+              "score": 0,
+              "verdict": "none"
+            },
+            "evaluation_duration_ms": 142,
+            "evaluated_at": "2026-03-24T20:00:05.000Z"
+          },
+          "request": {
+            "url": "https://example.com/signup",
+            "user_agent": "Mozilla/5.0",
+            "ip_address": "203.0.113.9",
+            "screen_size": "1440x900",
+            "is_touch_capable": false
+          },
+          "score_breakdown": {
+            "categories": {
+              "behavioral": 9
+            }
+          }
+        }
+      ]
+    }
+  },
+  "meta": {
+    "request_id": "req_0123456789abcdef0123456789abcdef"
+  }
+}

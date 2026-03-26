@@ -4,7 +4,7 @@
     "message": "Missing Authorization header. Send Authorization: Bearer <token> to authenticate this request.",
     "status": 401,
     "retryable": false,
-    "requestId": "req_0123456789abcdef0123456789abcdef",
-    "docsUrl": "https://tripwirejs.com/docs/api-reference/introduction"
+    "request_id": "req_0123456789abcdef0123456789abcdef",
+    "docs_url": "https://tripwirejs.com/docs/api-reference/introduction"
   }
 }
