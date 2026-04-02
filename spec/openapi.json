@@ -27,6 +27,14 @@
     {
       "name": "API Keys",
       "description": "Team API key lifecycle endpoints."
+    },
+    {
+      "name": "Gate",
+      "description": "Registry, signup sessions, agent tokens, and dashboard login sessions."
+    },
+    {
+      "name": "Gate Webhooks",
+      "description": "Outbound Gate webhook delivery contracts."
     }
   ],
   "paths": {
@@ -839,10 +847,647 @@
           }
         }
       }
+    },
+    "/v1/gate/registry": {
+      "get": {
+        "tags": [
+          "Gate"
+        ],
+        "operationId": "listGateRegistryServices",
+        "summary": "List Gate services",
+        "responses": {
+          "200": {
+            "description": "Gate registry response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GateRegistryListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/gate/registry/{serviceId}": {
+      "get": {
+        "tags": [
+          "Gate"
+        ],
+        "operationId": "getGateRegistryService",
+        "summary": "Get a Gate service",
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/GateServiceId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gate service response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GateRegistryEntryResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Service not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/gate/sessions": {
+      "post": {
+        "tags": [
+          "Gate"
+        ],
+        "operationId": "createGateSession",
+        "summary": "Create a Gate signup session",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGateSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Gate session created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GateSessionCreateResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Service not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/gate/sessions/{gateSessionId}": {
+      "get": {
+        "tags": [
+          "Gate"
+        ],
+        "operationId": "pollGateSession",
+        "summary": "Poll a Gate signup session",
+        "description": "Requires Authorization: Bearer gtpoll_....",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "gateSessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/GateSessionId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gate session status response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GateSessionPollResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Session expired or delivery consumed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/gate/sessions/{gateSessionId}/ack": {
+      "post": {
+        "tags": [
+          "Gate"
+        ],
+        "operationId": "acknowledgeGateSessionDelivery",
+        "summary": "Acknowledge Gate delivery receipt",
+        "description": "Requires Authorization: Bearer gtpoll_....",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "gateSessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/GateSessionId"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcknowledgeGateSessionDeliveryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Delivery acknowledged.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GateSessionDeliveryResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid ack or bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Session not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Delivery already consumed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/gate/login-sessions": {
+      "post": {
+        "tags": [
+          "Gate"
+        ],
+        "operationId": "createGateLoginSession",
+        "summary": "Create a Gate dashboard login session",
+        "description": "Requires Authorization: Bearer agt_....",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGateLoginSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Gate login session created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GateLoginSessionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid agent token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Service not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/gate/agent-tokens/verify": {
+      "post": {
+        "tags": [
+          "Gate"
+        ],
+        "operationId": "verifyGateAgentToken",
+        "summary": "Verify a Gate agent token",
+        "description": "Requires Authorization: Bearer sk_* with the gate:agent_tokens:verify scope.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyAgentTokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Agent token verification response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentTokenVerificationResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Secret key required or insufficient scope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/gate/agent-tokens/revoke": {
+      "post": {
+        "tags": [
+          "Gate"
+        ],
+        "operationId": "revokeGateAgentToken",
+        "summary": "Revoke a Gate agent token",
+        "description": "Requires Authorization: Bearer sk_* with the gate:agent_tokens:revoke scope.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeAgentTokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Agent token revoked."
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Secret key required or insufficient scope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Agent token not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/gate/login-sessions/consume": {
+      "post": {
+        "tags": [
+          "Gate"
+        ],
+        "operationId": "consumeGateLoginSessionCode",
+        "summary": "Consume a Gate dashboard login code",
+        "description": "Requires Authorization: Bearer sk_* with the gate:login_sessions:consume scope.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConsumeGateLoginSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Dashboard login consumed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GateDashboardLoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Secret key required or insufficient scope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Login code expired or already consumed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "AcknowledgeGateSessionDeliveryRequest": {
+        "type": "object",
+        "required": [
+          "ack_token"
+        ],
+        "properties": {
+          "ack_token": {
+            "type": "string"
+          }
+        }
+      },
+      "AgentToken": {
+        "type": "string",
+        "example": "agt_live_abc123"
+      },
+      "AgentTokenVerification": {
+        "type": "object",
+        "required": [
+          "valid"
+        ],
+        "properties": {
+          "valid": {
+            "type": "boolean"
+          },
+          "gate_account_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "revoked"
+            ]
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AgentTokenVerificationResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/AgentTokenVerification"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
       "ApiErrorDetails": {
         "type": "object",
         "properties": {
@@ -1061,6 +1706,17 @@
           "rotated"
         ]
       },
+      "ConsumeGateLoginSessionRequest": {
+        "type": "object",
+        "required": [
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/GateLoginCode"
+          }
+        }
+      },
       "CreateApiKeyRequest": {
         "type": "object",
         "additionalProperties": false,
@@ -1081,6 +1737,40 @@
           "rate_limit": {
             "type": "integer",
             "minimum": 1
+          }
+        }
+      },
+      "CreateGateLoginSessionRequest": {
+        "type": "object",
+        "required": [
+          "service_id"
+        ],
+        "properties": {
+          "service_id": {
+            "$ref": "#/components/schemas/GateServiceId"
+          }
+        }
+      },
+      "CreateGateSessionRequest": {
+        "type": "object",
+        "required": [
+          "service_id",
+          "account_name",
+          "delivery"
+        ],
+        "properties": {
+          "service_id": {
+            "$ref": "#/components/schemas/GateServiceId"
+          },
+          "account_name": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "delivery": {
+            "$ref": "#/components/schemas/GateDeliveryRequest"
           }
         }
       },
@@ -1180,6 +1870,623 @@
       "FingerprintId": {
         "type": "string",
         "pattern": "^vid_[0123456789abcdefghjkmnpqrstvwxyz]{26}$"
+      },
+      "GateApprovedWebhookPayload": {
+        "type": "object",
+        "required": [
+          "event",
+          "service_id",
+          "gate_session_id",
+          "gate_account_id",
+          "account_name",
+          "metadata",
+          "tripwire",
+          "delivery"
+        ],
+        "properties": {
+          "event": {
+            "type": "string",
+            "const": "gate.session.approved"
+          },
+          "service_id": {
+            "$ref": "#/components/schemas/GateServiceId"
+          },
+          "gate_session_id": {
+            "$ref": "#/components/schemas/GateSessionId"
+          },
+          "gate_account_id": {
+            "type": "string"
+          },
+          "account_name": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": true
+          },
+          "tripwire": {
+            "type": "object",
+            "required": [
+              "verdict",
+              "score"
+            ],
+            "properties": {
+              "verdict": {
+                "type": "string",
+                "enum": [
+                  "bot",
+                  "human",
+                  "inconclusive"
+                ]
+              },
+              "score": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          },
+          "delivery": {
+            "$ref": "#/components/schemas/GateDeliveryRequest"
+          }
+        }
+      },
+      "GateApprovedWebhookResponse": {
+        "type": "object",
+        "required": [
+          "encrypted_delivery"
+        ],
+        "properties": {
+          "encrypted_delivery": {
+            "$ref": "#/components/schemas/GateDeliveryEnvelope"
+          }
+        }
+      },
+      "GateBranding": {
+        "type": "object",
+        "required": [
+          "logo_url",
+          "primary_color",
+          "secondary_color",
+          "ascii_art",
+          "verified"
+        ],
+        "properties": {
+          "logo_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "primary_color": {
+            "type": "string"
+          },
+          "secondary_color": {
+            "type": "string"
+          },
+          "ascii_art": {
+            "type": "string"
+          },
+          "verified": {
+            "type": "boolean"
+          }
+        }
+      },
+      "GateConsentConfig": {
+        "type": "object",
+        "required": [
+          "description",
+          "terms_url",
+          "privacy_url",
+          "scopes"
+        ],
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "terms_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "privacy_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GateConsentScope"
+            }
+          }
+        }
+      },
+      "GateConsentScope": {
+        "type": "object",
+        "required": [
+          "label",
+          "description"
+        ],
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "GateDashboardLogin": {
+        "type": "object",
+        "required": [
+          "object",
+          "gate_account_id",
+          "account_name"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "gate_dashboard_login"
+          },
+          "gate_account_id": {
+            "type": "string"
+          },
+          "account_name": {
+            "type": "string"
+          }
+        }
+      },
+      "GateDashboardLoginResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/GateDashboardLogin"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "GateDeliveryBundle": {
+        "type": "object",
+        "required": [
+          "integrator",
+          "gate"
+        ],
+        "properties": {
+          "integrator": {
+            "$ref": "#/components/schemas/GateDeliveryEnvelope"
+          },
+          "gate": {
+            "$ref": "#/components/schemas/GateDeliveryEnvelope"
+          }
+        }
+      },
+      "GateDeliveryEnvelope": {
+        "type": "object",
+        "required": [
+          "version",
+          "algorithm",
+          "key_id",
+          "ephemeral_public_key",
+          "salt",
+          "iv",
+          "ciphertext",
+          "tag"
+        ],
+        "properties": {
+          "version": {
+            "type": "integer",
+            "const": 1
+          },
+          "algorithm": {
+            "type": "string",
+            "const": "x25519-hkdf-sha256/aes-256-gcm"
+          },
+          "key_id": {
+            "type": "string"
+          },
+          "ephemeral_public_key": {
+            "type": "string"
+          },
+          "salt": {
+            "type": "string"
+          },
+          "iv": {
+            "type": "string"
+          },
+          "ciphertext": {
+            "type": "string"
+          },
+          "tag": {
+            "type": "string"
+          }
+        }
+      },
+      "GateDeliveryRequest": {
+        "type": "object",
+        "required": [
+          "version",
+          "algorithm",
+          "key_id",
+          "public_key"
+        ],
+        "properties": {
+          "version": {
+            "type": "integer",
+            "const": 1
+          },
+          "algorithm": {
+            "type": "string",
+            "const": "x25519-hkdf-sha256/aes-256-gcm"
+          },
+          "key_id": {
+            "type": "string"
+          },
+          "public_key": {
+            "type": "string"
+          }
+        }
+      },
+      "GateEnvVar": {
+        "type": "object",
+        "required": [
+          "name",
+          "key",
+          "secret",
+          "source"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "secret": {
+            "type": "boolean"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "integrator",
+              "gate"
+            ]
+          }
+        }
+      },
+      "GateLoginCode": {
+        "type": "string",
+        "example": "glogin_abc123"
+      },
+      "GateLoginSession": {
+        "type": "object",
+        "required": [
+          "object",
+          "id",
+          "status",
+          "consent_url",
+          "expires_at"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "gate_login_session"
+          },
+          "id": {
+            "$ref": "#/components/schemas/GateSessionId"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending"
+            ]
+          },
+          "consent_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "GateLoginSessionResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/GateLoginSession"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "GatePollToken": {
+        "type": "string",
+        "example": "gtpoll_live_abc123"
+      },
+      "GateRegistryEntry": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "description",
+          "gate_api_url",
+          "dashboard_login_url",
+          "env_vars",
+          "docs_url",
+          "quickstart_url",
+          "sdks",
+          "branding",
+          "consent"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/GateServiceId"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "gate_api_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "dashboard_login_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "env_vars": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GateEnvVar"
+            }
+          },
+          "docs_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "quickstart_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "sdks": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/GateSdkInstall"
+            }
+          },
+          "branding": {
+            "$ref": "#/components/schemas/GateBranding"
+          },
+          "consent": {
+            "$ref": "#/components/schemas/GateConsentConfig"
+          }
+        }
+      },
+      "GateRegistryEntryResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/GateRegistryEntry"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "GateRegistryListResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GateRegistryEntry"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "GateSdkInstall": {
+        "type": "object",
+        "required": [
+          "label",
+          "install",
+          "url"
+        ],
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "install": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "GateServiceId": {
+        "type": "string",
+        "example": "tripwire"
+      },
+      "GateSessionCreate": {
+        "type": "object",
+        "required": [
+          "object",
+          "id",
+          "status",
+          "poll_token",
+          "consent_url",
+          "expires_at"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "gate_session"
+          },
+          "id": {
+            "$ref": "#/components/schemas/GateSessionId"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending"
+            ]
+          },
+          "poll_token": {
+            "$ref": "#/components/schemas/GatePollToken"
+          },
+          "consent_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "GateSessionCreateResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/GateSessionCreate"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "GateSessionDeliveryAcknowledgement": {
+        "type": "object",
+        "required": [
+          "object",
+          "gate_session_id",
+          "status"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "gate_session_delivery"
+          },
+          "gate_session_id": {
+            "$ref": "#/components/schemas/GateSessionId"
+          },
+          "status": {
+            "type": "string",
+            "const": "acknowledged"
+          }
+        }
+      },
+      "GateSessionDeliveryResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/GateSessionDeliveryAcknowledgement"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "GateSessionId": {
+        "type": "string",
+        "example": "gate_abc123xyz"
+      },
+      "GateSessionPollData": {
+        "type": "object",
+        "required": [
+          "object",
+          "id",
+          "status"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "gate_session"
+          },
+          "id": {
+            "$ref": "#/components/schemas/GateSessionId"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "approved",
+              "rejected",
+              "expired"
+            ]
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "gate_account_id": {
+            "type": "string"
+          },
+          "account_name": {
+            "type": "string"
+          },
+          "delivery_bundle": {
+            "$ref": "#/components/schemas/GateDeliveryBundle"
+          },
+          "docs_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "quickstart_url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "GateSessionPollResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/GateSessionPollData"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
       },
       "IssuedApiKey": {
         "type": "object",
@@ -1426,6 +2733,17 @@
         "properties": {
           "request_id": {
             "$ref": "#/components/schemas/RequestId"
+          }
+        }
+      },
+      "RevokeAgentTokenRequest": {
+        "type": "object",
+        "required": [
+          "agent_token"
+        ],
+        "properties": {
+          "agent_token": {
+            "$ref": "#/components/schemas/AgentToken"
           }
         }
       },
@@ -3311,6 +4629,17 @@
           "inconclusive"
         ]
       },
+      "VerifyAgentTokenRequest": {
+        "type": "object",
+        "required": [
+          "agent_token"
+        ],
+        "properties": {
+          "agent_token": {
+            "$ref": "#/components/schemas/AgentToken"
+          }
+        }
+      },
       "VisitorFingerprintActivity": {
         "type": "object",
         "additionalProperties": false,
@@ -3611,6 +4940,79 @@
           },
           "anchors": {
             "$ref": "#/components/schemas/VisitorFingerprintAnchors"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Send Authorization: Bearer <token>. Gate business endpoints require sk_* secret keys. Gate workflow endpoints use gate-native bearer tokens such as gtpoll_* or agt_* where documented."
+      }
+    }
+  },
+  "webhooks": {
+    "gate.session.approved": {
+      "post": {
+        "tags": [
+          "Gate Webhooks"
+        ],
+        "operationId": "gateSessionApprovedWebhook",
+        "summary": "Gate approved-session webhook",
+        "description": "Tripwire sends this webhook to the integrator when a signup session is approved. Verify X-Tripwire-Timestamp and X-Tripwire-Signature against the raw request body.",
+        "parameters": [
+          {
+            "name": "X-Tripwire-Timestamp",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unix timestamp used in the webhook signature base string."
+          },
+          {
+            "name": "X-Tripwire-Signature",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "HMAC-SHA256 signature computed over `${timestamp}.${rawBody}`."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GateApprovedWebhookPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Encrypted delivery response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GateApprovedWebhookResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid payload."
+          },
+          "401": {
+            "description": "Invalid signature."
+          },
+          "409": {
+            "description": "Duplicate or already-consumed provisioning event."
+          },
+          "500": {
+            "description": "Internal error."
           }
         }
       }
