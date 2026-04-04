@@ -1,6 +1,6 @@
 {
   "name": "@abxy/tripwire-server",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Official Tripwire Node server SDK",
   "license": "MIT",
   "repository": {
