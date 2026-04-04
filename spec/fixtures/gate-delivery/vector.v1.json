@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "delivery": {
+    "version": 1,
+    "algorithm": "x25519-hkdf-sha256/aes-256-gcm",
+    "key_id": "LyGqfpvB0SCaX4P0inVpMJTAjCNJVWq_3OE87it2ZYo",
+    "public_key": "bn6szfMIS-7pLl01PqvssrrGRoW1SVTkUuqeg0hfrW0"
+  },
+  "private_key_pkcs8": "MC4CAQAwBQYDK2VuBCIEIL8KtbBiPaNXyTYwgHfrxlH5RQkpHQ41rwkX77or4_eV",
+  "payload": {
+    "version": 1,
+    "outputs": {
+      "TRIPWIRE_PUBLISHABLE_KEY": "pk_test_vector",
+      "TRIPWIRE_SECRET_KEY": "sk_test_vector"
+    },
+    "ack_token": "ack_test_vector"
+  },
+  "envelope": {
+    "version": 1,
+    "algorithm": "x25519-hkdf-sha256/aes-256-gcm",
+    "key_id": "LyGqfpvB0SCaX4P0inVpMJTAjCNJVWq_3OE87it2ZYo",
+    "ephemeral_public_key": "Q_5aebzWx6eFzTwWQfb0w_mLOmlelA2saRy4XdzCjEM",
+    "salt": "Zaieku8TjeKB-jfdRjlOfBufwGP5BsGY6PYIA1PwcQk",
+    "iv": "gf_vsGj9KXTwRobP",
+    "ciphertext": "pCDCqi28gW0GpyXNHhhX0koP_vyst774zO2n7WnLF2v36zYTTEonlEzqM3gOYpX3Vff1rsrBtQ_BS7KPmqvxh1ku93tWebjOUXcEu2ExvJxTakv5JtiS-uxcPDgUbNoy-9r-hFYCJsWZx9Bw2E8ohgUeVsGWWVvZXljfODbHRXlqa0it_pbm5ts6",
+    "tag": "fhlTs3NfvLN1rTo8-bpyNQ"
+  }
+}
