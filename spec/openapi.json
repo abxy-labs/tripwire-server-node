@@ -30,7 +30,7 @@
     },
     {
       "name": "Gate",
-      "description": "Registry, signup sessions, agent tokens, and dashboard login sessions."
+      "description": "Registry, team-owned services, signup sessions, agent tokens, and dashboard login sessions."
     },
     {
       "name": "Gate Webhooks",
@@ -1949,10 +1949,6 @@
       "GateBranding": {
         "type": "object",
         "required": [
-          "logo_url",
-          "primary_color",
-          "secondary_color",
-          "ascii_art",
           "verified"
         ],
         "properties": {
@@ -1970,22 +1966,14 @@
             "type": "string"
           },
           "verified": {
-            "type": "boolean"
+            "type": "boolean",
+            "readOnly": true
           }
         }
       },
       "GateConsentConfig": {
         "type": "object",
-        "required": [
-          "description",
-          "terms_url",
-          "privacy_url",
-          "scopes"
-        ],
         "properties": {
-          "description": {
-            "type": "string"
-          },
           "terms_url": {
             "type": "string",
             "format": "uri"
@@ -1993,27 +1981,6 @@
           "privacy_url": {
             "type": "string",
             "format": "uri"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GateConsentScope"
-            }
-          }
-        }
-      },
-      "GateConsentScope": {
-        "type": "object",
-        "required": [
-          "label",
-          "description"
-        ],
-        "properties": {
-          "label": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
           }
         }
       },
@@ -2138,8 +2105,7 @@
         "required": [
           "name",
           "key",
-          "secret",
-          "source"
+          "secret"
         ],
         "properties": {
           "name": {
@@ -2150,13 +2116,6 @@
           },
           "secret": {
             "type": "boolean"
-          },
-          "source": {
-            "type": "string",
-            "enum": [
-              "integrator",
-              "gate"
-            ]
           }
         }
       },
@@ -2222,14 +2181,14 @@
           "id",
           "name",
           "description",
-          "gate_api_url",
-          "dashboard_login_url",
+          "website",
           "env_vars",
           "docs_url",
-          "quickstart_url",
           "sdks",
           "branding",
-          "consent"
+          "consent",
+          "status",
+          "discoverable"
         ],
         "properties": {
           "id": {
@@ -2241,7 +2200,7 @@
           "description": {
             "type": "string"
           },
-          "gate_api_url": {
+          "website": {
             "type": "string",
             "format": "uri"
           },
@@ -2259,13 +2218,9 @@
             "type": "string",
             "format": "uri"
           },
-          "quickstart_url": {
-            "type": "string",
-            "format": "uri"
-          },
           "sdks": {
-            "type": "object",
-            "additionalProperties": {
+            "type": "array",
+            "items": {
               "$ref": "#/components/schemas/GateSdkInstall"
             }
           },
@@ -2274,6 +2229,12 @@
           },
           "consent": {
             "$ref": "#/components/schemas/GateConsentConfig"
+          },
+          "status": {
+            "$ref": "#/components/schemas/GateServiceStatus"
+          },
+          "discoverable": {
+            "type": "boolean"
           }
         }
       },
@@ -2332,7 +2293,18 @@
       },
       "GateServiceId": {
         "type": "string",
-        "example": "tripwire"
+        "example": "acme-prod",
+        "minLength": 3,
+        "maxLength": 32,
+        "pattern": "^[a-z0-9](?:[a-z0-9_-]{1,30}[a-z0-9])$",
+        "description": "Canonical Gate service slug used by the public registry and by npx signup <service>. Lowercase letters, numbers, dashes, and underscores only; must start and end with a letter or number."
+      },
+      "GateServiceStatus": {
+        "type": "string",
+        "enum": [
+          "active",
+          "disabled"
+        ]
       },
       "GateSessionCreate": {
         "type": "object",
@@ -2464,10 +2436,6 @@
             "$ref": "#/components/schemas/GateDeliveryBundle"
           },
           "docs_url": {
-            "type": "string",
-            "format": "uri"
-          },
-          "quickstart_url": {
             "type": "string",
             "format": "uri"
           }
