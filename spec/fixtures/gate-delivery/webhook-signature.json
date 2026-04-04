@@ -1,0 +1,9 @@
+{
+  "secret": "whsec_test",
+  "timestamp": "1735776000",
+  "expired_timestamp": "1735775400",
+  "now_seconds": 1735776000,
+  "raw_body": "{\"event\":\"gate.session.approved\",\"service_id\":\"tripwire\"}",
+  "signature": "e31cfe4ad62aa4a5ed4eaa8c31c05af7f6482d276ff43eb466c562d101835b26",
+  "invalid_signature": "031cfe4ad62aa4a5ed4eaa8c31c05af7f6482d276ff43eb466c562d101835b26"
+}

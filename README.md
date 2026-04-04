@@ -4,13 +4,14 @@
 ![Node 18+](https://img.shields.io/badge/node-%E2%89%A518-339933?logo=node.js&logoColor=white)
 ![License: MIT](https://img.shields.io/badge/license-MIT-0f766e.svg)
 
-The Tripwire Node library provides convenient access to the Tripwire API from applications running in Node.js. It includes a typed client for Sessions, Fingerprints, Teams, Team API key management, and sealed token verification.
+The Tripwire Node library provides convenient access to the Tripwire API from applications running in Node.js. It includes a typed client for Sessions, Fingerprints, Teams, Gate, Team API key management, sealed token verification, and Gate delivery/webhook helpers.
 
 The library also provides:
 
 - a fast configuration path using `TRIPWIRE_SECRET_KEY`
+- public, bearer-token, and secret-key auth modes for Gate flows
 - helpers for cursor-based pagination
-- structured API errors and built-in sealed token verification
+- structured API errors, built-in sealed token verification, and Gate delivery/webhook helpers
 
 ## Documentation
 
@@ -30,7 +31,7 @@ npm install @abxy/tripwire-server
 
 ## Usage
 
-The library needs to be configured with your account's secret key. Set `TRIPWIRE_SECRET_KEY` in your environment or pass `secretKey` directly:
+The library can be constructed without a secret key for public or bearer-auth Gate flows. Secret-auth routes use `TRIPWIRE_SECRET_KEY` or an explicit `secretKey`:
 
 ```ts
 import { Tripwire } from "@abxy/tripwire-server";
@@ -44,6 +45,21 @@ const session = await client.sessions.get("sid_123");
 
 console.log(page.has_more, page.next_cursor);
 console.log(session.decision.risk_score, session.highlights[0]?.summary);
+```
+
+### Gate APIs
+
+```ts
+const client = new Tripwire();
+
+const services = await client.gate.registry.list();
+const session = await client.gate.sessions.create({
+  service_id: "tripwire",
+  account_name: "my-project",
+  delivery: createDeliveryKeyPair().delivery,
+});
+
+console.log(services[0]?.id, session.consent_url);
 ```
 
 ### Sealed token verification
@@ -62,6 +78,36 @@ if (!result.ok) {
 }
 
 console.log(result.data.decision.verdict, result.data.decision.risk_score);
+```
+
+### Gate delivery and webhook helpers
+
+```ts
+import {
+  createDeliveryKeyPair,
+  createGateApprovedWebhookResponse,
+  decryptGateDeliveryEnvelope,
+  verifyGateWebhookSignature,
+} from "@abxy/tripwire-server";
+
+const keyPair = createDeliveryKeyPair();
+const response = createGateApprovedWebhookResponse({
+  delivery: keyPair.delivery,
+  outputs: {
+    TRIPWIRE_PUBLISHABLE_KEY: "pk_live_...",
+    TRIPWIRE_SECRET_KEY: "sk_live_...",
+  },
+});
+
+const payload = decryptGateDeliveryEnvelope(keyPair.privateKey, response.encrypted_delivery);
+console.log(payload.outputs.TRIPWIRE_SECRET_KEY);
+
+console.log(verifyGateWebhookSignature({
+  secret: "whsec_test",
+  timestamp: "1735776000",
+  rawBody: "{\"event\":\"gate.session.approved\"}",
+  signature: "…",
+}));
 ```
 
 ### Pagination
