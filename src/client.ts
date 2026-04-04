@@ -1,13 +1,28 @@
 import { TripwireApiError, TripwireConfigurationError } from './errors';
 import type {
+  AcknowledgeGateSessionDeliveryRequest,
   ApiKey,
   ApiKeyListParams,
+  AgentTokenVerification,
+  ConsumeGateLoginSessionRequest,
   CreateApiKeyRequest,
+  CreateGateLoginSessionRequest,
+  CreateGateServiceRequest,
+  CreateGateSessionRequest,
   CreateTeamRequest,
   FingerprintListParams,
+  GateDashboardLogin,
+  GateLoginSession,
+  GateManagedService,
+  GateRegistryEntry,
+  GateSessionCreate,
+  GateSessionDeliveryAcknowledgement,
+  GateSessionPollData,
   IssuedApiKey,
   ListResult,
   ApiErrorEnvelope,
+  PollGateSessionOptions,
+  RevokeGateAgentTokenRequest,
   RequestOptions,
   ResourceEnvelope,
   ResourceListEnvelope,
@@ -16,7 +31,9 @@ import type {
   SessionSummary,
   Team,
   TripwireOptions,
+  UpdateGateServiceRequest,
   UpdateTeamRequest,
+  VerifyGateAgentTokenRequest,
   VisitorFingerprintDetail,
   VisitorFingerprintSummary,
 } from './types';
@@ -33,24 +50,23 @@ interface RequestConfig {
   query?: Record<string, QueryValue>;
   body?: unknown;
   signal?: AbortSignal;
+  auth?: AuthConfig;
 }
 
 interface ResolvedOptions {
-  secretKey: string;
+  secretKey?: string;
   baseUrl: string;
   timeoutMs: number;
   fetch: typeof globalThis.fetch;
   userAgent?: string;
 }
 
-function resolveOptions(options: TripwireOptions = {}): ResolvedOptions {
-  const secretKey = options.secretKey ?? process.env.TRIPWIRE_SECRET_KEY;
-  if (!secretKey) {
-    throw new TripwireConfigurationError(
-      'Missing Tripwire secret key. Pass secretKey explicitly or set TRIPWIRE_SECRET_KEY.',
-    );
-  }
+type AuthConfig =
+  | { kind?: 'secret' }
+  | { kind: 'none' }
+  | { kind: 'bearer'; token: string };
 
+function resolveOptions(options: TripwireOptions = {}): ResolvedOptions {
   const fetchImpl = options.fetch ?? globalThis.fetch;
   if (typeof fetchImpl !== 'function') {
     throw new TripwireConfigurationError(
@@ -59,7 +75,7 @@ function resolveOptions(options: TripwireOptions = {}): ResolvedOptions {
   }
 
   return {
-    secretKey,
+    secretKey: options.secretKey ?? process.env.TRIPWIRE_SECRET_KEY,
     baseUrl: options.baseUrl && options.baseUrl !== '' ? options.baseUrl : DEFAULT_BASE_URL,
     timeoutMs: options.timeoutMs ?? DEFAULT_TIMEOUT_MS,
     fetch: fetchImpl,
@@ -121,6 +137,12 @@ function normalizeListEnvelope<T>(envelope: ResourceListEnvelope<T>): ListResult
   };
 }
 
+function missingSecretKeyError(): TripwireConfigurationError {
+  return new TripwireConfigurationError(
+    'Missing Tripwire secret key. Pass secretKey explicitly or set TRIPWIRE_SECRET_KEY.',
+  );
+}
+
 class HttpClient {
   constructor(private readonly options: ResolvedOptions) {}
 
@@ -129,13 +151,7 @@ class HttpClient {
     try {
       const response = await this.options.fetch(buildUrl(this.options.baseUrl, config.path, config.query), {
         method: config.method ?? 'GET',
-        headers: {
-          Authorization: `Bearer ${this.options.secretKey}`,
-          Accept: 'application/json',
-          'X-Tripwire-Client': SDK_CLIENT_HEADER,
-          ...(this.options.userAgent ? { 'User-Agent': this.options.userAgent } : {}),
-          ...(config.body !== undefined ? { 'Content-Type': 'application/json' } : {}),
-        },
+        headers: this.buildHeaders(config),
         ...(config.body !== undefined ? { body: JSON.stringify(config.body) } : {}),
         signal,
       });
@@ -185,6 +201,33 @@ class HttpClient {
     }
   }
 
+  private buildHeaders(config: RequestConfig): Record<string, string> {
+    const headers: Record<string, string> = {
+      Accept: 'application/json',
+      'X-Tripwire-Client': SDK_CLIENT_HEADER,
+      ...(this.options.userAgent ? { 'User-Agent': this.options.userAgent } : {}),
+      ...(config.body !== undefined ? { 'Content-Type': 'application/json' } : {}),
+    };
+
+    const auth = config.auth ?? { kind: 'secret' as const };
+    if (auth.kind === 'none') {
+      return headers;
+    }
+
+    if (auth.kind === 'bearer') {
+      if (!auth.token) {
+        throw new TripwireConfigurationError('Missing bearer token for this Tripwire request.');
+      }
+      headers.Authorization = `Bearer ${auth.token}`;
+      return headers;
+    }
+
+    if (!this.options.secretKey) {
+      throw missingSecretKeyError();
+    }
+    headers.Authorization = `Bearer ${this.options.secretKey}`;
+    return headers;
+  }
 }
 
 async function* iterateCursor<T, TParams extends { cursor?: string } & RequestOptions>(
@@ -228,6 +271,36 @@ export class Tripwire {
       list: (teamId: string, params?: ApiKeyListParams) => Promise<ListResult<ApiKey>>;
       revoke: (teamId: string, keyId: string, options?: RequestOptions) => Promise<ApiKey>;
       rotate: (teamId: string, keyId: string, options?: RequestOptions) => Promise<IssuedApiKey>;
+    };
+  };
+
+  readonly gate: {
+    registry: {
+      list: (options?: RequestOptions) => Promise<GateRegistryEntry[]>;
+      get: (serviceId: string, options?: RequestOptions) => Promise<GateRegistryEntry>;
+    };
+    services: {
+      list: (options?: RequestOptions) => Promise<GateManagedService[]>;
+      get: (serviceId: string, options?: RequestOptions) => Promise<GateManagedService>;
+      create: (body: CreateGateServiceRequest) => Promise<GateManagedService>;
+      update: (serviceId: string, body: UpdateGateServiceRequest) => Promise<GateManagedService>;
+      disable: (serviceId: string, options?: RequestOptions) => Promise<GateManagedService>;
+    };
+    sessions: {
+      create: (body: CreateGateSessionRequest) => Promise<GateSessionCreate>;
+      poll: (gateSessionId: string, options: PollGateSessionOptions) => Promise<GateSessionPollData>;
+      acknowledge: (
+        gateSessionId: string,
+        body: AcknowledgeGateSessionDeliveryRequest,
+      ) => Promise<GateSessionDeliveryAcknowledgement>;
+    };
+    loginSessions: {
+      create: (body: CreateGateLoginSessionRequest) => Promise<GateLoginSession>;
+      consume: (body: ConsumeGateLoginSessionRequest) => Promise<GateDashboardLogin>;
+    };
+    agentTokens: {
+      verify: (body: VerifyGateAgentTokenRequest) => Promise<AgentTokenVerification>;
+      revoke: (body: RevokeGateAgentTokenRequest) => Promise<void>;
     };
   };
 
@@ -343,6 +416,147 @@ export class Tripwire {
             signal: options.signal,
           });
           return response.data;
+        },
+      },
+    };
+
+    this.gate = {
+      registry: {
+        list: async (options = {}) => {
+          const response = await this.http.request<ResourceEnvelope<GateRegistryEntry[]>>({
+            path: '/v1/gate/registry',
+            signal: options.signal,
+            auth: { kind: 'none' },
+          });
+          return response.data;
+        },
+        get: async (serviceId, options = {}) => {
+          const response = await this.http.request<ResourceEnvelope<GateRegistryEntry>>({
+            path: `/v1/gate/registry/${encodeURIComponent(serviceId)}`,
+            signal: options.signal,
+            auth: { kind: 'none' },
+          });
+          return response.data;
+        },
+      },
+      services: {
+        list: async (options = {}) => {
+          const response = await this.http.request<ResourceEnvelope<GateManagedService[]>>({
+            path: '/v1/gate/services',
+            signal: options.signal,
+          });
+          return response.data;
+        },
+        get: async (serviceId, options = {}) => {
+          const response = await this.http.request<ResourceEnvelope<GateManagedService>>({
+            path: `/v1/gate/services/${encodeURIComponent(serviceId)}`,
+            signal: options.signal,
+          });
+          return response.data;
+        },
+        create: async (body) => {
+          const { signal, ...payload } = body;
+          const response = await this.http.request<ResourceEnvelope<GateManagedService>>({
+            path: '/v1/gate/services',
+            method: 'POST',
+            body: payload,
+            signal,
+          });
+          return response.data;
+        },
+        update: async (serviceId, body) => {
+          const { signal, ...payload } = body;
+          const response = await this.http.request<ResourceEnvelope<GateManagedService>>({
+            path: `/v1/gate/services/${encodeURIComponent(serviceId)}`,
+            method: 'PATCH',
+            body: payload,
+            signal,
+          });
+          return response.data;
+        },
+        disable: async (serviceId, options = {}) => {
+          const response = await this.http.request<ResourceEnvelope<GateManagedService>>({
+            path: `/v1/gate/services/${encodeURIComponent(serviceId)}`,
+            method: 'DELETE',
+            signal: options.signal,
+          });
+          return response.data;
+        },
+      },
+      sessions: {
+        create: async (body) => {
+          const { signal, ...payload } = body;
+          const response = await this.http.request<ResourceEnvelope<GateSessionCreate>>({
+            path: '/v1/gate/sessions',
+            method: 'POST',
+            body: payload,
+            signal,
+            auth: { kind: 'none' },
+          });
+          return response.data;
+        },
+        poll: async (gateSessionId, options) => {
+          const response = await this.http.request<ResourceEnvelope<GateSessionPollData>>({
+            path: `/v1/gate/sessions/${encodeURIComponent(gateSessionId)}`,
+            signal: options.signal,
+            auth: { kind: 'bearer', token: options.pollToken },
+          });
+          return response.data;
+        },
+        acknowledge: async (gateSessionId, body) => {
+          const { signal, pollToken, ...payload } = body;
+          const response = await this.http.request<ResourceEnvelope<GateSessionDeliveryAcknowledgement>>({
+            path: `/v1/gate/sessions/${encodeURIComponent(gateSessionId)}/ack`,
+            method: 'POST',
+            body: payload,
+            signal,
+            auth: { kind: 'bearer', token: pollToken },
+          });
+          return response.data;
+        },
+      },
+      loginSessions: {
+        create: async (body) => {
+          const { signal, agentToken, ...payload } = body;
+          const response = await this.http.request<ResourceEnvelope<GateLoginSession>>({
+            path: '/v1/gate/login-sessions',
+            method: 'POST',
+            body: payload,
+            signal,
+            auth: { kind: 'bearer', token: agentToken },
+          });
+          return response.data;
+        },
+        consume: async (body) => {
+          const { signal, ...payload } = body;
+          const response = await this.http.request<ResourceEnvelope<GateDashboardLogin>>({
+            path: '/v1/gate/login-sessions/consume',
+            method: 'POST',
+            body: payload,
+            signal,
+          });
+          return response.data;
+        },
+      },
+      agentTokens: {
+        verify: async (body) => {
+          const { signal, ...payload } = body;
+          const response = await this.http.request<ResourceEnvelope<AgentTokenVerification>>({
+            path: '/v1/gate/agent-tokens/verify',
+            method: 'POST',
+            body: payload,
+            signal,
+          });
+          return response.data;
+        },
+        revoke: async (body) => {
+          const { signal, ...payload } = body;
+          await this.http.request<void>({
+            path: '/v1/gate/agent-tokens/revoke',
+            method: 'POST',
+            body: payload,
+            signal,
+          });
         },
       },
     };

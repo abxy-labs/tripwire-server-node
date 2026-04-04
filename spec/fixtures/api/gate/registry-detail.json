@@ -1,0 +1,45 @@
+{
+  "data": {
+    "id": "tripwire",
+    "status": "active",
+    "discoverable": true,
+    "name": "Tripwire",
+    "description": "Detect AI agents and malicious users",
+    "website": "https://tripwirejs.com",
+    "dashboard_login_url": "https://dashboard.tripwirejs.com/auth/gate",
+    "env_vars": [
+      {
+        "name": "Publishable key",
+        "key": "TRIPWIRE_PUBLISHABLE_KEY",
+        "secret": false
+      },
+      {
+        "name": "Secret key",
+        "key": "TRIPWIRE_SECRET_KEY",
+        "secret": true
+      }
+    ],
+    "docs_url": "https://tripwirejs.com/docs",
+    "sdks": [
+      {
+        "label": "Node",
+        "install": "npm install @abxy/tripwire-server",
+        "url": "https://www.npmjs.com/package/@abxy/tripwire-server"
+      }
+    ],
+    "branding": {
+      "logo_url": "https://tripwirejs.com/logo.png",
+      "primary_color": "#117BE7",
+      "secondary_color": "#0B5CAD",
+      "ascii_art": "TRIPWIRE",
+      "verified": true
+    },
+    "consent": {
+      "terms_url": "https://tripwirejs.com/terms",
+      "privacy_url": "https://tripwirejs.com/privacy"
+    }
+  },
+  "meta": {
+    "request_id": "req_0123456789abcdef0123456789abcdef"
+  }
+}

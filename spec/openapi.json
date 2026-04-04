@@ -910,6 +910,345 @@
         }
       }
     },
+    "/v1/gate/services": {
+      "get": {
+        "tags": [
+          "Gate"
+        ],
+        "operationId": "listManagedGateServices",
+        "summary": "List Gate services for the authenticated team",
+        "description": "Requires Authorization: Bearer sk_* with the gate:services:read scope.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Team Gate service list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GateManagedServiceListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Secret key required or insufficient scope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Gate"
+        ],
+        "operationId": "createManagedGateService",
+        "summary": "Create a Gate service for the authenticated team",
+        "description": "Requires Authorization: Bearer sk_* with the gate:services:manage scope.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGateServiceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created Gate service.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GateManagedServiceResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Secret key required or insufficient scope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Duplicate service_id or team Gate service limit reached.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/gate/services/{serviceId}": {
+      "get": {
+        "tags": [
+          "Gate"
+        ],
+        "operationId": "getManagedGateService",
+        "summary": "Get one Gate service for the authenticated team",
+        "description": "Requires Authorization: Bearer sk_* with the gate:services:read scope.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/GateServiceId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gate service response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GateManagedServiceResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Secret key required or insufficient scope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Gate service not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Gate"
+        ],
+        "operationId": "updateManagedGateService",
+        "summary": "Update a Gate service for the authenticated team",
+        "description": "Requires Authorization: Bearer sk_* with the gate:services:manage scope.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/GateServiceId"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGateServiceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated Gate service.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GateManagedServiceResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Secret key required or insufficient scope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Gate service not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Gate"
+        ],
+        "operationId": "disableManagedGateService",
+        "summary": "Disable a Gate service for the authenticated team",
+        "description": "Requires Authorization: Bearer sk_* with the gate:services:manage scope. This is a soft delete that sets status=disabled.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/GateServiceId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Disabled Gate service.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GateManagedServiceResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Secret key required or insufficient scope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Gate service not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/gate/sessions": {
       "post": {
         "tags": [
@@ -1751,6 +2090,67 @@
           }
         }
       },
+      "CreateGateServiceRequest": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "description",
+          "website",
+          "webhook_url"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/GateServiceId"
+          },
+          "discoverable": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "website": {
+            "type": "string",
+            "format": "uri"
+          },
+          "dashboard_login_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "webhook_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "webhook_secret": {
+            "type": "string"
+          },
+          "env_vars": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GateEnvVar"
+            }
+          },
+          "docs_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "sdks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GateSdkInstall"
+            }
+          },
+          "branding": {
+            "$ref": "#/components/schemas/GateBranding"
+          },
+          "consent": {
+            "$ref": "#/components/schemas/GateConsentConfig"
+          }
+        }
+      },
       "CreateGateSessionRequest": {
         "type": "object",
         "required": [
@@ -2165,6 +2565,122 @@
         "properties": {
           "data": {
             "$ref": "#/components/schemas/GateLoginSession"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "GateManagedService": {
+        "type": "object",
+        "required": [
+          "object",
+          "id",
+          "status",
+          "discoverable",
+          "name",
+          "description",
+          "website",
+          "webhook_url",
+          "env_vars",
+          "docs_url",
+          "sdks",
+          "branding",
+          "consent",
+          "created_at",
+          "updated_at"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "gate_service"
+          },
+          "id": {
+            "$ref": "#/components/schemas/GateServiceId"
+          },
+          "status": {
+            "$ref": "#/components/schemas/GateServiceStatus"
+          },
+          "discoverable": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "website": {
+            "type": "string",
+            "format": "uri"
+          },
+          "dashboard_login_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "webhook_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "env_vars": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GateEnvVar"
+            }
+          },
+          "docs_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "sdks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GateSdkInstall"
+            }
+          },
+          "branding": {
+            "$ref": "#/components/schemas/GateBranding"
+          },
+          "consent": {
+            "$ref": "#/components/schemas/GateConsentConfig"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "GateManagedServiceListResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GateManagedService"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "GateManagedServiceResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/GateManagedService"
           },
           "meta": {
             "$ref": "#/components/schemas/ResponseMeta"
@@ -4574,6 +5090,61 @@
           "suspended",
           "deleted"
         ]
+      },
+      "UpdateGateServiceRequest": {
+        "type": "object",
+        "description": "Partial Gate service update. Nested objects and arrays replace the existing value wholesale.",
+        "properties": {
+          "discoverable": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "website": {
+            "type": "string",
+            "format": "uri"
+          },
+          "dashboard_login_url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri"
+          },
+          "webhook_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "webhook_secret": {
+            "type": "string"
+          },
+          "env_vars": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GateEnvVar"
+            }
+          },
+          "docs_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "sdks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GateSdkInstall"
+            }
+          },
+          "branding": {
+            "$ref": "#/components/schemas/GateBranding"
+          },
+          "consent": {
+            "$ref": "#/components/schemas/GateConsentConfig"
+          }
+        }
       },
       "UpdateTeamRequest": {
         "type": "object",
