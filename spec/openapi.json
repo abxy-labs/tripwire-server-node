@@ -2125,7 +2125,9 @@
             "format": "uri"
           },
           "webhook_secret": {
-            "type": "string"
+            "type": "string",
+            "minLength": 32,
+            "description": "If provided, must be at least 32 characters. Omit on create to let Gate generate one."
           },
           "env_vars": {
             "type": "array",
@@ -2357,10 +2359,14 @@
             "format": "uri"
           },
           "primary_color": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+            "description": "Hex color in #RGB, #RGBA, #RRGGBB, or #RRGGBBAA format."
           },
           "secondary_color": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+            "description": "Hex color in #RGB, #RGBA, #RRGGBB, or #RRGGBBAA format."
           },
           "ascii_art": {
             "type": "string"
@@ -5120,7 +5126,9 @@
             "format": "uri"
           },
           "webhook_secret": {
-            "type": "string"
+            "type": "string",
+            "minLength": 32,
+            "description": "If provided, must be at least 32 characters. Omit on create to let Gate generate one."
           },
           "env_vars": {
             "type": "array",
@@ -5549,6 +5557,9 @@
           },
           "409": {
             "description": "Duplicate or already-consumed provisioning event."
+          },
+          "429": {
+            "description": "Rate limited. Respect Retry-After before retrying the webhook."
           },
           "500": {
             "description": "Internal error."
