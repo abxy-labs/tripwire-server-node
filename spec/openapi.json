@@ -3471,6 +3471,8 @@
               "family",
               "product",
               "confidence",
+              "match_source",
+              "reference",
               "deterministic"
             ],
             "properties": {
@@ -3504,10 +3506,100 @@
                   "null"
                 ]
               },
+              "match_source": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
               "deterministic": {
                 "type": [
                   "boolean",
                   "null"
+                ]
+              },
+              "reference": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "label",
+                      "source",
+                      "protocol",
+                      "tls_version",
+                      "sni",
+                      "alpn",
+                      "cipher_count",
+                      "ext_count",
+                      "sample_size",
+                      "verified"
+                    ],
+                    "properties": {
+                      "label": {
+                        "type": "string"
+                      },
+                      "source": {
+                        "type": "string"
+                      },
+                      "protocol": {
+                        "type": "string"
+                      },
+                      "tls_version": {
+                        "type": "string"
+                      },
+                      "sni": {
+                        "type": "string"
+                      },
+                      "alpn": {
+                        "type": "string"
+                      },
+                      "cipher_count": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "min",
+                          "max"
+                        ],
+                        "properties": {
+                          "min": {
+                            "type": "integer"
+                          },
+                          "max": {
+                            "type": "integer"
+                          }
+                        }
+                      },
+                      "ext_count": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "min",
+                          "max"
+                        ],
+                        "properties": {
+                          "min": {
+                            "type": "integer"
+                          },
+                          "max": {
+                            "type": "integer"
+                          }
+                        }
+                      },
+                      "sample_size": {
+                        "type": "integer"
+                      },
+                      "verified": {
+                        "type": [
+                          "boolean",
+                          "null"
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "null"
+                  }
                 ]
               }
             }

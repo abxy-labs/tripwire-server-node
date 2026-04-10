@@ -200,7 +200,26 @@
         "family": "chromium",
         "product": "edge",
         "confidence": "exact",
-        "deterministic": true
+        "match_source": "full_ja4",
+        "deterministic": true,
+        "reference": {
+          "label": "Edge",
+          "source": "master_db",
+          "protocol": "t",
+          "tls_version": "13",
+          "sni": "d",
+          "alpn": "h2",
+          "cipher_count": {
+            "min": 15,
+            "max": 15
+          },
+          "ext_count": {
+            "min": 16,
+            "max": 16
+          },
+          "sample_size": 1,
+          "verified": true
+        }
       },
       "http2": {
         "akamai_fingerprint": "1:65536;4:131072;5:16384|12517377|0|m,p,a,s",
