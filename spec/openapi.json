@@ -21,16 +21,16 @@
       "description": "Durable visitor fingerprint readback endpoints."
     },
     {
-      "name": "Teams",
-      "description": "Team lifecycle endpoints."
+      "name": "Organizations",
+      "description": "Organization lifecycle endpoints."
     },
     {
       "name": "API Keys",
-      "description": "Team API key lifecycle endpoints."
+      "description": "Organization API key lifecycle endpoints."
     },
     {
       "name": "Gate",
-      "description": "Registry, team-owned services, signup sessions, agent tokens, and dashboard login sessions."
+      "description": "Registry, organization-owned services, signup sessions, agent tokens, and dashboard login sessions."
     },
     {
       "name": "Gate Webhooks",
@@ -1121,19 +1121,19 @@
         }
       }
     },
-    "/v1/teams": {
+    "/v1/organizations": {
       "post": {
         "tags": [
-          "Teams"
+          "Organizations"
         ],
-        "operationId": "createTeam",
-        "summary": "Create a team",
+        "operationId": "createOrganization",
+        "summary": "Create an organization",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTeamRequest",
+                "$ref": "#/components/schemas/CreateOrganizationRequest",
                 "example": {
                   "name": "Acme Growth Workspace",
                   "slug": "acme-growth"
@@ -1144,15 +1144,15 @@
         },
         "responses": {
           "201": {
-            "description": "Team created.",
+            "description": "Organization created.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TeamResponse",
+                  "$ref": "#/components/schemas/OrganizationResponse",
                   "example": {
                     "data": {
-                      "object": "team",
-                      "id": "team_f6m39y94nh6fs513q03skj929c",
+                      "object": "organization",
+                      "id": "org_f6m39y94nh6fs513q03skj929c",
                       "name": "Acme Growth Workspace",
                       "slug": "acme-growth",
                       "status": "active",
@@ -1314,35 +1314,35 @@
         }
       }
     },
-    "/v1/teams/{teamId}": {
+    "/v1/organizations/{organizationId}": {
       "get": {
         "tags": [
-          "Teams"
+          "Organizations"
         ],
-        "operationId": "getTeam",
-        "summary": "Retrieve one team",
+        "operationId": "getOrganization",
+        "summary": "Retrieve one organization",
         "parameters": [
           {
-            "name": "teamId",
+            "name": "organizationId",
             "in": "path",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/TeamId",
-              "example": "team_f6m39y94nh6fs513q03skj929c"
+              "$ref": "#/components/schemas/OrganizationId",
+              "example": "org_f6m39y94nh6fs513q03skj929c"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Team response.",
+            "description": "Organization response.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TeamResponse",
+                  "$ref": "#/components/schemas/OrganizationResponse",
                   "example": {
                     "data": {
-                      "object": "team",
-                      "id": "team_f6m39y94nh6fs513q03skj929c",
+                      "object": "organization",
+                      "id": "org_f6m39y94nh6fs513q03skj929c",
                       "name": "Acme Growth Workspace",
                       "slug": "acme-growth",
                       "status": "active",
@@ -1394,7 +1394,7 @@
             }
           },
           "403": {
-            "description": "Team access denied.",
+            "description": "Organization access denied.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1430,7 +1430,7 @@
             }
           },
           "404": {
-            "description": "Team not found.",
+            "description": "Organization not found.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1469,18 +1469,18 @@
       },
       "patch": {
         "tags": [
-          "Teams"
+          "Organizations"
         ],
-        "operationId": "updateTeam",
-        "summary": "Update a team",
+        "operationId": "updateOrganization",
+        "summary": "Update a organization",
         "parameters": [
           {
-            "name": "teamId",
+            "name": "organizationId",
             "in": "path",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/TeamId",
-              "example": "team_f6m39y94nh6fs513q03skj929c"
+              "$ref": "#/components/schemas/OrganizationId",
+              "example": "org_f6m39y94nh6fs513q03skj929c"
             }
           }
         ],
@@ -1489,7 +1489,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateTeamRequest",
+                "$ref": "#/components/schemas/UpdateOrganizationRequest",
                 "example": {
                   "name": "Acme Growth Workspace",
                   "status": "active"
@@ -1500,15 +1500,15 @@
         },
         "responses": {
           "200": {
-            "description": "Updated team response.",
+            "description": "Updated organization response.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TeamResponse",
+                  "$ref": "#/components/schemas/OrganizationResponse",
                   "example": {
                     "data": {
-                      "object": "team",
-                      "id": "team_f6m39y94nh6fs513q03skj929c",
+                      "object": "organization",
+                      "id": "org_f6m39y94nh6fs513q03skj929c",
                       "name": "Acme Growth Workspace",
                       "slug": "acme-growth",
                       "status": "active",
@@ -1560,7 +1560,7 @@
             }
           },
           "403": {
-            "description": "Team access denied.",
+            "description": "Organization access denied.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1596,7 +1596,7 @@
             }
           },
           "404": {
-            "description": "Team not found.",
+            "description": "Organization not found.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1670,21 +1670,21 @@
         }
       }
     },
-    "/v1/teams/{teamId}/api-keys": {
+    "/v1/organizations/{organizationId}/api-keys": {
       "get": {
         "tags": [
           "API Keys"
         ],
-        "operationId": "listTeamApiKeys",
-        "summary": "List team API keys",
+        "operationId": "listOrganizationApiKeys",
+        "summary": "List organization API keys",
         "parameters": [
           {
-            "name": "teamId",
+            "name": "organizationId",
             "in": "path",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/TeamId",
-              "example": "team_f6m39y94nh6fs513q03skj929c"
+              "$ref": "#/components/schemas/OrganizationId",
+              "example": "org_f6m39y94nh6fs513q03skj929c"
             }
           },
           {
@@ -1782,7 +1782,7 @@
             }
           },
           "403": {
-            "description": "Team access denied.",
+            "description": "Organization access denied.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1818,7 +1818,7 @@
             }
           },
           "404": {
-            "description": "Team not found.",
+            "description": "Organization not found.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1895,16 +1895,16 @@
         "tags": [
           "API Keys"
         ],
-        "operationId": "createTeamApiKey",
-        "summary": "Create a team API key",
+        "operationId": "createOrganizationApiKey",
+        "summary": "Create an organization API key",
         "parameters": [
           {
-            "name": "teamId",
+            "name": "organizationId",
             "in": "path",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/TeamId",
-              "example": "team_f6m39y94nh6fs513q03skj929c"
+              "$ref": "#/components/schemas/OrganizationId",
+              "example": "org_f6m39y94nh6fs513q03skj929c"
             }
           }
         ],
@@ -1995,7 +1995,7 @@
             }
           },
           "403": {
-            "description": "Team access denied.",
+            "description": "Organization access denied.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2031,7 +2031,7 @@
             }
           },
           "404": {
-            "description": "Team not found.",
+            "description": "Organization not found.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2105,21 +2105,21 @@
         }
       }
     },
-    "/v1/teams/{teamId}/api-keys/{keyId}": {
+    "/v1/organizations/{organizationId}/api-keys/{keyId}": {
       "delete": {
         "tags": [
           "API Keys"
         ],
-        "operationId": "revokeTeamApiKey",
-        "summary": "Revoke a team API key",
+        "operationId": "revokeOrganizationApiKey",
+        "summary": "Revoke a organization API key",
         "parameters": [
           {
-            "name": "teamId",
+            "name": "organizationId",
             "in": "path",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/TeamId",
-              "example": "team_f6m39y94nh6fs513q03skj929c"
+              "$ref": "#/components/schemas/OrganizationId",
+              "example": "org_f6m39y94nh6fs513q03skj929c"
             }
           },
           {
@@ -2200,7 +2200,7 @@
             }
           },
           "403": {
-            "description": "Team access denied.",
+            "description": "Organization access denied.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2274,21 +2274,21 @@
         }
       }
     },
-    "/v1/teams/{teamId}/api-keys/{keyId}/rotations": {
+    "/v1/organizations/{organizationId}/api-keys/{keyId}/rotations": {
       "post": {
         "tags": [
           "API Keys"
         ],
-        "operationId": "rotateTeamApiKey",
-        "summary": "Rotate a team API key",
+        "operationId": "rotateOrganizationApiKey",
+        "summary": "Rotate a organization API key",
         "parameters": [
           {
-            "name": "teamId",
+            "name": "organizationId",
             "in": "path",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/TeamId",
-              "example": "team_f6m39y94nh6fs513q03skj929c"
+              "$ref": "#/components/schemas/OrganizationId",
+              "example": "org_f6m39y94nh6fs513q03skj929c"
             }
           },
           {
@@ -2370,7 +2370,7 @@
             }
           },
           "403": {
-            "description": "Team access denied.",
+            "description": "Organization access denied.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2621,7 +2621,7 @@
           "Gate"
         ],
         "operationId": "listManagedGateServices",
-        "summary": "List Gate services for the authenticated team",
+        "summary": "List Gate services for the authenticated organization",
         "description": "Requires Authorization: Bearer sk_* with the gate:services:read scope.",
         "security": [
           {
@@ -2630,7 +2630,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Team Gate service list.",
+            "description": "Organization Gate service list.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2764,7 +2764,7 @@
           "Gate"
         ],
         "operationId": "createManagedGateService",
-        "summary": "Create a Gate service for the authenticated team",
+        "summary": "Create a Gate service for the authenticated organization",
         "description": "Requires Authorization: Bearer sk_* with the gate:services:manage scope.",
         "security": [
           {
@@ -2945,7 +2945,7 @@
             }
           },
           "409": {
-            "description": "Duplicate service_id or team Gate service limit reached.",
+            "description": "Duplicate service_id or organization Gate service limit reached.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3025,7 +3025,7 @@
           "Gate"
         ],
         "operationId": "getManagedGateService",
-        "summary": "Get one Gate service for the authenticated team",
+        "summary": "Get one Gate service for the authenticated organization",
         "description": "Requires Authorization: Bearer sk_* with the gate:services:read scope.",
         "security": [
           {
@@ -3213,7 +3213,7 @@
           "Gate"
         ],
         "operationId": "updateManagedGateService",
-        "summary": "Update a Gate service for the authenticated team",
+        "summary": "Update a Gate service for the authenticated organization",
         "description": "Requires Authorization: Bearer sk_* with the gate:services:manage scope.",
         "security": [
           {
@@ -3482,7 +3482,7 @@
           "Gate"
         ],
         "operationId": "disableManagedGateService",
-        "summary": "Disable a Gate service for the authenticated team",
+        "summary": "Disable a Gate service for the authenticated organization",
         "description": "Requires Authorization: Bearer sk_* with the gate:services:manage scope. This is a soft delete that sets status=disabled.",
         "security": [
           {
@@ -5801,7 +5801,7 @@
           }
         }
       },
-      "CreateTeamRequest": {
+      "CreateOrganizationRequest": {
         "type": "object",
         "additionalProperties": false,
         "required": [
@@ -7888,6 +7888,120 @@
           }
         ],
         "example": "obs_01234567"
+      },
+      "Organization": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "object",
+          "id",
+          "name",
+          "slug",
+          "status",
+          "created_at",
+          "updated_at"
+        ],
+        "properties": {
+          "object": {
+            "const": "organization",
+            "example": "organization"
+          },
+          "id": {
+            "$ref": "#/components/schemas/OrganizationId",
+            "example": "org_f6m39y94nh6fs513q03skj929c"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "example": "Acme Growth Workspace"
+          },
+          "slug": {
+            "$ref": "#/components/schemas/Slug",
+            "example": "acme-growth"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OrganizationStatus",
+            "example": "active"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-03-24T20:00:00.000Z"
+          },
+          "updated_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "example": "2026-03-24T20:00:05.000Z"
+          }
+        },
+        "example": {
+          "object": "organization",
+          "id": "org_f6m39y94nh6fs513q03skj929c",
+          "name": "Acme Growth Workspace",
+          "slug": "acme-growth",
+          "status": "active",
+          "created_at": "2026-03-24T20:00:00.000Z",
+          "updated_at": "2026-03-24T20:00:05.000Z"
+        }
+      },
+      "OrganizationId": {
+        "type": "string",
+        "pattern": "^org_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
+        "example": "org_f6m39y94nh6fs513q03skj929c"
+      },
+      "OrganizationResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Organization",
+            "example": {
+              "object": "organization",
+              "id": "org_f6m39y94nh6fs513q03skj929c",
+              "name": "Acme Growth Workspace",
+              "slug": "acme-growth",
+              "status": "active",
+              "created_at": "2026-03-24T20:00:00.000Z",
+              "updated_at": "2026-03-24T20:00:05.000Z"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta",
+            "example": {
+              "request_id": "req_cf147349a4134208aebb8c70e25fb7e1"
+            }
+          }
+        },
+        "example": {
+          "data": {
+            "object": "organization",
+            "id": "org_f6m39y94nh6fs513q03skj929c",
+            "name": "Acme Growth Workspace",
+            "slug": "acme-growth",
+            "status": "active",
+            "created_at": "2026-03-24T20:00:00.000Z",
+            "updated_at": "2026-03-24T20:00:05.000Z"
+          },
+          "meta": {
+            "request_id": "req_cf147349a4134208aebb8c70e25fb7e1"
+          }
+        }
+      },
+      "OrganizationStatus": {
+        "type": "string",
+        "enum": [
+          "active",
+          "suspended",
+          "deleted"
+        ],
+        "example": "active"
       },
       "Phase": {
         "type": "string",
@@ -12448,120 +12562,6 @@
         "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
         "example": "acme-growth"
       },
-      "Team": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "object",
-          "id",
-          "name",
-          "slug",
-          "status",
-          "created_at",
-          "updated_at"
-        ],
-        "properties": {
-          "object": {
-            "const": "team",
-            "example": "team"
-          },
-          "id": {
-            "$ref": "#/components/schemas/TeamId",
-            "example": "team_f6m39y94nh6fs513q03skj929c"
-          },
-          "name": {
-            "type": "string",
-            "minLength": 1,
-            "example": "Acme Growth Workspace"
-          },
-          "slug": {
-            "$ref": "#/components/schemas/Slug",
-            "example": "acme-growth"
-          },
-          "status": {
-            "$ref": "#/components/schemas/TeamStatus",
-            "example": "active"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time",
-            "example": "2026-03-24T20:00:00.000Z"
-          },
-          "updated_at": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time",
-            "example": "2026-03-24T20:00:05.000Z"
-          }
-        },
-        "example": {
-          "object": "team",
-          "id": "team_f6m39y94nh6fs513q03skj929c",
-          "name": "Acme Growth Workspace",
-          "slug": "acme-growth",
-          "status": "active",
-          "created_at": "2026-03-24T20:00:00.000Z",
-          "updated_at": "2026-03-24T20:00:05.000Z"
-        }
-      },
-      "TeamId": {
-        "type": "string",
-        "pattern": "^team_[0123456789abcdefghjkmnpqrstvwxyz]{26}$",
-        "example": "team_f6m39y94nh6fs513q03skj929c"
-      },
-      "TeamResponse": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "data",
-          "meta"
-        ],
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/Team",
-            "example": {
-              "object": "team",
-              "id": "team_f6m39y94nh6fs513q03skj929c",
-              "name": "Acme Growth Workspace",
-              "slug": "acme-growth",
-              "status": "active",
-              "created_at": "2026-03-24T20:00:00.000Z",
-              "updated_at": "2026-03-24T20:00:05.000Z"
-            }
-          },
-          "meta": {
-            "$ref": "#/components/schemas/ResponseMeta",
-            "example": {
-              "request_id": "req_cf147349a4134208aebb8c70e25fb7e1"
-            }
-          }
-        },
-        "example": {
-          "data": {
-            "object": "team",
-            "id": "team_f6m39y94nh6fs513q03skj929c",
-            "name": "Acme Growth Workspace",
-            "slug": "acme-growth",
-            "status": "active",
-            "created_at": "2026-03-24T20:00:00.000Z",
-            "updated_at": "2026-03-24T20:00:05.000Z"
-          },
-          "meta": {
-            "request_id": "req_cf147349a4134208aebb8c70e25fb7e1"
-          }
-        }
-      },
-      "TeamStatus": {
-        "type": "string",
-        "enum": [
-          "active",
-          "suspended",
-          "deleted"
-        ],
-        "example": "active"
-      },
       "UpdateGateServiceRequest": {
         "type": "object",
         "description": "Partial Gate service update. Nested objects and arrays replace the existing value wholesale.",
@@ -12697,7 +12697,7 @@
           }
         }
       },
-      "UpdateTeamRequest": {
+      "UpdateOrganizationRequest": {
         "type": "object",
         "additionalProperties": false,
         "minProperties": 1,
@@ -12708,7 +12708,7 @@
             "example": "Acme Growth Workspace"
           },
           "status": {
-            "$ref": "#/components/schemas/TeamStatus",
+            "$ref": "#/components/schemas/OrganizationStatus",
             "example": "active"
           }
         },
