@@ -237,7 +237,8 @@
               }
             }
           }
-        }
+        },
+        "description": "Requires the `sessions:list` secret-key scope."
       }
     },
     "/v1/sessions/{sessionId}": {
@@ -702,7 +703,8 @@
               }
             }
           }
-        }
+        },
+        "description": "Requires the `sessions:read` secret-key scope."
       }
     },
     "/v1/fingerprints": {
@@ -910,7 +912,8 @@
               }
             }
           }
-        }
+        },
+        "description": "Requires the `fingerprints:list` secret-key scope."
       }
     },
     "/v1/fingerprints/{visitorId}": {
@@ -1118,7 +1121,8 @@
               }
             }
           }
-        }
+        },
+        "description": "Requires the `fingerprints:read` secret-key scope."
       }
     },
     "/v1/organizations": {
@@ -1311,7 +1315,8 @@
               }
             }
           }
-        }
+        },
+        "description": "Requires the `organizations:create` secret-key scope."
       }
     },
     "/v1/organizations/{organizationId}": {
@@ -1465,7 +1470,8 @@
               }
             }
           }
-        }
+        },
+        "description": "Requires the `organizations:read` secret-key scope."
       },
       "patch": {
         "tags": [
@@ -1667,7 +1673,8 @@
               }
             }
           }
-        }
+        },
+        "description": "Requires the `organizations:update` secret-key scope."
       }
     },
     "/v1/organizations/{organizationId}/api-keys": {
@@ -1719,17 +1726,25 @@
                       {
                         "object": "api_key",
                         "id": "key_6cw04zdmetw8t5rsdppadhper0",
-                        "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK",
-                        "name": "Acme Growth Workspace",
+                        "type": "publishable",
                         "environment": "live",
+                        "name": "Acme Growth Workspace",
+                        "status": "active",
                         "allowed_origins": [
                           "https://app.acme.co/signup"
                         ],
+                        "scopes": [
+                          "sessions:list"
+                        ],
                         "rate_limit": 1,
-                        "status": "active",
+                        "key_preview": "TRIPWIRE_SAMPLE_KEY",
+                        "display_key": "TRIPWIRE_SAMPLE_KEY",
+                        "revealed_key": "TRIPWIRE_SAMPLE_KEY",
+                        "last_used_at": "2026-03-24T20:00:05.000Z",
                         "created_at": "2026-03-24T20:00:00.000Z",
                         "rotated_at": "2026-03-24T20:00:05.000Z",
-                        "revoked_at": "2026-03-24T20:00:05.000Z"
+                        "revoked_at": "2026-03-24T20:00:05.000Z",
+                        "grace_expires_at": "2026-03-24T20:00:05.000Z"
                       }
                     ],
                     "pagination": {
@@ -1889,7 +1904,8 @@
               }
             }
           }
-        }
+        },
+        "description": "Requires the `api_keys:read` secret-key scope."
       },
       "post": {
         "tags": [
@@ -1916,11 +1932,14 @@
                 "$ref": "#/components/schemas/CreateApiKeyRequest",
                 "example": {
                   "name": "Acme Growth Workspace",
+                  "type": "publishable",
                   "environment": "live",
                   "allowed_origins": [
                     "https://app.acme.co/signup"
                   ],
-                  "rate_limit": 50
+                  "scopes": [
+                    "sessions:list"
+                  ]
                 }
               }
             }
@@ -1937,18 +1956,25 @@
                     "data": {
                       "object": "api_key",
                       "id": "key_6cw04zdmetw8t5rsdppadhper0",
-                      "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK",
-                      "name": "Acme Growth Workspace",
+                      "type": "publishable",
                       "environment": "live",
+                      "name": "Acme Growth Workspace",
+                      "status": "active",
                       "allowed_origins": [
                         "https://app.acme.co/signup"
                       ],
+                      "scopes": [
+                        "sessions:list"
+                      ],
                       "rate_limit": 1,
-                      "status": "active",
+                      "key_preview": "TRIPWIRE_SAMPLE_KEY",
+                      "display_key": "TRIPWIRE_SAMPLE_KEY",
+                      "revealed_key": "TRIPWIRE_SAMPLE_KEY",
+                      "last_used_at": "2026-03-24T20:00:05.000Z",
                       "created_at": "2026-03-24T20:00:00.000Z",
                       "rotated_at": "2026-03-24T20:00:05.000Z",
                       "revoked_at": "2026-03-24T20:00:05.000Z",
-                      "secret_key": "sk_live_ZaoNMI3tWc61g-2lAcClhL8ySmV3q7Iuabg1-EMQ4lQ"
+                      "grace_expires_at": "2026-03-24T20:00:05.000Z"
                     },
                     "meta": {
                       "request_id": "req_cf147349a4134208aebb8c70e25fb7e1"
@@ -2102,7 +2128,8 @@
               }
             }
           }
-        }
+        },
+        "description": "Requires the `api_keys:manage` secret-key scope."
       }
     },
     "/v1/organizations/{organizationId}/api-keys/{keyId}": {
@@ -2143,17 +2170,25 @@
                     "data": {
                       "object": "api_key",
                       "id": "key_6cw04zdmetw8t5rsdppadhper0",
-                      "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK",
-                      "name": "Acme Growth Workspace",
+                      "type": "publishable",
                       "environment": "live",
+                      "name": "Acme Growth Workspace",
+                      "status": "active",
                       "allowed_origins": [
                         "https://app.acme.co/signup"
                       ],
+                      "scopes": [
+                        "sessions:list"
+                      ],
                       "rate_limit": 1,
-                      "status": "active",
+                      "key_preview": "TRIPWIRE_SAMPLE_KEY",
+                      "display_key": "TRIPWIRE_SAMPLE_KEY",
+                      "revealed_key": "TRIPWIRE_SAMPLE_KEY",
+                      "last_used_at": "2026-03-24T20:00:05.000Z",
                       "created_at": "2026-03-24T20:00:00.000Z",
                       "rotated_at": "2026-03-24T20:00:05.000Z",
-                      "revoked_at": "2026-03-24T20:00:05.000Z"
+                      "revoked_at": "2026-03-24T20:00:05.000Z",
+                      "grace_expires_at": "2026-03-24T20:00:05.000Z"
                     },
                     "meta": {
                       "request_id": "req_cf147349a4134208aebb8c70e25fb7e1"
@@ -2237,6 +2272,238 @@
           },
           "404": {
             "description": "API key not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope",
+                  "example": {
+                    "error": {
+                      "code": "request.validation_failed",
+                      "message": "Observation payload failed validation.",
+                      "status": 1,
+                      "retryable": true,
+                      "request_id": "req_cf147349a4134208aebb8c70e25fb7e1",
+                      "docs_url": "https://app.acme.co/signup",
+                      "details": {
+                        "fields": [
+                          {
+                            "name": "Acme Growth Workspace",
+                            "issue": "required",
+                            "expected": "string",
+                            "received": "any_of"
+                          }
+                        ],
+                        "allowed_values": [
+                          "verified"
+                        ],
+                        "header_name": "x-forwarded-for",
+                        "parameter_set": "browser_fingerprint",
+                        "next_action": "retry"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Requires the `api_keys:manage` secret-key scope."
+      },
+      "patch": {
+        "tags": [
+          "API Keys"
+        ],
+        "operationId": "updateOrganizationApiKey",
+        "summary": "Update an organization API key",
+        "description": "Requires the `api_keys:manage` secret-key scope.",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/OrganizationId",
+              "example": "org_f6m39y94nh6fs513q03skj929c"
+            }
+          },
+          {
+            "name": "keyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ApiKeyId",
+              "example": "key_6cw04zdmetw8t5rsdppadhper0"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateApiKeyRequest",
+                "example": {
+                  "name": "Acme Growth Workspace",
+                  "allowed_origins": [
+                    "https://app.acme.co/signup"
+                  ],
+                  "scopes": [
+                    "sessions:list"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Revoked API key response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiKeyResponse",
+                  "example": {
+                    "data": {
+                      "object": "api_key",
+                      "id": "key_6cw04zdmetw8t5rsdppadhper0",
+                      "type": "publishable",
+                      "environment": "live",
+                      "name": "Acme Growth Workspace",
+                      "status": "active",
+                      "allowed_origins": [
+                        "https://app.acme.co/signup"
+                      ],
+                      "scopes": [
+                        "sessions:list"
+                      ],
+                      "rate_limit": 1,
+                      "key_preview": "TRIPWIRE_SAMPLE_KEY",
+                      "display_key": "TRIPWIRE_SAMPLE_KEY",
+                      "revealed_key": "TRIPWIRE_SAMPLE_KEY",
+                      "last_used_at": "2026-03-24T20:00:05.000Z",
+                      "created_at": "2026-03-24T20:00:00.000Z",
+                      "rotated_at": "2026-03-24T20:00:05.000Z",
+                      "revoked_at": "2026-03-24T20:00:05.000Z",
+                      "grace_expires_at": "2026-03-24T20:00:05.000Z"
+                    },
+                    "meta": {
+                      "request_id": "req_cf147349a4134208aebb8c70e25fb7e1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope",
+                  "example": {
+                    "error": {
+                      "code": "request.validation_failed",
+                      "message": "Observation payload failed validation.",
+                      "status": 1,
+                      "retryable": true,
+                      "request_id": "req_cf147349a4134208aebb8c70e25fb7e1",
+                      "docs_url": "https://app.acme.co/signup",
+                      "details": {
+                        "fields": [
+                          {
+                            "name": "Acme Growth Workspace",
+                            "issue": "required",
+                            "expected": "string",
+                            "received": "any_of"
+                          }
+                        ],
+                        "allowed_values": [
+                          "verified"
+                        ],
+                        "header_name": "x-forwarded-for",
+                        "parameter_set": "browser_fingerprint",
+                        "next_action": "retry"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Organization access denied.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope",
+                  "example": {
+                    "error": {
+                      "code": "request.validation_failed",
+                      "message": "Observation payload failed validation.",
+                      "status": 1,
+                      "retryable": true,
+                      "request_id": "req_cf147349a4134208aebb8c70e25fb7e1",
+                      "docs_url": "https://app.acme.co/signup",
+                      "details": {
+                        "fields": [
+                          {
+                            "name": "Acme Growth Workspace",
+                            "issue": "required",
+                            "expected": "string",
+                            "received": "any_of"
+                          }
+                        ],
+                        "allowed_values": [
+                          "verified"
+                        ],
+                        "header_name": "x-forwarded-for",
+                        "parameter_set": "browser_fingerprint",
+                        "next_action": "retry"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "API key not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorEnvelope",
+                  "example": {
+                    "error": {
+                      "code": "request.validation_failed",
+                      "message": "Observation payload failed validation.",
+                      "status": 1,
+                      "retryable": true,
+                      "request_id": "req_cf147349a4134208aebb8c70e25fb7e1",
+                      "docs_url": "https://app.acme.co/signup",
+                      "details": {
+                        "fields": [
+                          {
+                            "name": "Acme Growth Workspace",
+                            "issue": "required",
+                            "expected": "string",
+                            "received": "any_of"
+                          }
+                        ],
+                        "allowed_values": [
+                          "verified"
+                        ],
+                        "header_name": "x-forwarded-for",
+                        "parameter_set": "browser_fingerprint",
+                        "next_action": "retry"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation failed.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2312,18 +2579,25 @@
                     "data": {
                       "object": "api_key",
                       "id": "key_6cw04zdmetw8t5rsdppadhper0",
-                      "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK",
-                      "name": "Acme Growth Workspace",
+                      "type": "publishable",
                       "environment": "live",
+                      "name": "Acme Growth Workspace",
+                      "status": "active",
                       "allowed_origins": [
                         "https://app.acme.co/signup"
                       ],
+                      "scopes": [
+                        "sessions:list"
+                      ],
                       "rate_limit": 1,
-                      "status": "active",
+                      "key_preview": "TRIPWIRE_SAMPLE_KEY",
+                      "display_key": "TRIPWIRE_SAMPLE_KEY",
+                      "revealed_key": "TRIPWIRE_SAMPLE_KEY",
+                      "last_used_at": "2026-03-24T20:00:05.000Z",
                       "created_at": "2026-03-24T20:00:00.000Z",
                       "rotated_at": "2026-03-24T20:00:05.000Z",
                       "revoked_at": "2026-03-24T20:00:05.000Z",
-                      "secret_key": "sk_live_ZaoNMI3tWc61g-2lAcClhL8ySmV3q7Iuabg1-EMQ4lQ"
+                      "grace_expires_at": "2026-03-24T20:00:05.000Z"
                     },
                     "meta": {
                       "request_id": "req_cf147349a4134208aebb8c70e25fb7e1"
@@ -2441,7 +2715,8 @@
               }
             }
           }
-        }
+        },
+        "description": "Requires the `api_keys:manage` secret-key scope."
       }
     },
     "/v1/gate/registry": {
@@ -3689,7 +3964,7 @@
                     "version": 1,
                     "algorithm": "x25519-hkdf-sha256/aes-256-gcm",
                     "key_id": "key_6cw04zdmetw8t5rsdppadhper0",
-                    "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK"
+                    "public_key": "pk_live_[example_publishable_key]"
                   }
                 }
               }
@@ -5268,15 +5543,19 @@
         "required": [
           "object",
           "id",
-          "public_key",
-          "name",
+          "type",
           "environment",
-          "allowed_origins",
-          "rate_limit",
+          "name",
           "status",
+          "allowed_origins",
+          "scopes",
+          "rate_limit",
+          "key_preview",
+          "last_used_at",
           "created_at",
           "rotated_at",
-          "revoked_at"
+          "revoked_at",
+          "grace_expires_at"
         ],
         "properties": {
           "object": {
@@ -5287,17 +5566,25 @@
             "$ref": "#/components/schemas/ApiKeyId",
             "example": "key_6cw04zdmetw8t5rsdppadhper0"
           },
-          "public_key": {
+          "type": {
             "type": "string",
-            "example": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK"
+            "enum": [
+              "publishable",
+              "secret"
+            ],
+            "example": "publishable"
+          },
+          "environment": {
+            "$ref": "#/components/schemas/ApiKeyEnvironment",
+            "example": "live"
           },
           "name": {
             "type": "string",
             "example": "Acme Growth Workspace"
           },
-          "environment": {
-            "$ref": "#/components/schemas/ApiKeyEnvironment",
-            "example": "live"
+          "status": {
+            "$ref": "#/components/schemas/ApiKeyStatus",
+            "example": "active"
           },
           "allowed_origins": {
             "anyOf": [
@@ -5321,6 +5608,43 @@
               "https://app.acme.co/signup"
             ]
           },
+          "scopes": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "example": "sessions:list",
+                  "enum": [
+                    "sessions:list",
+                    "sessions:read",
+                    "fingerprints:list",
+                    "fingerprints:read",
+                    "organizations:create",
+                    "organizations:read",
+                    "organizations:update",
+                    "api_keys:read",
+                    "api_keys:manage",
+                    "gate:agent_tokens:verify",
+                    "gate:agent_tokens:revoke",
+                    "gate:login_sessions:consume",
+                    "gate:services:read",
+                    "gate:services:manage"
+                  ]
+                },
+                "example": [
+                  "sessions:list"
+                ]
+              },
+              {
+                "type": "null",
+                "example": null
+              }
+            ],
+            "example": [
+              "sessions:list"
+            ]
+          },
           "rate_limit": {
             "anyOf": [
               {
@@ -5335,9 +5659,25 @@
             ],
             "example": 1
           },
-          "status": {
-            "$ref": "#/components/schemas/ApiKeyStatus",
-            "example": "active"
+          "key_preview": {
+            "type": "string",
+            "example": "TRIPWIRE_SAMPLE_KEY"
+          },
+          "display_key": {
+            "type": "string",
+            "example": "TRIPWIRE_SAMPLE_KEY"
+          },
+          "revealed_key": {
+            "type": "string",
+            "example": "TRIPWIRE_SAMPLE_KEY"
+          },
+          "last_used_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "example": "2026-03-24T20:00:05.000Z"
           },
           "created_at": {
             "type": "string",
@@ -5359,22 +5699,38 @@
             ],
             "format": "date-time",
             "example": "2026-03-24T20:00:05.000Z"
+          },
+          "grace_expires_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "example": "2026-03-24T20:00:05.000Z"
           }
         },
         "example": {
           "object": "api_key",
           "id": "key_6cw04zdmetw8t5rsdppadhper0",
-          "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK",
-          "name": "Acme Growth Workspace",
+          "type": "publishable",
           "environment": "live",
+          "name": "Acme Growth Workspace",
+          "status": "active",
           "allowed_origins": [
             "https://app.acme.co/signup"
           ],
+          "scopes": [
+            "sessions:list"
+          ],
           "rate_limit": 1,
-          "status": "active",
+          "key_preview": "TRIPWIRE_SAMPLE_KEY",
+          "display_key": "TRIPWIRE_SAMPLE_KEY",
+          "revealed_key": "TRIPWIRE_SAMPLE_KEY",
+          "last_used_at": "2026-03-24T20:00:05.000Z",
           "created_at": "2026-03-24T20:00:00.000Z",
           "rotated_at": "2026-03-24T20:00:05.000Z",
-          "revoked_at": "2026-03-24T20:00:05.000Z"
+          "revoked_at": "2026-03-24T20:00:05.000Z",
+          "grace_expires_at": "2026-03-24T20:00:05.000Z"
         }
       },
       "ApiKeyEnvironment": {
@@ -5406,34 +5762,50 @@
               "example": {
                 "object": "api_key",
                 "id": "key_6cw04zdmetw8t5rsdppadhper0",
-                "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK",
-                "name": "Acme Growth Workspace",
+                "type": "publishable",
                 "environment": "live",
+                "name": "Acme Growth Workspace",
+                "status": "active",
                 "allowed_origins": [
                   "https://app.acme.co/signup"
                 ],
+                "scopes": [
+                  "sessions:list"
+                ],
                 "rate_limit": 1,
-                "status": "active",
+                "key_preview": "TRIPWIRE_SAMPLE_KEY",
+                "display_key": "TRIPWIRE_SAMPLE_KEY",
+                "revealed_key": "TRIPWIRE_SAMPLE_KEY",
+                "last_used_at": "2026-03-24T20:00:05.000Z",
                 "created_at": "2026-03-24T20:00:00.000Z",
                 "rotated_at": "2026-03-24T20:00:05.000Z",
-                "revoked_at": "2026-03-24T20:00:05.000Z"
+                "revoked_at": "2026-03-24T20:00:05.000Z",
+                "grace_expires_at": "2026-03-24T20:00:05.000Z"
               }
             },
             "example": [
               {
                 "object": "api_key",
                 "id": "key_6cw04zdmetw8t5rsdppadhper0",
-                "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK",
-                "name": "Acme Growth Workspace",
+                "type": "publishable",
                 "environment": "live",
+                "name": "Acme Growth Workspace",
+                "status": "active",
                 "allowed_origins": [
                   "https://app.acme.co/signup"
                 ],
+                "scopes": [
+                  "sessions:list"
+                ],
                 "rate_limit": 1,
-                "status": "active",
+                "key_preview": "TRIPWIRE_SAMPLE_KEY",
+                "display_key": "TRIPWIRE_SAMPLE_KEY",
+                "revealed_key": "TRIPWIRE_SAMPLE_KEY",
+                "last_used_at": "2026-03-24T20:00:05.000Z",
                 "created_at": "2026-03-24T20:00:00.000Z",
                 "rotated_at": "2026-03-24T20:00:05.000Z",
-                "revoked_at": "2026-03-24T20:00:05.000Z"
+                "revoked_at": "2026-03-24T20:00:05.000Z",
+                "grace_expires_at": "2026-03-24T20:00:05.000Z"
               }
             ]
           },
@@ -5457,17 +5829,25 @@
             {
               "object": "api_key",
               "id": "key_6cw04zdmetw8t5rsdppadhper0",
-              "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK",
-              "name": "Acme Growth Workspace",
+              "type": "publishable",
               "environment": "live",
+              "name": "Acme Growth Workspace",
+              "status": "active",
               "allowed_origins": [
                 "https://app.acme.co/signup"
               ],
+              "scopes": [
+                "sessions:list"
+              ],
               "rate_limit": 1,
-              "status": "active",
+              "key_preview": "TRIPWIRE_SAMPLE_KEY",
+              "display_key": "TRIPWIRE_SAMPLE_KEY",
+              "revealed_key": "TRIPWIRE_SAMPLE_KEY",
+              "last_used_at": "2026-03-24T20:00:05.000Z",
               "created_at": "2026-03-24T20:00:00.000Z",
               "rotated_at": "2026-03-24T20:00:05.000Z",
-              "revoked_at": "2026-03-24T20:00:05.000Z"
+              "revoked_at": "2026-03-24T20:00:05.000Z",
+              "grace_expires_at": "2026-03-24T20:00:05.000Z"
             }
           ],
           "pagination": {
@@ -5493,17 +5873,25 @@
             "example": {
               "object": "api_key",
               "id": "key_6cw04zdmetw8t5rsdppadhper0",
-              "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK",
-              "name": "Acme Growth Workspace",
+              "type": "publishable",
               "environment": "live",
+              "name": "Acme Growth Workspace",
+              "status": "active",
               "allowed_origins": [
                 "https://app.acme.co/signup"
               ],
+              "scopes": [
+                "sessions:list"
+              ],
               "rate_limit": 1,
-              "status": "active",
+              "key_preview": "TRIPWIRE_SAMPLE_KEY",
+              "display_key": "TRIPWIRE_SAMPLE_KEY",
+              "revealed_key": "TRIPWIRE_SAMPLE_KEY",
+              "last_used_at": "2026-03-24T20:00:05.000Z",
               "created_at": "2026-03-24T20:00:00.000Z",
               "rotated_at": "2026-03-24T20:00:05.000Z",
-              "revoked_at": "2026-03-24T20:00:05.000Z"
+              "revoked_at": "2026-03-24T20:00:05.000Z",
+              "grace_expires_at": "2026-03-24T20:00:05.000Z"
             }
           },
           "meta": {
@@ -5517,17 +5905,25 @@
           "data": {
             "object": "api_key",
             "id": "key_6cw04zdmetw8t5rsdppadhper0",
-            "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK",
-            "name": "Acme Growth Workspace",
+            "type": "publishable",
             "environment": "live",
+            "name": "Acme Growth Workspace",
+            "status": "active",
             "allowed_origins": [
               "https://app.acme.co/signup"
             ],
+            "scopes": [
+              "sessions:list"
+            ],
             "rate_limit": 1,
-            "status": "active",
+            "key_preview": "TRIPWIRE_SAMPLE_KEY",
+            "display_key": "TRIPWIRE_SAMPLE_KEY",
+            "revealed_key": "TRIPWIRE_SAMPLE_KEY",
+            "last_used_at": "2026-03-24T20:00:05.000Z",
             "created_at": "2026-03-24T20:00:00.000Z",
             "rotated_at": "2026-03-24T20:00:05.000Z",
-            "revoked_at": "2026-03-24T20:00:05.000Z"
+            "revoked_at": "2026-03-24T20:00:05.000Z",
+            "grace_expires_at": "2026-03-24T20:00:05.000Z"
           },
           "meta": {
             "request_id": "req_cf147349a4134208aebb8c70e25fb7e1"
@@ -5538,8 +5934,8 @@
         "type": "string",
         "enum": [
           "active",
-          "revoked",
-          "rotated"
+          "rotating",
+          "revoked"
         ],
         "example": "active"
       },
@@ -5561,10 +5957,22 @@
       "CreateApiKeyRequest": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "name"
+        ],
         "properties": {
           "name": {
             "type": "string",
+            "minLength": 1,
             "example": "Acme Growth Workspace"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "publishable",
+              "secret"
+            ],
+            "example": "publishable"
           },
           "environment": {
             "$ref": "#/components/schemas/ApiKeyEnvironment",
@@ -5581,19 +5989,43 @@
               "https://app.acme.co/signup"
             ]
           },
-          "rate_limit": {
-            "type": "integer",
-            "minimum": 1,
-            "example": 50
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "sessions:list",
+              "enum": [
+                "sessions:list",
+                "sessions:read",
+                "fingerprints:list",
+                "fingerprints:read",
+                "organizations:create",
+                "organizations:read",
+                "organizations:update",
+                "api_keys:read",
+                "api_keys:manage",
+                "gate:agent_tokens:verify",
+                "gate:agent_tokens:revoke",
+                "gate:login_sessions:consume",
+                "gate:services:read",
+                "gate:services:manage"
+              ]
+            },
+            "example": [
+              "sessions:list"
+            ]
           }
         },
         "example": {
           "name": "Acme Growth Workspace",
+          "type": "publishable",
           "environment": "live",
           "allowed_origins": [
             "https://app.acme.co/signup"
           ],
-          "rate_limit": 50
+          "scopes": [
+            "sessions:list"
+          ]
         }
       },
       "CreateGateLoginSessionRequest": {
@@ -5783,7 +6215,7 @@
               "version": 1,
               "algorithm": "x25519-hkdf-sha256/aes-256-gcm",
               "key_id": "key_6cw04zdmetw8t5rsdppadhper0",
-              "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK"
+              "public_key": "pk_live_[example_publishable_key]"
             }
           }
         },
@@ -5797,7 +6229,7 @@
             "version": 1,
             "algorithm": "x25519-hkdf-sha256/aes-256-gcm",
             "key_id": "key_6cw04zdmetw8t5rsdppadhper0",
-            "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK"
+            "public_key": "pk_live_[example_publishable_key]"
           }
         }
       },
@@ -6022,7 +6454,7 @@
               "version": 1,
               "algorithm": "x25519-hkdf-sha256/aes-256-gcm",
               "key_id": "key_6cw04zdmetw8t5rsdppadhper0",
-              "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK"
+              "public_key": "pk_live_[example_publishable_key]"
             }
           }
         },
@@ -6043,7 +6475,7 @@
             "version": 1,
             "algorithm": "x25519-hkdf-sha256/aes-256-gcm",
             "key_id": "key_6cw04zdmetw8t5rsdppadhper0",
-            "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK"
+            "public_key": "pk_live_[example_publishable_key]"
           }
         }
       },
@@ -6342,14 +6774,14 @@
           },
           "public_key": {
             "type": "string",
-            "example": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK"
+            "example": "pk_live_[example_publishable_key]"
           }
         },
         "example": {
           "version": 1,
           "algorithm": "x25519-hkdf-sha256/aes-256-gcm",
           "key_id": "key_6cw04zdmetw8t5rsdppadhper0",
-          "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK"
+          "public_key": "pk_live_[example_publishable_key]"
         }
       },
       "GateEnvVar": {
@@ -7649,16 +8081,20 @@
         "required": [
           "object",
           "id",
-          "public_key",
-          "name",
+          "type",
           "environment",
-          "allowed_origins",
-          "rate_limit",
+          "name",
           "status",
+          "allowed_origins",
+          "scopes",
+          "rate_limit",
+          "key_preview",
+          "last_used_at",
           "created_at",
           "rotated_at",
           "revoked_at",
-          "secret_key"
+          "grace_expires_at",
+          "revealed_key"
         ],
         "properties": {
           "object": {
@@ -7669,17 +8105,25 @@
             "$ref": "#/components/schemas/ApiKeyId",
             "example": "key_6cw04zdmetw8t5rsdppadhper0"
           },
-          "public_key": {
+          "type": {
             "type": "string",
-            "example": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK"
+            "enum": [
+              "publishable",
+              "secret"
+            ],
+            "example": "publishable"
+          },
+          "environment": {
+            "$ref": "#/components/schemas/ApiKeyEnvironment",
+            "example": "live"
           },
           "name": {
             "type": "string",
             "example": "Acme Growth Workspace"
           },
-          "environment": {
-            "$ref": "#/components/schemas/ApiKeyEnvironment",
-            "example": "live"
+          "status": {
+            "$ref": "#/components/schemas/ApiKeyStatus",
+            "example": "active"
           },
           "allowed_origins": {
             "anyOf": [
@@ -7703,6 +8147,43 @@
               "https://app.acme.co/signup"
             ]
           },
+          "scopes": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "example": "sessions:list",
+                  "enum": [
+                    "sessions:list",
+                    "sessions:read",
+                    "fingerprints:list",
+                    "fingerprints:read",
+                    "organizations:create",
+                    "organizations:read",
+                    "organizations:update",
+                    "api_keys:read",
+                    "api_keys:manage",
+                    "gate:agent_tokens:verify",
+                    "gate:agent_tokens:revoke",
+                    "gate:login_sessions:consume",
+                    "gate:services:read",
+                    "gate:services:manage"
+                  ]
+                },
+                "example": [
+                  "sessions:list"
+                ]
+              },
+              {
+                "type": "null",
+                "example": null
+              }
+            ],
+            "example": [
+              "sessions:list"
+            ]
+          },
           "rate_limit": {
             "anyOf": [
               {
@@ -7717,9 +8198,25 @@
             ],
             "example": 1
           },
-          "status": {
-            "$ref": "#/components/schemas/ApiKeyStatus",
-            "example": "active"
+          "key_preview": {
+            "type": "string",
+            "example": "TRIPWIRE_SAMPLE_KEY"
+          },
+          "display_key": {
+            "type": "string",
+            "example": "TRIPWIRE_SAMPLE_KEY"
+          },
+          "revealed_key": {
+            "type": "string",
+            "example": "TRIPWIRE_SAMPLE_KEY"
+          },
+          "last_used_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "example": "2026-03-24T20:00:05.000Z"
           },
           "created_at": {
             "type": "string",
@@ -7742,26 +8239,37 @@
             "format": "date-time",
             "example": "2026-03-24T20:00:05.000Z"
           },
-          "secret_key": {
-            "type": "string",
-            "example": "sk_live_ZaoNMI3tWc61g-2lAcClhL8ySmV3q7Iuabg1-EMQ4lQ"
+          "grace_expires_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "example": "2026-03-24T20:00:05.000Z"
           }
         },
         "example": {
           "object": "api_key",
           "id": "key_6cw04zdmetw8t5rsdppadhper0",
-          "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK",
-          "name": "Acme Growth Workspace",
+          "type": "publishable",
           "environment": "live",
+          "name": "Acme Growth Workspace",
+          "status": "active",
           "allowed_origins": [
             "https://app.acme.co/signup"
           ],
+          "scopes": [
+            "sessions:list"
+          ],
           "rate_limit": 1,
-          "status": "active",
+          "key_preview": "TRIPWIRE_SAMPLE_KEY",
+          "display_key": "TRIPWIRE_SAMPLE_KEY",
+          "revealed_key": "TRIPWIRE_SAMPLE_KEY",
+          "last_used_at": "2026-03-24T20:00:05.000Z",
           "created_at": "2026-03-24T20:00:00.000Z",
           "rotated_at": "2026-03-24T20:00:05.000Z",
           "revoked_at": "2026-03-24T20:00:05.000Z",
-          "secret_key": "sk_live_ZaoNMI3tWc61g-2lAcClhL8ySmV3q7Iuabg1-EMQ4lQ"
+          "grace_expires_at": "2026-03-24T20:00:05.000Z"
         }
       },
       "IssuedApiKeyResponse": {
@@ -7777,18 +8285,25 @@
             "example": {
               "object": "api_key",
               "id": "key_6cw04zdmetw8t5rsdppadhper0",
-              "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK",
-              "name": "Acme Growth Workspace",
+              "type": "publishable",
               "environment": "live",
+              "name": "Acme Growth Workspace",
+              "status": "active",
               "allowed_origins": [
                 "https://app.acme.co/signup"
               ],
+              "scopes": [
+                "sessions:list"
+              ],
               "rate_limit": 1,
-              "status": "active",
+              "key_preview": "TRIPWIRE_SAMPLE_KEY",
+              "display_key": "TRIPWIRE_SAMPLE_KEY",
+              "revealed_key": "TRIPWIRE_SAMPLE_KEY",
+              "last_used_at": "2026-03-24T20:00:05.000Z",
               "created_at": "2026-03-24T20:00:00.000Z",
               "rotated_at": "2026-03-24T20:00:05.000Z",
               "revoked_at": "2026-03-24T20:00:05.000Z",
-              "secret_key": "sk_live_ZaoNMI3tWc61g-2lAcClhL8ySmV3q7Iuabg1-EMQ4lQ"
+              "grace_expires_at": "2026-03-24T20:00:05.000Z"
             }
           },
           "meta": {
@@ -7802,18 +8317,25 @@
           "data": {
             "object": "api_key",
             "id": "key_6cw04zdmetw8t5rsdppadhper0",
-            "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK",
-            "name": "Acme Growth Workspace",
+            "type": "publishable",
             "environment": "live",
+            "name": "Acme Growth Workspace",
+            "status": "active",
             "allowed_origins": [
               "https://app.acme.co/signup"
             ],
+            "scopes": [
+              "sessions:list"
+            ],
             "rate_limit": 1,
-            "status": "active",
+            "key_preview": "TRIPWIRE_SAMPLE_KEY",
+            "display_key": "TRIPWIRE_SAMPLE_KEY",
+            "revealed_key": "TRIPWIRE_SAMPLE_KEY",
+            "last_used_at": "2026-03-24T20:00:05.000Z",
             "created_at": "2026-03-24T20:00:00.000Z",
             "rotated_at": "2026-03-24T20:00:05.000Z",
             "revoked_at": "2026-03-24T20:00:05.000Z",
-            "secret_key": "sk_live_ZaoNMI3tWc61g-2lAcClhL8ySmV3q7Iuabg1-EMQ4lQ"
+            "grace_expires_at": "2026-03-24T20:00:05.000Z"
           },
           "meta": {
             "request_id": "req_cf147349a4134208aebb8c70e25fb7e1"
@@ -12561,6 +13083,63 @@
         "type": "string",
         "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
         "example": "acme-growth"
+      },
+      "UpdateApiKeyRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "minProperties": 1,
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Acme Growth Workspace"
+          },
+          "allowed_origins": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "example": "https://app.acme.co/signup"
+            },
+            "example": [
+              "https://app.acme.co/signup"
+            ]
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "sessions:list",
+                "sessions:read",
+                "fingerprints:list",
+                "fingerprints:read",
+                "organizations:create",
+                "organizations:read",
+                "organizations:update",
+                "api_keys:read",
+                "api_keys:manage",
+                "gate:agent_tokens:verify",
+                "gate:agent_tokens:revoke",
+                "gate:login_sessions:consume",
+                "gate:services:read",
+                "gate:services:manage"
+              ],
+              "example": "sessions:list"
+            },
+            "example": [
+              "sessions:list"
+            ]
+          }
+        },
+        "example": {
+          "name": "Acme Growth Workspace",
+          "allowed_origins": [
+            "https://app.acme.co/signup"
+          ],
+          "scopes": [
+            "sessions:list"
+          ]
+        }
       },
       "UpdateGateServiceRequest": {
         "type": "object",
