@@ -371,6 +371,12 @@
                         "virtualization_suspected": true,
                         "privacy_hardening_suspected": true
                       },
+                      "native_runtime_integrity": null,
+                      "native_app": null,
+                      "native_carrier": null,
+                      "native_motion_print": null,
+                      "device_identity": null,
+                      "install_id": null,
                       "visitor_fingerprint": {
                         "object": "visitor_fingerprint",
                         "id": "vid_7cyvmdfjs3rzznf8m65v3bv51m",
@@ -9499,6 +9505,12 @@
           "web_bot_auth",
           "network",
           "runtime_integrity",
+          "native_runtime_integrity",
+          "native_app",
+          "native_carrier",
+          "native_motion_print",
+          "device_identity",
+          "install_id",
           "visitor_fingerprint",
           "connection_fingerprint",
           "previous_decisions",
@@ -9694,6 +9706,68 @@
               "virtualization_suspected": true,
               "privacy_hardening_suspected": true
             }
+          },
+          "native_runtime_integrity": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SessionNativeRuntimeIntegrity"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "example": null
+          },
+          "native_app": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SessionNativeApp"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "example": null
+          },
+          "native_carrier": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SessionNativeCarrier"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "example": null
+          },
+          "native_motion_print": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SessionNativeMotionPrint"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "example": null
+          },
+          "device_identity": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SessionDetailDeviceIdentity"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "example": null
+          },
+          "install_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "example": null
           },
           "visitor_fingerprint": {
             "anyOf": [
@@ -10082,6 +10156,12 @@
             "virtualization_suspected": true,
             "privacy_hardening_suspected": true
           },
+          "native_runtime_integrity": null,
+          "native_app": null,
+          "native_carrier": null,
+          "native_motion_print": null,
+          "device_identity": null,
+          "install_id": null,
           "visitor_fingerprint": {
             "object": "visitor_fingerprint",
             "id": "vid_7cyvmdfjs3rzznf8m65v3bv51m",
@@ -10366,6 +10446,79 @@
           "evaluated_at": "2026-03-24T20:00:05.000Z"
         }
       },
+      "SessionDetailDeviceIdentity": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "object",
+          "id",
+          "confidence",
+          "source",
+          "platform",
+          "identified_at",
+          "lifecycle",
+          "matched_anchors"
+        ],
+        "properties": {
+          "object": {
+            "const": "device_identity"
+          },
+          "id": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "attested",
+              "anchored",
+              "inferred",
+              "new"
+            ]
+          },
+          "platform": {
+            "type": "string",
+            "enum": [
+              "ios",
+              "android"
+            ]
+          },
+          "identified_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lifecycle": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "first_seen_at",
+              "last_seen_at",
+              "seen_count"
+            ],
+            "properties": {
+              "first_seen_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "last_seen_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "seen_count": {
+                "type": "number"
+              }
+            }
+          },
+          "matched_anchors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "SessionDetailRequest": {
         "type": "object",
         "additionalProperties": false,
@@ -10512,6 +10665,12 @@
                 "virtualization_suspected": true,
                 "privacy_hardening_suspected": true
               },
+              "native_runtime_integrity": null,
+              "native_app": null,
+              "native_carrier": null,
+              "native_motion_print": null,
+              "device_identity": null,
+              "install_id": null,
               "visitor_fingerprint": {
                 "object": "visitor_fingerprint",
                 "id": "vid_7cyvmdfjs3rzznf8m65v3bv51m",
@@ -10841,6 +11000,12 @@
               "virtualization_suspected": true,
               "privacy_hardening_suspected": true
             },
+            "native_runtime_integrity": null,
+            "native_app": null,
+            "native_carrier": null,
+            "native_motion_print": null,
+            "device_identity": null,
+            "install_id": null,
             "visitor_fingerprint": {
               "object": "visitor_fingerprint",
               "id": "vid_7cyvmdfjs3rzznf8m65v3bv51m",
@@ -11799,6 +11964,406 @@
           },
           "meta": {
             "request_id": "req_cf147349a4134208aebb8c70e25fb7e1"
+          }
+        }
+      },
+      "SessionNativeApp": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "bundle_id",
+          "app_version",
+          "app_build",
+          "install_time_epoch_ms",
+          "provisioning_team"
+        ],
+        "properties": {
+          "bundle_id": {
+            "type": "string"
+          },
+          "app_version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "app_build": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "install_time_epoch_ms": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "provisioning_team": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "SessionNativeCarrier": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "platform",
+          "carrier_name",
+          "country_iso",
+          "mcc",
+          "mnc",
+          "phone_type",
+          "network_type",
+          "radio_access"
+        ],
+        "properties": {
+          "platform": {
+            "type": "string",
+            "enum": [
+              "ios",
+              "android"
+            ]
+          },
+          "carrier_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "country_iso": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "mcc": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "mnc": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "phone_type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "network_type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "radio_access": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "SessionNativeCodeSigning": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "invalid"
+        ],
+        "properties": {
+          "invalid": {
+            "type": "boolean"
+          },
+          "code_sign_valid": {
+            "type": "boolean"
+          },
+          "text_integrity_ok": {
+            "type": "boolean"
+          },
+          "application_debuggable": {
+            "type": "boolean"
+          },
+          "dyld_insert_libraries": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "SessionNativeDebugger": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "attached"
+        ],
+        "properties": {
+          "attached": {
+            "type": "boolean"
+          },
+          "tracer_pid": {
+            "type": "number"
+          },
+          "breakpoint_count": {
+            "type": "number"
+          },
+          "watchpoint_thread_count": {
+            "type": "number"
+          }
+        }
+      },
+      "SessionNativeHooks": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "detected"
+        ],
+        "properties": {
+          "detected": {
+            "type": "boolean"
+          },
+          "frida_ports": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "frida_thread_names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "hooked_symbols": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "self_hooked_symbols": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "prologue_anomaly_count": {
+            "type": "number"
+          },
+          "unexpected_dyld_images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "xposed_packages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "SessionNativeJailbreakOrRoot": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "detected",
+          "signals"
+        ],
+        "properties": {
+          "detected": {
+            "type": "boolean"
+          },
+          "signals": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "present_paths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "dyld_insert_libraries": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "verified_boot_state": {
+            "type": "string"
+          },
+          "magisk_mount_present": {
+            "type": "boolean"
+          },
+          "su_on_path": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SessionNativeMotionAxes": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "bias",
+          "noise"
+        ],
+        "properties": {
+          "bias": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "noise": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          }
+        }
+      },
+      "SessionNativeMotionPrint": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "platform",
+          "sample_count",
+          "gyro",
+          "accel",
+          "mag"
+        ],
+        "properties": {
+          "platform": {
+            "type": "string",
+            "enum": [
+              "ios",
+              "android"
+            ]
+          },
+          "sample_count": {
+            "type": "number"
+          },
+          "gyro": {
+            "$ref": "#/components/schemas/SessionNativeMotionAxes"
+          },
+          "accel": {
+            "$ref": "#/components/schemas/SessionNativeMotionAxes"
+          },
+          "mag": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SessionNativeMotionAxes"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "SessionNativeRuntimeIntegrity": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "platform",
+          "jailbreak_or_root",
+          "hooks",
+          "debugger",
+          "code_signing",
+          "simulator_or_emulator"
+        ],
+        "properties": {
+          "platform": {
+            "type": "string",
+            "enum": [
+              "ios",
+              "android"
+            ],
+            "example": "ios"
+          },
+          "jailbreak_or_root": {
+            "$ref": "#/components/schemas/SessionNativeJailbreakOrRoot"
+          },
+          "hooks": {
+            "$ref": "#/components/schemas/SessionNativeHooks"
+          },
+          "debugger": {
+            "$ref": "#/components/schemas/SessionNativeDebugger"
+          },
+          "code_signing": {
+            "$ref": "#/components/schemas/SessionNativeCodeSigning"
+          },
+          "simulator_or_emulator": {
+            "$ref": "#/components/schemas/SessionNativeSimulatorOrEmulator"
+          }
+        },
+        "example": {
+          "platform": "ios",
+          "jailbreak_or_root": {
+            "detected": false,
+            "signals": []
+          },
+          "hooks": {
+            "detected": false
+          },
+          "debugger": {
+            "attached": false
+          },
+          "code_signing": {
+            "invalid": false,
+            "code_sign_valid": true,
+            "text_integrity_ok": true
+          },
+          "simulator_or_emulator": {
+            "detected": false
+          }
+        }
+      },
+      "SessionNativeSimulatorOrEmulator": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "detected"
+        ],
+        "properties": {
+          "detected": {
+            "type": "boolean"
+          },
+          "is_ios_app_on_mac": {
+            "type": "boolean"
+          },
+          "qemu_files": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ro_hardware": {
+            "type": "string"
+          },
+          "ro_product_model": {
+            "type": "string"
+          },
+          "simulator_env_keys": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
