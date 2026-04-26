@@ -18,6 +18,20 @@ const spec = JSON.parse(readFileSync(specPath, 'utf8')) as {
   };
 };
 
+function stripExamples<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value.map((item) => stripExamples(item)) as T;
+  }
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([key]) => key !== 'example')
+        .map(([key, item]) => [key, stripExamples(item)]),
+    ) as T;
+  }
+  return value;
+}
+
 describe('server SDK contract', () => {
   it('contains only the supported public server paths', () => {
     const paths = Object.keys(spec.paths).sort();
@@ -87,9 +101,9 @@ describe('server SDK contract', () => {
     expect(schemas.OrganizationId.pattern).toBe('^org_[0123456789abcdefghjkmnpqrstvwxyz]{26}$');
     expect(schemas.ApiKeyId.pattern).toBe('^key_[0123456789abcdefghjkmnpqrstvwxyz]{26}$');
 
-    expect(schemas.SessionSummary.properties?.id).toMatchObject({ $ref: '#/components/schemas/SessionId' });
-    expect(schemas.Organization.properties?.status).toMatchObject({ $ref: '#/components/schemas/OrganizationStatus' });
-    expect(schemas.ApiKey.properties?.status).toMatchObject({ $ref: '#/components/schemas/ApiKeyStatus' });
+    expect(stripExamples(schemas.SessionSummary.properties?.id)).toEqual({ $ref: '#/components/schemas/SessionId' });
+    expect(stripExamples(schemas.Organization.properties?.status)).toEqual({ $ref: '#/components/schemas/OrganizationStatus' });
+    expect(stripExamples(schemas.ApiKey.properties?.status)).toEqual({ $ref: '#/components/schemas/ApiKeyStatus' });
     expect(schemas.PublicError.properties?.code).toMatchObject({
       'x-tripwire-known-values-ref': '#/components/schemas/KnownPublicErrorCode',
     });
@@ -119,14 +133,14 @@ describe('server SDK contract', () => {
         'client_telemetry',
       ]),
     );
-    expect(schemas.SessionDetail.properties?.request).toMatchObject({ $ref: '#/components/schemas/SessionDetailRequest' });
-    expect(schemas.SessionDetail.properties?.client_telemetry).toMatchObject({
+    expect(stripExamples(schemas.SessionDetail.properties?.request)).toEqual({ $ref: '#/components/schemas/SessionDetailRequest' });
+    expect(stripExamples(schemas.SessionDetail.properties?.client_telemetry)).toEqual({
       $ref: '#/components/schemas/SessionClientTelemetry',
     });
-    expect(schemas.SessionDetail.properties?.automation).toMatchObject({
+    expect(stripExamples(schemas.SessionDetail.properties?.automation)).toEqual({
       anyOf: [{ $ref: '#/components/schemas/SessionAutomation' }, { type: 'null' }],
     });
-    expect(schemas.SessionDetail.properties?.signals_fired).toMatchObject({
+    expect(stripExamples(schemas.SessionDetail.properties?.signals_fired)).toEqual({
       type: 'array',
       items: { $ref: '#/components/schemas/SessionSignalFired' },
     });
