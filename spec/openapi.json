@@ -3798,14 +3798,14 @@
                   "example": {
                     "data": {
                       "object": "webhook_test",
-                      "event_id": "webhook_event_id",
+                      "event_id": "wevt_0123456789abcdef0123456789abcdef",
                       "delivery_ids": [
-                        "webhook_delivery_id"
+                        "wdlv_0123456789abcdef0123456789abcdef"
                       ],
                       "latest_delivery": {
                         "object": "webhook_delivery",
-                        "id": "webhook_delivery_id",
-                        "event_id": "webhook_event_id",
+                        "id": "wdlv_0123456789abcdef0123456789abcdef",
+                        "event_id": "wevt_0123456789abcdef0123456789abcdef",
                         "endpoint_id": "we_0123456789abcdef0123456789abcdef",
                         "event_type": "session.fingerprint.calculated",
                         "status": "pending",
@@ -3998,7 +3998,48 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EventListResponse"
+                  "$ref": "#/components/schemas/EventListResponse",
+                  "example": {
+                    "data": [
+                      {
+                        "object": "event",
+                        "id": "wevt_0123456789abcdef0123456789abcdef",
+                        "type": "session.fingerprint.calculated",
+                        "subject": {
+                          "type": "type",
+                          "id": "sid_87wfetm98myh9awj0dpt28a3kc"
+                        },
+                        "data": {
+                          "source": "signup_form"
+                        },
+                        "webhook_deliveries": [
+                          {
+                            "object": "webhook_delivery",
+                            "id": "wdlv_0123456789abcdef0123456789abcdef",
+                            "event_id": "wevt_0123456789abcdef0123456789abcdef",
+                            "endpoint_id": "we_0123456789abcdef0123456789abcdef",
+                            "event_type": "session.fingerprint.calculated",
+                            "status": "pending",
+                            "attempts": 1,
+                            "response_status": 1,
+                            "response_body": "response_body",
+                            "error": "error",
+                            "created_at": "2026-03-24T20:00:00.000Z",
+                            "updated_at": "2026-03-24T20:00:05.000Z"
+                          }
+                        ],
+                        "created_at": "2026-03-24T20:00:00.000Z"
+                      }
+                    ],
+                    "pagination": {
+                      "limit": 50,
+                      "has_more": false,
+                      "next_cursor": "eyJ2IjoxLCJzY29yZWRBdCI6IjIwMjYtMDQtMTBUMDY6NDI6NDIuNTE0WiIsInJvd0lkIjoiMTc3In0"
+                    },
+                    "meta": {
+                      "request_id": "req_cf147349a4134208aebb8c70e25fb7e1"
+                    }
+                  }
                 }
               }
             }
@@ -4008,7 +4049,33 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope",
+                  "example": {
+                    "error": {
+                      "code": "request.validation_failed",
+                      "message": "Observation payload failed validation.",
+                      "status": 1,
+                      "retryable": true,
+                      "request_id": "req_cf147349a4134208aebb8c70e25fb7e1",
+                      "docs_url": "https://app.acme.co/signup",
+                      "details": {
+                        "fields": [
+                          {
+                            "name": "Acme Growth Workspace",
+                            "issue": "required",
+                            "expected": "string",
+                            "received": "any_of"
+                          }
+                        ],
+                        "allowed_values": [
+                          "verified"
+                        ],
+                        "header_name": "x-forwarded-for",
+                        "parameter_set": "browser_fingerprint",
+                        "next_action": "retry"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -4018,7 +4085,33 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope",
+                  "example": {
+                    "error": {
+                      "code": "request.validation_failed",
+                      "message": "Observation payload failed validation.",
+                      "status": 1,
+                      "retryable": true,
+                      "request_id": "req_cf147349a4134208aebb8c70e25fb7e1",
+                      "docs_url": "https://app.acme.co/signup",
+                      "details": {
+                        "fields": [
+                          {
+                            "name": "Acme Growth Workspace",
+                            "issue": "required",
+                            "expected": "string",
+                            "received": "any_of"
+                          }
+                        ],
+                        "allowed_values": [
+                          "verified"
+                        ],
+                        "header_name": "x-forwarded-for",
+                        "parameter_set": "browser_fingerprint",
+                        "next_action": "retry"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -4028,7 +4121,33 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope",
+                  "example": {
+                    "error": {
+                      "code": "request.validation_failed",
+                      "message": "Observation payload failed validation.",
+                      "status": 1,
+                      "retryable": true,
+                      "request_id": "req_cf147349a4134208aebb8c70e25fb7e1",
+                      "docs_url": "https://app.acme.co/signup",
+                      "details": {
+                        "fields": [
+                          {
+                            "name": "Acme Growth Workspace",
+                            "issue": "required",
+                            "expected": "string",
+                            "received": "any_of"
+                          }
+                        ],
+                        "allowed_values": [
+                          "verified"
+                        ],
+                        "header_name": "x-forwarded-for",
+                        "parameter_set": "browser_fingerprint",
+                        "next_action": "retry"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -4075,7 +4194,41 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/EventResponse"
+                  "$ref": "#/components/schemas/EventResponse",
+                  "example": {
+                    "data": {
+                      "object": "event",
+                      "id": "wevt_0123456789abcdef0123456789abcdef",
+                      "type": "session.fingerprint.calculated",
+                      "subject": {
+                        "type": "type",
+                        "id": "sid_87wfetm98myh9awj0dpt28a3kc"
+                      },
+                      "data": {
+                        "source": "signup_form"
+                      },
+                      "webhook_deliveries": [
+                        {
+                          "object": "webhook_delivery",
+                          "id": "wdlv_0123456789abcdef0123456789abcdef",
+                          "event_id": "wevt_0123456789abcdef0123456789abcdef",
+                          "endpoint_id": "we_0123456789abcdef0123456789abcdef",
+                          "event_type": "session.fingerprint.calculated",
+                          "status": "pending",
+                          "attempts": 1,
+                          "response_status": 1,
+                          "response_body": "response_body",
+                          "error": "error",
+                          "created_at": "2026-03-24T20:00:00.000Z",
+                          "updated_at": "2026-03-24T20:00:05.000Z"
+                        }
+                      ],
+                      "created_at": "2026-03-24T20:00:00.000Z"
+                    },
+                    "meta": {
+                      "request_id": "req_cf147349a4134208aebb8c70e25fb7e1"
+                    }
+                  }
                 }
               }
             }
@@ -4085,7 +4238,33 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope",
+                  "example": {
+                    "error": {
+                      "code": "request.validation_failed",
+                      "message": "Observation payload failed validation.",
+                      "status": 1,
+                      "retryable": true,
+                      "request_id": "req_cf147349a4134208aebb8c70e25fb7e1",
+                      "docs_url": "https://app.acme.co/signup",
+                      "details": {
+                        "fields": [
+                          {
+                            "name": "Acme Growth Workspace",
+                            "issue": "required",
+                            "expected": "string",
+                            "received": "any_of"
+                          }
+                        ],
+                        "allowed_values": [
+                          "verified"
+                        ],
+                        "header_name": "x-forwarded-for",
+                        "parameter_set": "browser_fingerprint",
+                        "next_action": "retry"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -4095,7 +4274,33 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope",
+                  "example": {
+                    "error": {
+                      "code": "request.validation_failed",
+                      "message": "Observation payload failed validation.",
+                      "status": 1,
+                      "retryable": true,
+                      "request_id": "req_cf147349a4134208aebb8c70e25fb7e1",
+                      "docs_url": "https://app.acme.co/signup",
+                      "details": {
+                        "fields": [
+                          {
+                            "name": "Acme Growth Workspace",
+                            "issue": "required",
+                            "expected": "string",
+                            "received": "any_of"
+                          }
+                        ],
+                        "allowed_values": [
+                          "verified"
+                        ],
+                        "header_name": "x-forwarded-for",
+                        "parameter_set": "browser_fingerprint",
+                        "next_action": "retry"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -4105,7 +4310,33 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiErrorEnvelope"
+                  "$ref": "#/components/schemas/ApiErrorEnvelope",
+                  "example": {
+                    "error": {
+                      "code": "request.validation_failed",
+                      "message": "Observation payload failed validation.",
+                      "status": 1,
+                      "retryable": true,
+                      "request_id": "req_cf147349a4134208aebb8c70e25fb7e1",
+                      "docs_url": "https://app.acme.co/signup",
+                      "details": {
+                        "fields": [
+                          {
+                            "name": "Acme Growth Workspace",
+                            "issue": "required",
+                            "expected": "string",
+                            "received": "any_of"
+                          }
+                        ],
+                        "allowed_values": [
+                          "verified"
+                        ],
+                        "header_name": "x-forwarded-for",
+                        "parameter_set": "browser_fingerprint",
+                        "next_action": "retry"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -7816,24 +8047,57 @@
           },
           "type": {
             "$ref": "#/components/schemas/WebhookDeliveryEventType",
-            "example": "session.result.persisted"
+            "example": "session.fingerprint.calculated"
           },
           "subject": {
-            "$ref": "#/components/schemas/EventSubject"
+            "$ref": "#/components/schemas/EventSubject",
+            "example": {
+              "type": "type",
+              "id": "sid_87wfetm98myh9awj0dpt28a3kc"
+            }
           },
           "data": {
             "type": "object",
             "additionalProperties": true,
             "example": {
-              "session_id": "sid_87wfetm98myh9awj0dpt28a3kc",
-              "verdict": "human"
+              "source": "signup_form"
             }
           },
           "webhook_deliveries": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/WebhookDelivery"
-            }
+              "$ref": "#/components/schemas/WebhookDelivery",
+              "example": {
+                "object": "webhook_delivery",
+                "id": "wdlv_0123456789abcdef0123456789abcdef",
+                "event_id": "wevt_0123456789abcdef0123456789abcdef",
+                "endpoint_id": "we_0123456789abcdef0123456789abcdef",
+                "event_type": "session.fingerprint.calculated",
+                "status": "pending",
+                "attempts": 1,
+                "response_status": 1,
+                "response_body": "response_body",
+                "error": "error",
+                "created_at": "2026-03-24T20:00:00.000Z",
+                "updated_at": "2026-03-24T20:00:05.000Z"
+              }
+            },
+            "example": [
+              {
+                "object": "webhook_delivery",
+                "id": "wdlv_0123456789abcdef0123456789abcdef",
+                "event_id": "wevt_0123456789abcdef0123456789abcdef",
+                "endpoint_id": "we_0123456789abcdef0123456789abcdef",
+                "event_type": "session.fingerprint.calculated",
+                "status": "pending",
+                "attempts": 1,
+                "response_status": 1,
+                "response_body": "response_body",
+                "error": "error",
+                "created_at": "2026-03-24T20:00:00.000Z",
+                "updated_at": "2026-03-24T20:00:05.000Z"
+              }
+            ]
           },
           "created_at": {
             "type": "string",
@@ -7844,16 +8108,30 @@
         "example": {
           "object": "event",
           "id": "wevt_0123456789abcdef0123456789abcdef",
-          "type": "session.result.persisted",
+          "type": "session.fingerprint.calculated",
           "subject": {
-            "type": "session",
+            "type": "type",
             "id": "sid_87wfetm98myh9awj0dpt28a3kc"
           },
           "data": {
-            "session_id": "sid_87wfetm98myh9awj0dpt28a3kc",
-            "verdict": "human"
+            "source": "signup_form"
           },
-          "webhook_deliveries": [],
+          "webhook_deliveries": [
+            {
+              "object": "webhook_delivery",
+              "id": "wdlv_0123456789abcdef0123456789abcdef",
+              "event_id": "wevt_0123456789abcdef0123456789abcdef",
+              "endpoint_id": "we_0123456789abcdef0123456789abcdef",
+              "event_type": "session.fingerprint.calculated",
+              "status": "pending",
+              "attempts": 1,
+              "response_status": 1,
+              "response_body": "response_body",
+              "error": "error",
+              "created_at": "2026-03-24T20:00:00.000Z",
+              "updated_at": "2026-03-24T20:00:05.000Z"
+            }
+          ],
           "created_at": "2026-03-24T20:00:00.000Z"
         }
       },
@@ -7874,14 +8152,123 @@
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Event"
-            }
+              "$ref": "#/components/schemas/Event",
+              "example": {
+                "object": "event",
+                "id": "wevt_0123456789abcdef0123456789abcdef",
+                "type": "session.fingerprint.calculated",
+                "subject": {
+                  "type": "type",
+                  "id": "sid_87wfetm98myh9awj0dpt28a3kc"
+                },
+                "data": {
+                  "source": "signup_form"
+                },
+                "webhook_deliveries": [
+                  {
+                    "object": "webhook_delivery",
+                    "id": "wdlv_0123456789abcdef0123456789abcdef",
+                    "event_id": "wevt_0123456789abcdef0123456789abcdef",
+                    "endpoint_id": "we_0123456789abcdef0123456789abcdef",
+                    "event_type": "session.fingerprint.calculated",
+                    "status": "pending",
+                    "attempts": 1,
+                    "response_status": 1,
+                    "response_body": "response_body",
+                    "error": "error",
+                    "created_at": "2026-03-24T20:00:00.000Z",
+                    "updated_at": "2026-03-24T20:00:05.000Z"
+                  }
+                ],
+                "created_at": "2026-03-24T20:00:00.000Z"
+              }
+            },
+            "example": [
+              {
+                "object": "event",
+                "id": "wevt_0123456789abcdef0123456789abcdef",
+                "type": "session.fingerprint.calculated",
+                "subject": {
+                  "type": "type",
+                  "id": "sid_87wfetm98myh9awj0dpt28a3kc"
+                },
+                "data": {
+                  "source": "signup_form"
+                },
+                "webhook_deliveries": [
+                  {
+                    "object": "webhook_delivery",
+                    "id": "wdlv_0123456789abcdef0123456789abcdef",
+                    "event_id": "wevt_0123456789abcdef0123456789abcdef",
+                    "endpoint_id": "we_0123456789abcdef0123456789abcdef",
+                    "event_type": "session.fingerprint.calculated",
+                    "status": "pending",
+                    "attempts": 1,
+                    "response_status": 1,
+                    "response_body": "response_body",
+                    "error": "error",
+                    "created_at": "2026-03-24T20:00:00.000Z",
+                    "updated_at": "2026-03-24T20:00:05.000Z"
+                  }
+                ],
+                "created_at": "2026-03-24T20:00:00.000Z"
+              }
+            ]
           },
           "pagination": {
-            "$ref": "#/components/schemas/CursorPagination"
+            "$ref": "#/components/schemas/CursorPagination",
+            "example": {
+              "limit": 50,
+              "has_more": false,
+              "next_cursor": "eyJ2IjoxLCJzY29yZWRBdCI6IjIwMjYtMDQtMTBUMDY6NDI6NDIuNTE0WiIsInJvd0lkIjoiMTc3In0"
+            }
           },
           "meta": {
-            "$ref": "#/components/schemas/ResponseMeta"
+            "$ref": "#/components/schemas/ResponseMeta",
+            "example": {
+              "request_id": "req_cf147349a4134208aebb8c70e25fb7e1"
+            }
+          }
+        },
+        "example": {
+          "data": [
+            {
+              "object": "event",
+              "id": "wevt_0123456789abcdef0123456789abcdef",
+              "type": "session.fingerprint.calculated",
+              "subject": {
+                "type": "type",
+                "id": "sid_87wfetm98myh9awj0dpt28a3kc"
+              },
+              "data": {
+                "source": "signup_form"
+              },
+              "webhook_deliveries": [
+                {
+                  "object": "webhook_delivery",
+                  "id": "wdlv_0123456789abcdef0123456789abcdef",
+                  "event_id": "wevt_0123456789abcdef0123456789abcdef",
+                  "endpoint_id": "we_0123456789abcdef0123456789abcdef",
+                  "event_type": "session.fingerprint.calculated",
+                  "status": "pending",
+                  "attempts": 1,
+                  "response_status": 1,
+                  "response_body": "response_body",
+                  "error": "error",
+                  "created_at": "2026-03-24T20:00:00.000Z",
+                  "updated_at": "2026-03-24T20:00:05.000Z"
+                }
+              ],
+              "created_at": "2026-03-24T20:00:00.000Z"
+            }
+          ],
+          "pagination": {
+            "limit": 50,
+            "has_more": false,
+            "next_cursor": "eyJ2IjoxLCJzY29yZWRBdCI6IjIwMjYtMDQtMTBUMDY6NDI6NDIuNTE0WiIsInJvd0lkIjoiMTc3In0"
+          },
+          "meta": {
+            "request_id": "req_cf147349a4134208aebb8c70e25fb7e1"
           }
         }
       },
@@ -7894,10 +8281,76 @@
         ],
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/Event"
+            "$ref": "#/components/schemas/Event",
+            "example": {
+              "object": "event",
+              "id": "wevt_0123456789abcdef0123456789abcdef",
+              "type": "session.fingerprint.calculated",
+              "subject": {
+                "type": "type",
+                "id": "sid_87wfetm98myh9awj0dpt28a3kc"
+              },
+              "data": {
+                "source": "signup_form"
+              },
+              "webhook_deliveries": [
+                {
+                  "object": "webhook_delivery",
+                  "id": "wdlv_0123456789abcdef0123456789abcdef",
+                  "event_id": "wevt_0123456789abcdef0123456789abcdef",
+                  "endpoint_id": "we_0123456789abcdef0123456789abcdef",
+                  "event_type": "session.fingerprint.calculated",
+                  "status": "pending",
+                  "attempts": 1,
+                  "response_status": 1,
+                  "response_body": "response_body",
+                  "error": "error",
+                  "created_at": "2026-03-24T20:00:00.000Z",
+                  "updated_at": "2026-03-24T20:00:05.000Z"
+                }
+              ],
+              "created_at": "2026-03-24T20:00:00.000Z"
+            }
           },
           "meta": {
-            "$ref": "#/components/schemas/ResponseMeta"
+            "$ref": "#/components/schemas/ResponseMeta",
+            "example": {
+              "request_id": "req_cf147349a4134208aebb8c70e25fb7e1"
+            }
+          }
+        },
+        "example": {
+          "data": {
+            "object": "event",
+            "id": "wevt_0123456789abcdef0123456789abcdef",
+            "type": "session.fingerprint.calculated",
+            "subject": {
+              "type": "type",
+              "id": "sid_87wfetm98myh9awj0dpt28a3kc"
+            },
+            "data": {
+              "source": "signup_form"
+            },
+            "webhook_deliveries": [
+              {
+                "object": "webhook_delivery",
+                "id": "wdlv_0123456789abcdef0123456789abcdef",
+                "event_id": "wevt_0123456789abcdef0123456789abcdef",
+                "endpoint_id": "we_0123456789abcdef0123456789abcdef",
+                "event_type": "session.fingerprint.calculated",
+                "status": "pending",
+                "attempts": 1,
+                "response_status": 1,
+                "response_body": "response_body",
+                "error": "error",
+                "created_at": "2026-03-24T20:00:00.000Z",
+                "updated_at": "2026-03-24T20:00:05.000Z"
+              }
+            ],
+            "created_at": "2026-03-24T20:00:00.000Z"
+          },
+          "meta": {
+            "request_id": "req_cf147349a4134208aebb8c70e25fb7e1"
           }
         }
       },
@@ -7911,7 +8364,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "example": "session"
+            "example": "type"
           },
           "id": {
             "type": "string",
@@ -7919,7 +8372,7 @@
           }
         },
         "example": {
-          "type": "session",
+          "type": "type",
           "id": "sid_87wfetm98myh9awj0dpt28a3kc"
         }
       },
@@ -8569,10 +9022,12 @@
           "webhook_endpoint_id": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/WebhookEndpointId"
+                "$ref": "#/components/schemas/WebhookEndpointId",
+                "example": "we_0123456789abcdef0123456789abcdef"
               },
               {
-                "type": "null"
+                "type": "null",
+                "example": null
               }
             ],
             "example": "we_0123456789abcdef0123456789abcdef"
@@ -9288,7 +9743,7 @@
           {
             "$ref": "#/components/schemas/WebhookEventEnvelope",
             "example": {
-              "id": "webhook_event_id",
+              "id": "wevt_0123456789abcdef0123456789abcdef",
               "object": "webhook_event",
               "type": "session.fingerprint.calculated",
               "created": "2026-03-24T20:00:00.000Z",
@@ -9348,31 +9803,28 @@
           }
         },
         "example": {
-          "id": "webhook_event_id",
+          "id": "wevt_0123456789abcdef0123456789abcdef",
           "object": "webhook_event",
-          "type": "session.fingerprint.calculated",
+          "type": "gate.session.approved",
           "created": "2026-03-24T20:00:00.000Z",
           "data": {
-            "object": "session_fingerprint",
-            "session": {
-              "id": "sid_87wfetm98myh9awj0dpt28a3kc"
+            "service_id": "gsvc_0123456789abcdefghjkmnpqrs",
+            "gate_session_id": "gate_0123456789abcdefghjkmnpqrs",
+            "gate_account_id": "gacct_0123456789abcdefghjkmnpqrs",
+            "account_name": "Acme Growth Workspace",
+            "metadata": {
+              "source": "signup_form"
             },
-            "visitor_fingerprint": {
-              "id": "vid_7cyvmdfjs3rzznf8m65v3bv51m",
-              "confidence": 93,
-              "identified_at": "2026-03-24T20:00:05.000Z"
+            "tripwire": {
+              "verdict": "human",
+              "score": 0.08
             },
-            "request": {
-              "url": "https://app.acme.co/signup",
-              "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
-              "ip_address": "203.0.113.10",
-              "screen_size": "1440x900",
-              "is_touch_capable": true,
-              "platform": "macOS",
-              "first_seen": "2026-03-01T18:22:11.000Z",
-              "risk_time": "2026-03-24T20:00:05.000Z"
-            },
-            "calculated_at": "2026-03-24T20:00:05.000Z"
+            "delivery": {
+              "version": 1,
+              "algorithm": "x25519-hkdf-sha256/aes-256-gcm",
+              "key_id": "key_6cw04zdmetw8t5rsdppadhper0",
+              "public_key": "pk_live_dZO3Bl6MqLn2VJYy18bjGkbPRCkubdgK"
+            }
           }
         }
       },
@@ -14236,7 +14688,7 @@
           {
             "$ref": "#/components/schemas/WebhookEventEnvelope",
             "example": {
-              "id": "webhook_event_id",
+              "id": "wevt_0123456789abcdef0123456789abcdef",
               "object": "webhook_event",
               "type": "session.fingerprint.calculated",
               "created": "2026-03-24T20:00:00.000Z",
@@ -14299,7 +14751,7 @@
           }
         },
         "example": {
-          "id": "webhook_event_id",
+          "id": "wevt_0123456789abcdef0123456789abcdef",
           "object": "webhook_event",
           "type": "session.fingerprint.calculated",
           "created": "2026-03-24T20:00:00.000Z",
@@ -16731,7 +17183,7 @@
           {
             "$ref": "#/components/schemas/WebhookEventEnvelope",
             "example": {
-              "id": "webhook_event_id",
+              "id": "wevt_0123456789abcdef0123456789abcdef",
               "object": "webhook_event",
               "type": "session.fingerprint.calculated",
               "created": "2026-03-24T20:00:00.000Z",
@@ -16826,19 +17278,33 @@
           }
         },
         "example": {
-          "id": "webhook_event_id",
+          "id": "wevt_0123456789abcdef0123456789abcdef",
           "object": "webhook_event",
-          "type": "session.fingerprint.calculated",
+          "type": "session.result.persisted",
           "created": "2026-03-24T20:00:00.000Z",
           "data": {
-            "object": "session_fingerprint",
+            "object": "session_result",
             "session": {
               "id": "sid_87wfetm98myh9awj0dpt28a3kc"
             },
+            "event": {
+              "id": "evt_srwqc0yqhz4bxvtrdtf69q7vkr",
+              "scoring_event_id": "scoring_event_id",
+              "phase": "phase",
+              "is_provisional": false,
+              "persisted_at": "2026-03-24T20:00:05.000Z"
+            },
+            "decision": {
+              "verdict": "human",
+              "risk_score": 94,
+              "score": 0.08,
+              "manipulation": {
+                "score": 1,
+                "verdict": "none"
+              }
+            },
             "visitor_fingerprint": {
-              "id": "vid_7cyvmdfjs3rzznf8m65v3bv51m",
-              "confidence": 93,
-              "identified_at": "2026-03-24T20:00:05.000Z"
+              "id": "vid_7cyvmdfjs3rzznf8m65v3bv51m"
             },
             "request": {
               "url": "https://app.acme.co/signup",
@@ -16850,7 +17316,25 @@
               "first_seen": "2026-03-01T18:22:11.000Z",
               "risk_time": "2026-03-24T20:00:05.000Z"
             },
-            "calculated_at": "2026-03-24T20:00:05.000Z"
+            "score_breakdown": {
+              "categories": {
+                "source": "signup_form"
+              }
+            },
+            "signals": [
+              {
+                "id": "sid_87wfetm98myh9awj0dpt28a3kc",
+                "category": "environment",
+                "confidence": "exact",
+                "score": 0.08,
+                "role": "owner"
+              }
+            ],
+            "attribution": {
+              "bot": {
+                "source": "signup_form"
+              }
+            }
           }
         }
       },
@@ -18270,11 +18754,11 @@
           },
           "id": {
             "$ref": "#/components/schemas/WebhookDeliveryId",
-            "example": "webhook_delivery_id"
+            "example": "wdlv_0123456789abcdef0123456789abcdef"
           },
           "event_id": {
             "$ref": "#/components/schemas/WebhookEventId",
-            "example": "webhook_event_id"
+            "example": "wevt_0123456789abcdef0123456789abcdef"
           },
           "endpoint_id": {
             "$ref": "#/components/schemas/WebhookEndpointId",
@@ -18327,8 +18811,8 @@
         },
         "example": {
           "object": "webhook_delivery",
-          "id": "webhook_delivery_id",
-          "event_id": "webhook_event_id",
+          "id": "wdlv_0123456789abcdef0123456789abcdef",
+          "event_id": "wevt_0123456789abcdef0123456789abcdef",
           "endpoint_id": "we_0123456789abcdef0123456789abcdef",
           "event_type": "session.fingerprint.calculated",
           "status": "pending",
@@ -18353,7 +18837,7 @@
       "WebhookDeliveryId": {
         "type": "string",
         "pattern": "^wdlv_[0-9a-f]{32}$",
-        "example": "webhook_delivery_id"
+        "example": "wdlv_0123456789abcdef0123456789abcdef"
       },
       "WebhookDeliveryStatus": {
         "type": "string",
@@ -18602,7 +19086,7 @@
         "properties": {
           "id": {
             "$ref": "#/components/schemas/WebhookEventId",
-            "example": "webhook_event_id"
+            "example": "wevt_0123456789abcdef0123456789abcdef"
           },
           "object": {
             "type": "string",
@@ -18759,7 +19243,7 @@
           }
         },
         "example": {
-          "id": "webhook_event_id",
+          "id": "wevt_0123456789abcdef0123456789abcdef",
           "object": "webhook_event",
           "type": "session.fingerprint.calculated",
           "created": "2026-03-24T20:00:00.000Z",
@@ -18790,7 +19274,7 @@
       "WebhookEventId": {
         "type": "string",
         "pattern": "^wevt_[0-9a-f]{32}$",
-        "example": "webhook_event_id"
+        "example": "wevt_0123456789abcdef0123456789abcdef"
       },
       "WebhookEventType": {
         "type": "string",
@@ -18890,16 +19374,16 @@
           },
           "event_id": {
             "$ref": "#/components/schemas/WebhookEventId",
-            "example": "webhook_event_id"
+            "example": "wevt_0123456789abcdef0123456789abcdef"
           },
           "delivery_ids": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/WebhookDeliveryId",
-              "example": "webhook_delivery_id"
+              "example": "wdlv_0123456789abcdef0123456789abcdef"
             },
             "example": [
-              "webhook_delivery_id"
+              "wdlv_0123456789abcdef0123456789abcdef"
             ]
           },
           "latest_delivery": {
@@ -18908,8 +19392,8 @@
                 "$ref": "#/components/schemas/WebhookDelivery",
                 "example": {
                   "object": "webhook_delivery",
-                  "id": "webhook_delivery_id",
-                  "event_id": "webhook_event_id",
+                  "id": "wdlv_0123456789abcdef0123456789abcdef",
+                  "event_id": "wevt_0123456789abcdef0123456789abcdef",
                   "endpoint_id": "we_0123456789abcdef0123456789abcdef",
                   "event_type": "session.fingerprint.calculated",
                   "status": "pending",
@@ -18928,8 +19412,8 @@
             ],
             "example": {
               "object": "webhook_delivery",
-              "id": "webhook_delivery_id",
-              "event_id": "webhook_event_id",
+              "id": "wdlv_0123456789abcdef0123456789abcdef",
+              "event_id": "wevt_0123456789abcdef0123456789abcdef",
               "endpoint_id": "we_0123456789abcdef0123456789abcdef",
               "event_type": "session.fingerprint.calculated",
               "status": "pending",
@@ -18944,14 +19428,14 @@
         },
         "example": {
           "object": "webhook_test",
-          "event_id": "webhook_event_id",
+          "event_id": "wevt_0123456789abcdef0123456789abcdef",
           "delivery_ids": [
-            "webhook_delivery_id"
+            "wdlv_0123456789abcdef0123456789abcdef"
           ],
           "latest_delivery": {
             "object": "webhook_delivery",
-            "id": "webhook_delivery_id",
-            "event_id": "webhook_event_id",
+            "id": "wdlv_0123456789abcdef0123456789abcdef",
+            "event_id": "wevt_0123456789abcdef0123456789abcdef",
             "endpoint_id": "we_0123456789abcdef0123456789abcdef",
             "event_type": "session.fingerprint.calculated",
             "status": "pending",
@@ -19013,14 +19497,14 @@
             "$ref": "#/components/schemas/WebhookTest",
             "example": {
               "object": "webhook_test",
-              "event_id": "webhook_event_id",
+              "event_id": "wevt_0123456789abcdef0123456789abcdef",
               "delivery_ids": [
-                "webhook_delivery_id"
+                "wdlv_0123456789abcdef0123456789abcdef"
               ],
               "latest_delivery": {
                 "object": "webhook_delivery",
-                "id": "webhook_delivery_id",
-                "event_id": "webhook_event_id",
+                "id": "wdlv_0123456789abcdef0123456789abcdef",
+                "event_id": "wevt_0123456789abcdef0123456789abcdef",
                 "endpoint_id": "we_0123456789abcdef0123456789abcdef",
                 "event_type": "session.fingerprint.calculated",
                 "status": "pending",
@@ -19043,14 +19527,14 @@
         "example": {
           "data": {
             "object": "webhook_test",
-            "event_id": "webhook_event_id",
+            "event_id": "wevt_0123456789abcdef0123456789abcdef",
             "delivery_ids": [
-              "webhook_delivery_id"
+              "wdlv_0123456789abcdef0123456789abcdef"
             ],
             "latest_delivery": {
               "object": "webhook_delivery",
-              "id": "webhook_delivery_id",
-              "event_id": "webhook_event_id",
+              "id": "wdlv_0123456789abcdef0123456789abcdef",
+              "event_id": "wevt_0123456789abcdef0123456789abcdef",
               "endpoint_id": "we_0123456789abcdef0123456789abcdef",
               "event_type": "session.fingerprint.calculated",
               "status": "pending",
