@@ -91,6 +91,12 @@
       "status": "200"
     },
     {
+      "file": "api/organizations/api-key-update.json",
+      "path": "/v1/organizations/{organizationId}/api-keys/{keyId}",
+      "method": "patch",
+      "status": "200"
+    },
+    {
       "file": "api/gate/registry-list.json",
       "path": "/v1/gate/registry",
       "method": "get",

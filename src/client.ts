@@ -9,8 +9,10 @@ import type {
   CreateGateLoginSessionRequest,
   CreateGateServiceRequest,
   CreateGateSessionRequest,
-  CreateTeamRequest,
+  CreateOrganizationRequest,
   CreateWebhookEndpointRequest,
+  Event,
+  EventListParams,
   FingerprintListParams,
   GateDashboardLogin,
   GateLoginSession,
@@ -22,6 +24,7 @@ import type {
   IssuedApiKey,
   ListResult,
   ApiErrorEnvelope,
+  Organization,
   PollGateSessionOptions,
   RevokeGateAgentTokenRequest,
   RequestOptions,
@@ -30,16 +33,14 @@ import type {
   SessionDetail,
   SessionListParams,
   SessionSummary,
-  Team,
   TripwireOptions,
   UpdateGateServiceRequest,
-  UpdateTeamRequest,
+  UpdateApiKeyRequest,
+  UpdateOrganizationRequest,
   UpdateWebhookEndpointRequest,
   VerifyGateAgentTokenRequest,
   VisitorFingerprintDetail,
   VisitorFingerprintSummary,
-  WebhookDelivery,
-  WebhookDeliveryListParams,
   WebhookEndpoint,
   WebhookTest,
 } from './types';
@@ -268,15 +269,16 @@ export class Tripwire {
     iter: (params?: Omit<FingerprintListParams, 'cursor'>) => AsyncGenerator<VisitorFingerprintSummary, void, void>;
   };
 
-  readonly teams: {
-    create: (body: CreateTeamRequest) => Promise<Team>;
-    get: (teamId: string, options?: RequestOptions) => Promise<Team>;
-    update: (teamId: string, body: UpdateTeamRequest) => Promise<Team>;
+  readonly organizations: {
+    create: (body: CreateOrganizationRequest) => Promise<Organization>;
+    get: (organizationId: string, options?: RequestOptions) => Promise<Organization>;
+    update: (organizationId: string, body: UpdateOrganizationRequest) => Promise<Organization>;
     apiKeys: {
-      create: (teamId: string, body: CreateApiKeyRequest) => Promise<IssuedApiKey>;
-      list: (teamId: string, params?: ApiKeyListParams) => Promise<ListResult<ApiKey>>;
-      revoke: (teamId: string, keyId: string, options?: RequestOptions) => Promise<ApiKey>;
-      rotate: (teamId: string, keyId: string, options?: RequestOptions) => Promise<IssuedApiKey>;
+      create: (organizationId: string, body: CreateApiKeyRequest) => Promise<IssuedApiKey>;
+      list: (organizationId: string, params?: ApiKeyListParams) => Promise<ListResult<ApiKey>>;
+      update: (organizationId: string, keyId: string, body: UpdateApiKeyRequest) => Promise<ApiKey>;
+      revoke: (organizationId: string, keyId: string, options?: RequestOptions) => Promise<ApiKey>;
+      rotate: (organizationId: string, keyId: string, options?: RequestOptions) => Promise<IssuedApiKey>;
     };
   };
 
@@ -317,7 +319,8 @@ export class Tripwire {
     disableEndpoint: (organizationId: string, endpointId: string, options?: RequestOptions) => Promise<WebhookEndpoint>;
     rotateSecret: (organizationId: string, endpointId: string, options?: RequestOptions) => Promise<WebhookEndpoint>;
     sendTest: (organizationId: string, endpointId: string, options?: RequestOptions) => Promise<WebhookTest>;
-    listDeliveries: (organizationId: string, params?: WebhookDeliveryListParams) => Promise<ListResult<WebhookDelivery>>;
+    listEvents: (organizationId: string, params?: EventListParams) => Promise<ListResult<Event>>;
+    retrieveEvent: (organizationId: string, eventId: string, options?: RequestOptions) => Promise<Event>;
   };
 
   constructor(options: TripwireOptions = {}) {
@@ -369,28 +372,28 @@ export class Tripwire {
     };
     this.fingerprints.iter = this.fingerprints.iter.bind(this.fingerprints);
 
-    this.teams = {
+    this.organizations = {
       create: async (body) => {
         const { signal, ...payload } = body;
-        const response = await this.http.request<ResourceEnvelope<Team>>({
-          path: '/v1/teams',
+        const response = await this.http.request<ResourceEnvelope<Organization>>({
+          path: '/v1/organizations',
           method: 'POST',
           body: payload,
           signal,
         });
         return response.data;
       },
-      get: async (teamId, options = {}) => {
-        const response = await this.http.request<ResourceEnvelope<Team>>({
-          path: `/v1/teams/${encodeURIComponent(teamId)}`,
+      get: async (organizationId, options = {}) => {
+        const response = await this.http.request<ResourceEnvelope<Organization>>({
+          path: `/v1/organizations/${encodeURIComponent(organizationId)}`,
           signal: options.signal,
         });
         return response.data;
       },
-      update: async (teamId, body) => {
+      update: async (organizationId, body) => {
         const { signal, ...payload } = body;
-        const response = await this.http.request<ResourceEnvelope<Team>>({
-          path: `/v1/teams/${encodeURIComponent(teamId)}`,
+        const response = await this.http.request<ResourceEnvelope<Organization>>({
+          path: `/v1/organizations/${encodeURIComponent(organizationId)}`,
           method: 'PATCH',
           body: payload,
           signal,
@@ -398,36 +401,46 @@ export class Tripwire {
         return response.data;
       },
       apiKeys: {
-        create: async (teamId, body) => {
+        create: async (organizationId, body) => {
           const { signal, ...payload } = body;
           const response = await this.http.request<ResourceEnvelope<IssuedApiKey>>({
-            path: `/v1/teams/${encodeURIComponent(teamId)}/api-keys`,
+            path: `/v1/organizations/${encodeURIComponent(organizationId)}/api-keys`,
             method: 'POST',
             body: payload,
             signal,
           });
           return response.data;
         },
-        list: async (teamId, params = {}) => {
+        list: async (organizationId, params = {}) => {
           const { signal, ...query } = params;
           const response = await this.http.request<ResourceListEnvelope<ApiKey>>({
-            path: `/v1/teams/${encodeURIComponent(teamId)}/api-keys`,
+            path: `/v1/organizations/${encodeURIComponent(organizationId)}/api-keys`,
             query,
             signal,
           });
           return normalizeListEnvelope(response);
         },
-        revoke: async (teamId, keyId, options = {}) => {
+        update: async (organizationId, keyId, body) => {
+          const { signal, ...payload } = body;
           const response = await this.http.request<ResourceEnvelope<ApiKey>>({
-            path: `/v1/teams/${encodeURIComponent(teamId)}/api-keys/${encodeURIComponent(keyId)}`,
+            path: `/v1/organizations/${encodeURIComponent(organizationId)}/api-keys/${encodeURIComponent(keyId)}`,
+            method: 'PATCH',
+            body: payload,
+            signal,
+          });
+          return response.data;
+        },
+        revoke: async (organizationId, keyId, options = {}) => {
+          const response = await this.http.request<ResourceEnvelope<ApiKey>>({
+            path: `/v1/organizations/${encodeURIComponent(organizationId)}/api-keys/${encodeURIComponent(keyId)}`,
             method: 'DELETE',
             signal: options.signal,
           });
           return response.data;
         },
-        rotate: async (teamId, keyId, options = {}) => {
+        rotate: async (organizationId, keyId, options = {}) => {
           const response = await this.http.request<ResourceEnvelope<IssuedApiKey>>({
-            path: `/v1/teams/${encodeURIComponent(teamId)}/api-keys/${encodeURIComponent(keyId)}/rotations`,
+            path: `/v1/organizations/${encodeURIComponent(organizationId)}/api-keys/${encodeURIComponent(keyId)}/rotations`,
             method: 'POST',
             signal: options.signal,
           });
@@ -629,14 +642,21 @@ export class Tripwire {
         });
         return response.data;
       },
-      listDeliveries: async (organizationId, params = {}) => {
+      listEvents: async (organizationId, params = {}) => {
         const { signal, ...query } = params;
-        const response = await this.http.request<ResourceListEnvelope<WebhookDelivery>>({
-          path: `/v1/organizations/${encodeURIComponent(organizationId)}/webhooks/deliveries`,
+        const response = await this.http.request<ResourceListEnvelope<Event>>({
+          path: `/v1/organizations/${encodeURIComponent(organizationId)}/events`,
           query,
           signal,
         });
         return normalizeListEnvelope(response);
+      },
+      retrieveEvent: async (organizationId, eventId, options = {}) => {
+        const response = await this.http.request<ResourceEnvelope<Event>>({
+          path: `/v1/organizations/${encodeURIComponent(organizationId)}/events/${encodeURIComponent(eventId)}`,
+          signal: options.signal,
+        });
+        return response.data;
       },
     };
   }

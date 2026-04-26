@@ -438,8 +438,8 @@ export interface VisitorFingerprintDetail extends VisitorFingerprintSummary {
   };
 }
 
-export interface Team {
-  object: 'team';
+export interface Organization {
+  object: 'organization';
   id: string;
   name: string;
   slug: string;
@@ -451,19 +451,25 @@ export interface Team {
 export interface ApiKey {
   object: 'api_key';
   id: string;
-  public_key: string;
+  type: 'publishable' | 'secret';
   name: string;
   environment: 'live' | 'test';
   allowed_origins: string[] | null;
+  scopes: string[] | null;
   rate_limit: number | null;
-  status: 'active' | 'revoked' | 'rotated';
+  status: 'active' | 'rotating' | 'revoked';
+  key_preview: string;
+  display_key?: string;
+  revealed_key?: string;
+  last_used_at: string | null;
   created_at: string;
   rotated_at: string | null;
   revoked_at: string | null;
+  grace_expires_at: string | null;
 }
 
 export interface IssuedApiKey extends ApiKey {
-  secret_key: string;
+  revealed_key: string;
 }
 
 export type GateServiceStatus = 'active' | 'disabled';
@@ -612,21 +618,28 @@ export interface ApiKeyListParams extends RequestOptions {
   cursor?: string;
 }
 
-export interface CreateTeamRequest extends RequestOptions {
+export interface CreateOrganizationRequest extends RequestOptions {
   name: string;
   slug: string;
 }
 
-export interface UpdateTeamRequest extends RequestOptions {
+export interface UpdateOrganizationRequest extends RequestOptions {
   name?: string;
   status?: 'active' | 'suspended' | 'deleted';
 }
 
 export interface CreateApiKeyRequest extends RequestOptions {
-  name?: string;
+  name: string;
+  type?: 'publishable' | 'secret';
   environment?: 'live' | 'test';
   allowed_origins?: string[];
-  rate_limit?: number;
+  scopes?: string[];
+}
+
+export interface UpdateApiKeyRequest extends RequestOptions {
+  name?: string;
+  allowed_origins?: string[];
+  scopes?: string[];
 }
 
 export interface CreateGateServiceRequest extends RequestOptions {
@@ -714,8 +727,24 @@ export interface UpdateWebhookEndpointRequest extends RequestOptions {
   event_types?: WebhookEventType[];
 }
 
-export interface WebhookDeliveryListParams extends RequestOptions {
+export interface EventSubject {
+  type: string;
+  id: string;
+}
+
+export interface Event {
+  object: 'event';
+  id: string;
+  type: WebhookDeliveryEventType;
+  subject: EventSubject;
+  data: Record<string, unknown>;
+  webhook_deliveries: WebhookDelivery[];
+  created_at: string;
+}
+
+export interface EventListParams extends RequestOptions {
   endpoint_id?: string;
+  type?: WebhookDeliveryEventType;
   limit?: number;
 }
 

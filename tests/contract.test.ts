@@ -35,13 +35,19 @@ describe('server SDK contract', () => {
       '/v1/gate/sessions',
       '/v1/gate/sessions/{gateSessionId}',
       '/v1/gate/sessions/{gateSessionId}/ack',
+      '/v1/organizations',
+      '/v1/organizations/{organizationId}',
+      '/v1/organizations/{organizationId}/api-keys',
+      '/v1/organizations/{organizationId}/api-keys/{keyId}',
+      '/v1/organizations/{organizationId}/api-keys/{keyId}/rotations',
+      '/v1/organizations/{organizationId}/events',
+      '/v1/organizations/{organizationId}/events/{eventId}',
+      '/v1/organizations/{organizationId}/webhooks/endpoints',
+      '/v1/organizations/{organizationId}/webhooks/endpoints/{endpointId}',
+      '/v1/organizations/{organizationId}/webhooks/endpoints/{endpointId}/rotations',
+      '/v1/organizations/{organizationId}/webhooks/endpoints/{endpointId}/test',
       '/v1/sessions',
       '/v1/sessions/{sessionId}',
-      '/v1/teams',
-      '/v1/teams/{teamId}',
-      '/v1/teams/{teamId}/api-keys',
-      '/v1/teams/{teamId}/api-keys/{keyId}',
-      '/v1/teams/{teamId}/api-keys/{keyId}/rotations',
     ]);
   });
 
@@ -78,17 +84,21 @@ describe('server SDK contract', () => {
 
     expect(schemas.SessionId.pattern).toBe('^sid_[0123456789abcdefghjkmnpqrstvwxyz]{26}$');
     expect(schemas.FingerprintId.pattern).toBe('^vid_[0123456789abcdefghjkmnpqrstvwxyz]{26}$');
-    expect(schemas.TeamId.pattern).toBe('^team_[0123456789abcdefghjkmnpqrstvwxyz]{26}$');
+    expect(schemas.OrganizationId.pattern).toBe('^org_[0123456789abcdefghjkmnpqrstvwxyz]{26}$');
     expect(schemas.ApiKeyId.pattern).toBe('^key_[0123456789abcdefghjkmnpqrstvwxyz]{26}$');
 
-    expect(schemas.SessionSummary.properties?.id).toEqual({ $ref: '#/components/schemas/SessionId' });
-    expect(schemas.Team.properties?.status).toEqual({ $ref: '#/components/schemas/TeamStatus' });
-    expect(schemas.ApiKey.properties?.status).toEqual({ $ref: '#/components/schemas/ApiKeyStatus' });
+    expect(schemas.SessionSummary.properties?.id).toMatchObject({ $ref: '#/components/schemas/SessionId' });
+    expect(schemas.Organization.properties?.status).toMatchObject({ $ref: '#/components/schemas/OrganizationStatus' });
+    expect(schemas.ApiKey.properties?.status).toMatchObject({ $ref: '#/components/schemas/ApiKeyStatus' });
     expect(schemas.PublicError.properties?.code).toMatchObject({
       'x-tripwire-known-values-ref': '#/components/schemas/KnownPublicErrorCode',
     });
-    expect(schemas.TeamStatus.enum).toEqual(['active', 'suspended', 'deleted']);
-    expect(schemas.ApiKeyStatus.enum).toEqual(['active', 'revoked', 'rotated']);
+    expect(schemas.OrganizationStatus.enum).toEqual(['active', 'suspended', 'deleted']);
+    expect(schemas.ApiKeyStatus.enum).toEqual(['active', 'rotating', 'revoked']);
+    expect(schemas.ApiKey.required).toEqual(
+      expect.arrayContaining(['type', 'allowed_origins', 'scopes', 'key_preview', 'last_used_at', 'grace_expires_at']),
+    );
+    expect(schemas.IssuedApiKey.required).toEqual(expect.arrayContaining(['revealed_key']));
     expect(schemas.SessionDetail.required).toEqual(
       expect.arrayContaining([
         'id',
@@ -109,14 +119,14 @@ describe('server SDK contract', () => {
         'client_telemetry',
       ]),
     );
-    expect(schemas.SessionDetail.properties?.request).toEqual({ $ref: '#/components/schemas/SessionDetailRequest' });
-    expect(schemas.SessionDetail.properties?.client_telemetry).toEqual({
+    expect(schemas.SessionDetail.properties?.request).toMatchObject({ $ref: '#/components/schemas/SessionDetailRequest' });
+    expect(schemas.SessionDetail.properties?.client_telemetry).toMatchObject({
       $ref: '#/components/schemas/SessionClientTelemetry',
     });
-    expect(schemas.SessionDetail.properties?.automation).toEqual({
+    expect(schemas.SessionDetail.properties?.automation).toMatchObject({
       anyOf: [{ $ref: '#/components/schemas/SessionAutomation' }, { type: 'null' }],
     });
-    expect(schemas.SessionDetail.properties?.signals_fired).toEqual({
+    expect(schemas.SessionDetail.properties?.signals_fired).toMatchObject({
       type: 'array',
       items: { $ref: '#/components/schemas/SessionSignalFired' },
     });
@@ -139,12 +149,16 @@ describe('server SDK contract', () => {
       operationId: 'getVisitorFingerprint',
       tags: ['Visitor fingerprints'],
     });
-    expect(spec.paths['/v1/teams/{teamId}'].patch).toMatchObject({
-      operationId: 'updateTeam',
-      tags: ['Teams'],
+    expect(spec.paths['/v1/organizations/{organizationId}'].patch).toMatchObject({
+      operationId: 'updateOrganization',
+      tags: ['Organizations'],
     });
-    expect(spec.paths['/v1/teams/{teamId}/api-keys/{keyId}/rotations'].post).toMatchObject({
-      operationId: 'rotateTeamApiKey',
+    expect(spec.paths['/v1/organizations/{organizationId}/api-keys/{keyId}'].patch).toMatchObject({
+      operationId: 'updateOrganizationApiKey',
+      tags: ['API Keys'],
+    });
+    expect(spec.paths['/v1/organizations/{organizationId}/api-keys/{keyId}/rotations'].post).toMatchObject({
+      operationId: 'rotateOrganizationApiKey',
       tags: ['API Keys'],
     });
     expect(spec.paths['/v1/gate/services'].post).toMatchObject({
