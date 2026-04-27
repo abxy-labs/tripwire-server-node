@@ -7239,6 +7239,7 @@
                   "type": "string",
                   "example": "sessions:list",
                   "enum": [
+                    "*",
                     "sessions:list",
                     "sessions:read",
                     "fingerprints:list",
@@ -7620,6 +7621,7 @@
               "type": "string",
               "example": "sessions:list",
               "enum": [
+                "*",
                 "sessions:list",
                 "sessions:read",
                 "fingerprints:list",
@@ -10252,6 +10254,7 @@
                   "type": "string",
                   "example": "sessions:list",
                   "enum": [
+                    "*",
                     "sessions:list",
                     "sessions:read",
                     "fingerprints:list",
@@ -17572,6 +17575,7 @@
             "items": {
               "type": "string",
               "enum": [
+                "*",
                 "sessions:list",
                 "sessions:read",
                 "fingerprints:list",
