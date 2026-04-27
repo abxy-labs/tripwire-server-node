@@ -382,6 +382,12 @@ export interface SessionDetail {
   web_bot_auth: SessionWebBotAuth | null;
   network: SessionNetwork;
   runtime_integrity: SessionRuntimeIntegrity;
+  native_runtime_integrity: Record<string, unknown> | null;
+  native_app: Record<string, unknown> | null;
+  native_carrier: Record<string, unknown> | null;
+  native_motion_print: Record<string, unknown> | null;
+  device_identity: Record<string, unknown> | null;
+  install_id: string | null;
   visitor_fingerprint: SessionDetailVisitorFingerprint | null;
   connection_fingerprint: SessionConnectionFingerprint;
   previous_decisions: SessionDecision[];

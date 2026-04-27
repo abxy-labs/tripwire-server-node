@@ -106,6 +106,13 @@ describe('gate delivery helpers', () => {
       signature: signatureFixture.signature,
       nowSeconds: signatureFixture.now_seconds,
     })).toBe(false);
+    expect(() => parseWebhookEvent(JSON.stringify({
+      id: 'wevt_0123456789abcdefghjkmnpqrs',
+      object: 'webhook_event',
+      type: 'unknown.event',
+      created: '2026-04-27T00:00:00.000Z',
+      data: {},
+    }))).toThrow(/unsupported webhook event type/);
   });
 
   it('exposes env-policy helpers from the shared fixtures', () => {

@@ -17,6 +17,12 @@ import type { GateDeliveryEnvelope, GateDeliveryRequest, WebhookEventEnvelope } 
 export const GATE_DELIVERY_VERSION = 1 as const;
 export const GATE_DELIVERY_ALGORITHM = 'x25519-hkdf-sha256/aes-256-gcm' as const;
 export const GATE_AGENT_TOKEN_ENV_SUFFIX = '_GATE_AGENT_TOKEN' as const;
+const WEBHOOK_EVENT_TYPES = new Set<WebhookEventEnvelope['type']>([
+  'session.fingerprint.calculated',
+  'session.result.persisted',
+  'gate.session.approved',
+  'webhook.test',
+]);
 export const BLOCKED_GATE_ENV_VAR_KEYS = [
   'BASH_ENV',
   'BROWSER',
@@ -336,19 +342,23 @@ export function parseWebhookEvent(rawBody: string | Buffer | Uint8Array | unknow
   if (typeof value.type !== 'string' || value.type.length === 0) {
     throw new Error('webhook event type is required');
   }
+  if (!WEBHOOK_EVENT_TYPES.has(value.type as WebhookEventEnvelope['type'])) {
+    throw new Error(`unsupported webhook event type: ${value.type}`);
+  }
   if (typeof value.created !== 'string' || value.created.length === 0) {
     throw new Error('webhook event created timestamp is required');
   }
   if (!isPlainObject(value.data)) {
     throw new Error('webhook event data must be an object');
   }
-  const data = value.type === 'gate.session.approved'
+  const eventType = value.type as WebhookEventEnvelope['type'];
+  const data = eventType === 'gate.session.approved'
     ? validateGateApprovedWebhookPayload(value.data)
     : value.data;
   return {
     id: value.id,
     object: 'webhook_event',
-    type: value.type as WebhookEventEnvelope['type'],
+    type: eventType,
     created: value.created,
     data,
   };
