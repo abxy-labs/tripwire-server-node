@@ -132,7 +132,14 @@ describe('Tripwire client', () => {
     });
 
     const client = new Tripwire({ secretKey: 'sk_live_test', fetch });
-    expect(await client.sessions.get('sid_0123456789abcdefghjkmnpqrs')).toEqual(fixture.data);
+    const session = await client.sessions.get('sid_0123456789abcdefghjkmnpqrs');
+    expect(session).toEqual(fixture.data);
+    expect(session.native_runtime_integrity).toBeNull();
+    expect(session.native_app).toBeNull();
+    expect(session.native_carrier).toBeNull();
+    expect(session.native_motion_print).toBeNull();
+    expect(session.device_identity).toBeNull();
+    expect(session.install_id).toBeNull();
   });
 
   it('lists and fetches fingerprints', async () => {
