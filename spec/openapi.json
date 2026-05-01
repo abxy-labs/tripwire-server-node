@@ -466,6 +466,29 @@
                           "signals": [
                             "webdriver_detected"
                           ]
+                        },
+                        "debug_posture": {
+                          "detected": true,
+                          "adb_enabled": true,
+                          "developer_options_enabled": true,
+                          "app_debuggable": true,
+                          "app_profileable": true,
+                          "app_test_only": true,
+                          "debugger_attached": true,
+                          "get_task_allow": true,
+                          "embedded_provisioning_profile_present": true,
+                          "receipt_is_sandbox": true,
+                          "receipt_is_testflight": true,
+                          "development_bundle": true,
+                          "active_debugger_attached": true,
+                          "breakpoint_count": 3,
+                          "exception_port_count": 3,
+                          "watchpoint_thread_count": 3,
+                          "tracer_pid": 1.5,
+                          "direct_syscall_tracer_pid": 1.5,
+                          "risk_signals": [
+                            "debugger_attached"
+                          ]
                         }
                       },
                       "native_app": {
@@ -11950,6 +11973,29 @@
                     "signals": [
                       "webdriver_detected"
                     ]
+                  },
+                  "debug_posture": {
+                    "detected": true,
+                    "adb_enabled": true,
+                    "developer_options_enabled": true,
+                    "app_debuggable": true,
+                    "app_profileable": true,
+                    "app_test_only": true,
+                    "debugger_attached": true,
+                    "get_task_allow": true,
+                    "embedded_provisioning_profile_present": true,
+                    "receipt_is_sandbox": true,
+                    "receipt_is_testflight": true,
+                    "development_bundle": true,
+                    "active_debugger_attached": true,
+                    "breakpoint_count": 3,
+                    "exception_port_count": 3,
+                    "watchpoint_thread_count": 3,
+                    "tracer_pid": 1.5,
+                    "direct_syscall_tracer_pid": 1.5,
+                    "risk_signals": [
+                      "debugger_attached"
+                    ]
                   }
                 }
               },
@@ -12040,6 +12086,29 @@
                 "detected": true,
                 "signals": [
                   "webdriver_detected"
+                ]
+              },
+              "debug_posture": {
+                "detected": true,
+                "adb_enabled": true,
+                "developer_options_enabled": true,
+                "app_debuggable": true,
+                "app_profileable": true,
+                "app_test_only": true,
+                "debugger_attached": true,
+                "get_task_allow": true,
+                "embedded_provisioning_profile_present": true,
+                "receipt_is_sandbox": true,
+                "receipt_is_testflight": true,
+                "development_bundle": true,
+                "active_debugger_attached": true,
+                "breakpoint_count": 3,
+                "exception_port_count": 3,
+                "watchpoint_thread_count": 3,
+                "tracer_pid": 1.5,
+                "direct_syscall_tracer_pid": 1.5,
+                "risk_signals": [
+                  "debugger_attached"
                 ]
               }
             }
@@ -12718,6 +12787,29 @@
               "detected": true,
               "signals": [
                 "webdriver_detected"
+              ]
+            },
+            "debug_posture": {
+              "detected": true,
+              "adb_enabled": true,
+              "developer_options_enabled": true,
+              "app_debuggable": true,
+              "app_profileable": true,
+              "app_test_only": true,
+              "debugger_attached": true,
+              "get_task_allow": true,
+              "embedded_provisioning_profile_present": true,
+              "receipt_is_sandbox": true,
+              "receipt_is_testflight": true,
+              "development_bundle": true,
+              "active_debugger_attached": true,
+              "breakpoint_count": 3,
+              "exception_port_count": 3,
+              "watchpoint_thread_count": 3,
+              "tracer_pid": 1.5,
+              "direct_syscall_tracer_pid": 1.5,
+              "risk_signals": [
+                "debugger_attached"
               ]
             }
           },
@@ -13421,6 +13513,29 @@
                   "signals": [
                     "webdriver_detected"
                   ]
+                },
+                "debug_posture": {
+                  "detected": true,
+                  "adb_enabled": true,
+                  "developer_options_enabled": true,
+                  "app_debuggable": true,
+                  "app_profileable": true,
+                  "app_test_only": true,
+                  "debugger_attached": true,
+                  "get_task_allow": true,
+                  "embedded_provisioning_profile_present": true,
+                  "receipt_is_sandbox": true,
+                  "receipt_is_testflight": true,
+                  "development_bundle": true,
+                  "active_debugger_attached": true,
+                  "breakpoint_count": 3,
+                  "exception_port_count": 3,
+                  "watchpoint_thread_count": 3,
+                  "tracer_pid": 1.5,
+                  "direct_syscall_tracer_pid": 1.5,
+                  "risk_signals": [
+                    "debugger_attached"
+                  ]
                 }
               },
               "native_app": {
@@ -13914,6 +14029,29 @@
                 "detected": true,
                 "signals": [
                   "webdriver_detected"
+                ]
+              },
+              "debug_posture": {
+                "detected": true,
+                "adb_enabled": true,
+                "developer_options_enabled": true,
+                "app_debuggable": true,
+                "app_profileable": true,
+                "app_test_only": true,
+                "debugger_attached": true,
+                "get_task_allow": true,
+                "embedded_provisioning_profile_present": true,
+                "receipt_is_sandbox": true,
+                "receipt_is_testflight": true,
+                "development_bundle": true,
+                "active_debugger_attached": true,
+                "breakpoint_count": 3,
+                "exception_port_count": 3,
+                "watchpoint_thread_count": 3,
+                "tracer_pid": 1.5,
+                "direct_syscall_tracer_pid": 1.5,
+                "risk_signals": [
+                  "debugger_attached"
                 ]
               }
             },
@@ -15372,6 +15510,121 @@
           ]
         }
       },
+      "SessionNativeDebugPosture": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "detected",
+          "risk_signals"
+        ],
+        "properties": {
+          "detected": {
+            "type": "boolean",
+            "example": true
+          },
+          "adb_enabled": {
+            "type": "boolean",
+            "example": true
+          },
+          "developer_options_enabled": {
+            "type": "boolean",
+            "example": true
+          },
+          "app_debuggable": {
+            "type": "boolean",
+            "example": true
+          },
+          "app_profileable": {
+            "type": "boolean",
+            "example": true
+          },
+          "app_test_only": {
+            "type": "boolean",
+            "example": true
+          },
+          "debugger_attached": {
+            "type": "boolean",
+            "example": true
+          },
+          "get_task_allow": {
+            "type": "boolean",
+            "example": true
+          },
+          "embedded_provisioning_profile_present": {
+            "type": "boolean",
+            "example": true
+          },
+          "receipt_is_sandbox": {
+            "type": "boolean",
+            "example": true
+          },
+          "receipt_is_testflight": {
+            "type": "boolean",
+            "example": true
+          },
+          "development_bundle": {
+            "type": "boolean",
+            "example": true
+          },
+          "active_debugger_attached": {
+            "type": "boolean",
+            "example": true
+          },
+          "breakpoint_count": {
+            "type": "number",
+            "example": 3
+          },
+          "exception_port_count": {
+            "type": "number",
+            "example": 3
+          },
+          "watchpoint_thread_count": {
+            "type": "number",
+            "example": 3
+          },
+          "tracer_pid": {
+            "type": "number",
+            "example": 1.5
+          },
+          "direct_syscall_tracer_pid": {
+            "type": "number",
+            "example": 1.5
+          },
+          "risk_signals": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "debugger_attached"
+            },
+            "example": [
+              "debugger_attached"
+            ]
+          }
+        },
+        "example": {
+          "detected": true,
+          "adb_enabled": true,
+          "developer_options_enabled": true,
+          "app_debuggable": true,
+          "app_profileable": true,
+          "app_test_only": true,
+          "debugger_attached": true,
+          "get_task_allow": true,
+          "embedded_provisioning_profile_present": true,
+          "receipt_is_sandbox": true,
+          "receipt_is_testflight": true,
+          "development_bundle": true,
+          "active_debugger_attached": true,
+          "breakpoint_count": 3,
+          "exception_port_count": 3,
+          "watchpoint_thread_count": 3,
+          "tracer_pid": 1.5,
+          "direct_syscall_tracer_pid": 1.5,
+          "risk_signals": [
+            "debugger_attached"
+          ]
+        }
+      },
       "SessionNativeDebugger": {
         "type": "object",
         "additionalProperties": false,
@@ -15792,6 +16045,7 @@
           "hooks",
           "debugger",
           "code_signing",
+          "debug_posture",
           "simulator_or_emulator",
           "hardware_claims_mismatch",
           "sim_posture",
@@ -15911,6 +16165,32 @@
                 "webdriver_detected"
               ]
             }
+          },
+          "debug_posture": {
+            "$ref": "#/components/schemas/SessionNativeDebugPosture",
+            "example": {
+              "detected": true,
+              "adb_enabled": true,
+              "developer_options_enabled": true,
+              "app_debuggable": true,
+              "app_profileable": true,
+              "app_test_only": true,
+              "debugger_attached": true,
+              "get_task_allow": true,
+              "embedded_provisioning_profile_present": true,
+              "receipt_is_sandbox": true,
+              "receipt_is_testflight": true,
+              "development_bundle": true,
+              "active_debugger_attached": true,
+              "breakpoint_count": 3,
+              "exception_port_count": 3,
+              "watchpoint_thread_count": 3,
+              "tracer_pid": 1.5,
+              "direct_syscall_tracer_pid": 1.5,
+              "risk_signals": [
+                "debugger_attached"
+              ]
+            }
           }
         },
         "example": {
@@ -15995,6 +16275,29 @@
             "detected": true,
             "signals": [
               "webdriver_detected"
+            ]
+          },
+          "debug_posture": {
+            "detected": true,
+            "adb_enabled": true,
+            "developer_options_enabled": true,
+            "app_debuggable": true,
+            "app_profileable": true,
+            "app_test_only": true,
+            "debugger_attached": true,
+            "get_task_allow": true,
+            "embedded_provisioning_profile_present": true,
+            "receipt_is_sandbox": true,
+            "receipt_is_testflight": true,
+            "development_bundle": true,
+            "active_debugger_attached": true,
+            "breakpoint_count": 3,
+            "exception_port_count": 3,
+            "watchpoint_thread_count": 3,
+            "tracer_pid": 1.5,
+            "direct_syscall_tracer_pid": 1.5,
+            "risk_signals": [
+              "debugger_attached"
             ]
           }
         }
