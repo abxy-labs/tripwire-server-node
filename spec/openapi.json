@@ -301,22 +301,6 @@
                           ]
                         }
                       ],
-                      "automation": {
-                        "category": "environment",
-                        "confidence": 1.5,
-                        "provider": "browserless",
-                        "product": "chrome",
-                        "framework": "playwright",
-                        "concealment_style": "stealth",
-                        "organization": "Browserless, Inc.",
-                        "facets": {
-                          "category": {
-                            "value": "automation",
-                            "confidence": 0.97,
-                            "relation": "is"
-                          }
-                        }
-                      },
                       "web_bot_auth": {
                         "status": "verified",
                         "domain": "browserless.io"
@@ -781,6 +765,30 @@
                           "blank_label_count": 3,
                           "topology_hash": 1234567890
                         }
+                      },
+                      "attribution": {
+                        "labels": [
+                          {
+                            "kind": "actor",
+                            "value": "automation",
+                            "label": "Automation",
+                            "confidence": 98
+                          },
+                          {
+                            "kind": "tool",
+                            "value": "selenium",
+                            "label": "Selenium",
+                            "confidence": 88
+                          }
+                        ],
+                        "behaviors": [
+                          {
+                            "channel": "typing",
+                            "value": "synthetic-typing",
+                            "label": "Synthetic Typing",
+                            "confidence": 86
+                          }
+                        ]
                       }
                     },
                     "meta": {
@@ -10962,139 +10970,163 @@
           "visitor_identity": true
         }
       },
-      "SessionAutomation": {
+      "SessionAttribution": {
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "category",
-          "confidence",
-          "provider",
-          "product",
-          "framework",
-          "concealment_style",
-          "organization",
-          "facets"
+          "labels",
+          "behaviors"
         ],
         "properties": {
-          "category": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "example": "environment"
-          },
-          "confidence": {
-            "anyOf": [
+          "labels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SessionAttributionLabel"
+            },
+            "example": [
               {
-                "type": "number",
-                "example": 1.5
+                "kind": "actor",
+                "value": "automation",
+                "label": "Automation",
+                "confidence": 98
               },
               {
-                "type": "null",
-                "example": null
+                "kind": "tool",
+                "value": "selenium",
+                "label": "Selenium",
+                "confidence": 88
               }
-            ],
-            "example": 1.5
+            ]
           },
-          "provider": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "example": "browserless"
-          },
-          "product": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "example": "chrome"
-          },
-          "framework": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "example": "playwright"
-          },
-          "concealment_style": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "example": "stealth"
-          },
-          "organization": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "example": "Browserless, Inc."
-          },
-          "facets": {
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/SessionAutomationFacet",
-              "example": {
-                "value": "automation",
-                "confidence": 93,
-                "relation": "is"
-              }
+          "behaviors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SessionAttributionBehavior"
             },
-            "example": {
-              "category": {
-                "value": "automation",
-                "confidence": 0.97,
-                "relation": "is"
+            "example": [
+              {
+                "channel": "typing",
+                "value": "synthetic-typing",
+                "label": "Synthetic Typing",
+                "confidence": 86
               }
-            }
+            ]
           }
         },
         "example": {
-          "category": "environment",
-          "confidence": 1.5,
-          "provider": "browserless",
-          "product": "chrome",
-          "framework": "playwright",
-          "concealment_style": "stealth",
-          "organization": "Browserless, Inc.",
-          "facets": {
-            "category": {
+          "labels": [
+            {
+              "kind": "actor",
               "value": "automation",
-              "confidence": 0.97,
-              "relation": "is"
+              "label": "Automation",
+              "confidence": 98
+            },
+            {
+              "kind": "tool",
+              "value": "selenium",
+              "label": "Selenium",
+              "confidence": 88
             }
-          }
+          ],
+          "behaviors": [
+            {
+              "channel": "typing",
+              "value": "synthetic-typing",
+              "label": "Synthetic Typing",
+              "confidence": 86
+            }
+          ]
         }
       },
-      "SessionAutomationFacet": {
+      "SessionAttributionBehavior": {
         "type": "object",
         "additionalProperties": false,
         "required": [
+          "channel",
           "value",
-          "confidence",
-          "relation"
+          "label",
+          "confidence"
         ],
         "properties": {
+          "channel": {
+            "type": "string",
+            "enum": [
+              "typing",
+              "form",
+              "mouse",
+              "touch",
+              "scroll",
+              "clipboard"
+            ],
+            "example": "typing"
+          },
+          "value": {
+            "type": "string",
+            "example": "synthetic-typing"
+          },
+          "label": {
+            "type": "string",
+            "example": "Synthetic Typing"
+          },
+          "confidence": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "example": 86
+          }
+        },
+        "example": {
+          "channel": "typing",
+          "value": "synthetic-typing",
+          "label": "Synthetic Typing",
+          "confidence": 86
+        }
+      },
+      "SessionAttributionLabel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "value",
+          "label",
+          "confidence"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "actor",
+              "provider",
+              "tool",
+              "product",
+              "organization",
+              "purpose",
+              "environment",
+              "trust",
+              "evasion"
+            ],
+            "example": "actor"
+          },
           "value": {
             "type": "string",
             "example": "automation"
           },
+          "label": {
+            "type": "string",
+            "example": "Automation"
+          },
           "confidence": {
-            "type": "number",
+            "type": "integer",
             "minimum": 0,
             "maximum": 100,
-            "example": 93
-          },
-          "relation": {
-            "type": "string",
-            "example": "is"
+            "example": 98
           }
         },
         "example": {
+          "kind": "actor",
           "value": "automation",
-          "confidence": 93,
-          "relation": "is"
+          "label": "Automation",
+          "confidence": 98
         }
       },
       "SessionBrowser": {
@@ -11676,7 +11708,7 @@
           "created_at",
           "decision",
           "highlights",
-          "automation",
+          "attribution",
           "web_bot_auth",
           "network",
           "runtime_integrity",
@@ -11755,49 +11787,6 @@
                 ]
               }
             ]
-          },
-          "automation": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/SessionAutomation",
-                "example": {
-                  "category": "environment",
-                  "confidence": 1.5,
-                  "provider": "browserless",
-                  "product": "chrome",
-                  "framework": "playwright",
-                  "concealment_style": "stealth",
-                  "organization": "Browserless, Inc.",
-                  "facets": {
-                    "category": {
-                      "value": "automation",
-                      "confidence": 0.97,
-                      "relation": "is"
-                    }
-                  }
-                }
-              },
-              {
-                "type": "null",
-                "example": null
-              }
-            ],
-            "example": {
-              "category": "environment",
-              "confidence": 1.5,
-              "provider": "browserless",
-              "product": "chrome",
-              "framework": "playwright",
-              "concealment_style": "stealth",
-              "organization": "Browserless, Inc.",
-              "facets": {
-                "category": {
-                  "value": "automation",
-                  "confidence": 0.97,
-                  "relation": "is"
-                }
-              }
-            }
           },
           "web_bot_auth": {
             "anyOf": [
@@ -12595,6 +12584,65 @@
                 "topology_hash": 1234567890
               }
             }
+          },
+          "attribution": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SessionAttribution",
+                "example": {
+                  "labels": [
+                    {
+                      "kind": "actor",
+                      "value": "automation",
+                      "label": "Automation",
+                      "confidence": 98
+                    },
+                    {
+                      "kind": "tool",
+                      "value": "selenium",
+                      "label": "Selenium",
+                      "confidence": 88
+                    }
+                  ],
+                  "behaviors": [
+                    {
+                      "channel": "typing",
+                      "value": "synthetic-typing",
+                      "label": "Synthetic Typing",
+                      "confidence": 86
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "null",
+                "example": null
+              }
+            ],
+            "example": {
+              "labels": [
+                {
+                  "kind": "actor",
+                  "value": "automation",
+                  "label": "Automation",
+                  "confidence": 98
+                },
+                {
+                  "kind": "tool",
+                  "value": "selenium",
+                  "label": "Selenium",
+                  "confidence": 88
+                }
+              ],
+              "behaviors": [
+                {
+                  "channel": "typing",
+                  "value": "synthetic-typing",
+                  "label": "Synthetic Typing",
+                  "confidence": 86
+                }
+              ]
+            }
           }
         },
         "example": {
@@ -12623,22 +12671,6 @@
               ]
             }
           ],
-          "automation": {
-            "category": "environment",
-            "confidence": 1.5,
-            "provider": "browserless",
-            "product": "chrome",
-            "framework": "playwright",
-            "concealment_style": "stealth",
-            "organization": "Browserless, Inc.",
-            "facets": {
-              "category": {
-                "value": "automation",
-                "confidence": 0.97,
-                "relation": "is"
-              }
-            }
-          },
           "web_bot_auth": {
             "status": "verified",
             "domain": "browserless.io"
@@ -13103,6 +13135,30 @@
               "blank_label_count": 3,
               "topology_hash": 1234567890
             }
+          },
+          "attribution": {
+            "labels": [
+              {
+                "kind": "actor",
+                "value": "automation",
+                "label": "Automation",
+                "confidence": 98
+              },
+              {
+                "kind": "tool",
+                "value": "selenium",
+                "label": "Selenium",
+                "confidence": 88
+              }
+            ],
+            "behaviors": [
+              {
+                "channel": "typing",
+                "value": "synthetic-typing",
+                "label": "Synthetic Typing",
+                "confidence": 86
+              }
+            ]
           }
         }
       },
@@ -13348,22 +13404,6 @@
                   ]
                 }
               ],
-              "automation": {
-                "category": "environment",
-                "confidence": 1.5,
-                "provider": "browserless",
-                "product": "chrome",
-                "framework": "playwright",
-                "concealment_style": "stealth",
-                "organization": "Browserless, Inc.",
-                "facets": {
-                  "category": {
-                    "value": "automation",
-                    "confidence": 0.97,
-                    "relation": "is"
-                  }
-                }
-              },
               "web_bot_auth": {
                 "status": "verified",
                 "domain": "browserless.io"
@@ -13828,6 +13868,30 @@
                   "blank_label_count": 3,
                   "topology_hash": 1234567890
                 }
+              },
+              "attribution": {
+                "labels": [
+                  {
+                    "kind": "actor",
+                    "value": "automation",
+                    "label": "Automation",
+                    "confidence": 98
+                  },
+                  {
+                    "kind": "tool",
+                    "value": "selenium",
+                    "label": "Selenium",
+                    "confidence": 88
+                  }
+                ],
+                "behaviors": [
+                  {
+                    "channel": "typing",
+                    "value": "synthetic-typing",
+                    "label": "Synthetic Typing",
+                    "confidence": 86
+                  }
+                ]
               }
             }
           },
@@ -13865,22 +13929,6 @@
                 ]
               }
             ],
-            "automation": {
-              "category": "environment",
-              "confidence": 1.5,
-              "provider": "browserless",
-              "product": "chrome",
-              "framework": "playwright",
-              "concealment_style": "stealth",
-              "organization": "Browserless, Inc.",
-              "facets": {
-                "category": {
-                  "value": "automation",
-                  "confidence": 0.97,
-                  "relation": "is"
-                }
-              }
-            },
             "web_bot_auth": {
               "status": "verified",
               "domain": "browserless.io"
@@ -14345,6 +14393,30 @@
                 "blank_label_count": 3,
                 "topology_hash": 1234567890
               }
+            },
+            "attribution": {
+              "labels": [
+                {
+                  "kind": "actor",
+                  "value": "automation",
+                  "label": "Automation",
+                  "confidence": 98
+                },
+                {
+                  "kind": "tool",
+                  "value": "selenium",
+                  "label": "Selenium",
+                  "confidence": 88
+                }
+              ],
+              "behaviors": [
+                {
+                  "channel": "typing",
+                  "value": "synthetic-typing",
+                  "label": "Synthetic Typing",
+                  "confidence": 86
+                }
+              ]
             }
           },
           "meta": {

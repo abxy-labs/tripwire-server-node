@@ -79,46 +79,47 @@
         ]
       }
     ],
-    "automation": {
-      "category": "automation",
-      "confidence": 0.97,
-      "provider": "browserless",
-      "product": "playwright",
-      "framework": "playwright",
-      "concealment_style": "stealth",
-      "organization": "Browserless",
-      "facets": {
-        "category": {
+    "attribution": {
+      "labels": [
+        {
+          "kind": "actor",
           "value": "automation",
-          "confidence": 0.97,
-          "relation": "is"
+          "label": "Automation",
+          "confidence": 97
         },
-        "provider_family": {
+        {
+          "kind": "provider",
           "value": "browserless",
-          "confidence": 0.92,
-          "relation": "resembles"
+          "label": "Browserless",
+          "confidence": 92
         },
-        "product_identity": {
+        {
+          "kind": "tool",
           "value": "playwright",
-          "confidence": 0.89,
-          "relation": "is"
+          "label": "Playwright",
+          "confidence": 89
         },
-        "execution_framework": {
-          "value": "playwright",
-          "confidence": 0.89,
-          "relation": "is"
-        },
-        "concealment_style": {
+        {
+          "kind": "evasion",
           "value": "stealth",
-          "confidence": 0.73,
-          "relation": "is"
+          "label": "Stealth",
+          "confidence": 73
         },
-        "organization": {
+        {
+          "kind": "organization",
           "value": "Browserless",
-          "confidence": 0.68,
-          "relation": "is"
+          "label": "Browserless",
+          "confidence": 68
         }
-      }
+      ],
+      "behaviors": [
+        {
+          "channel": "typing",
+          "value": "synthetic-typing",
+          "label": "Synthetic Typing",
+          "confidence": 86
+        }
+      ]
     },
     "web_bot_auth": {
       "status": "verified",
