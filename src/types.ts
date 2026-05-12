@@ -304,16 +304,17 @@ export interface SessionWebBotAuth {
   domain: string | null;
 }
 
+export type RuntimeIntegrityLevel = 'clean' | 'notice' | 'elevated' | 'high_risk';
+
 export interface SessionRuntimeIntegrity {
-  tampering_detected: boolean;
-  developer_tools_detected: boolean;
-  emulation_suspected: boolean;
-  virtualization_suspected: boolean;
-  privacy_hardening_suspected: boolean;
-  identity_spoofing_suspected: boolean;
-  replay_suspected: boolean;
-  outdated_environment: boolean;
-  verified_bot_identity: boolean;
+  tampering: RuntimeIntegrityLevel;
+  developer_tools: RuntimeIntegrityLevel;
+  emulation: RuntimeIntegrityLevel;
+  virtualization: RuntimeIntegrityLevel;
+  privacy_hardening: RuntimeIntegrityLevel;
+  identity_spoofing: RuntimeIntegrityLevel;
+  replay: RuntimeIntegrityLevel;
+  outdated_environment: RuntimeIntegrityLevel;
 }
 
 export interface VisitorFingerprintLink {
