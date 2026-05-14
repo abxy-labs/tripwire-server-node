@@ -282,21 +282,42 @@ export interface SessionDecision {
   evaluated_at: string;
 }
 
-export interface SessionAutomationFacet {
+export type SessionAttributionLabelKind =
+  | 'actor'
+  | 'provider'
+  | 'tool'
+  | 'product'
+  | 'organization'
+  | 'purpose'
+  | 'environment'
+  | 'trust'
+  | 'evasion';
+
+export type SessionAttributionBehaviorChannel =
+  | 'typing'
+  | 'form'
+  | 'mouse'
+  | 'touch'
+  | 'scroll'
+  | 'clipboard';
+
+export interface SessionAttributionLabel {
+  kind: SessionAttributionLabelKind;
   value: string;
+  label: string;
   confidence: number;
-  relation: string;
 }
 
-export interface SessionAutomation {
-  category: string | null;
-  confidence: number | null;
-  provider: string | null;
-  product: string | null;
-  framework: string | null;
-  concealment_style: string | null;
-  organization: string | null;
-  facets: Record<string, SessionAutomationFacet>;
+export interface SessionAttributionBehavior {
+  channel: SessionAttributionBehaviorChannel;
+  value: string;
+  label: string;
+  confidence: number;
+}
+
+export interface SessionAttribution {
+  labels: SessionAttributionLabel[];
+  behaviors: SessionAttributionBehavior[];
 }
 
 export interface SessionWebBotAuth {
@@ -304,16 +325,17 @@ export interface SessionWebBotAuth {
   domain: string | null;
 }
 
+export type RuntimeIntegrityLevel = 'clean' | 'notice' | 'elevated' | 'high_risk';
+
 export interface SessionRuntimeIntegrity {
-  tampering_detected: boolean;
-  developer_tools_detected: boolean;
-  emulation_suspected: boolean;
-  virtualization_suspected: boolean;
-  privacy_hardening_suspected: boolean;
-  identity_spoofing_suspected: boolean;
-  replay_suspected: boolean;
-  outdated_environment: boolean;
-  verified_bot_identity: boolean;
+  tampering: RuntimeIntegrityLevel;
+  developer_tools: RuntimeIntegrityLevel;
+  emulation: RuntimeIntegrityLevel;
+  virtualization: RuntimeIntegrityLevel;
+  privacy_hardening: RuntimeIntegrityLevel;
+  identity_spoofing: RuntimeIntegrityLevel;
+  replay: RuntimeIntegrityLevel;
+  outdated_environment: RuntimeIntegrityLevel;
 }
 
 export interface VisitorFingerprintLink {
@@ -382,7 +404,7 @@ export interface SessionDetail {
   created_at: string | null;
   decision: SessionDecision;
   highlights: SessionHighlight[];
-  automation: SessionAutomation | null;
+  attribution: SessionAttribution | null;
   web_bot_auth: SessionWebBotAuth | null;
   network: SessionNetwork;
   runtime_integrity: SessionRuntimeIntegrity;

@@ -79,46 +79,47 @@
         ]
       }
     ],
-    "automation": {
-      "category": "automation",
-      "confidence": 0.97,
-      "provider": "browserless",
-      "product": "playwright",
-      "framework": "playwright",
-      "concealment_style": "stealth",
-      "organization": "Browserless",
-      "facets": {
-        "category": {
+    "attribution": {
+      "labels": [
+        {
+          "kind": "actor",
           "value": "automation",
-          "confidence": 0.97,
-          "relation": "is"
+          "label": "Automation",
+          "confidence": 97
         },
-        "provider_family": {
+        {
+          "kind": "provider",
           "value": "browserless",
-          "confidence": 0.92,
-          "relation": "resembles"
+          "label": "Browserless",
+          "confidence": 92
         },
-        "product_identity": {
+        {
+          "kind": "tool",
           "value": "playwright",
-          "confidence": 0.89,
-          "relation": "is"
+          "label": "Playwright",
+          "confidence": 89
         },
-        "execution_framework": {
-          "value": "playwright",
-          "confidence": 0.89,
-          "relation": "is"
-        },
-        "concealment_style": {
+        {
+          "kind": "evasion",
           "value": "stealth",
-          "confidence": 0.73,
-          "relation": "is"
+          "label": "Stealth",
+          "confidence": 73
         },
-        "organization": {
+        {
+          "kind": "organization",
           "value": "Browserless",
-          "confidence": 0.68,
-          "relation": "is"
+          "label": "Browserless",
+          "confidence": 68
         }
-      }
+      ],
+      "behaviors": [
+        {
+          "channel": "typing",
+          "value": "synthetic-typing",
+          "label": "Synthetic Typing",
+          "confidence": 86
+        }
+      ]
     },
     "web_bot_auth": {
       "status": "verified",
@@ -176,15 +177,14 @@
       "evaluated_at": "2026-03-24T20:00:05.000Z"
     },
     "runtime_integrity": {
-      "tampering_detected": true,
-      "developer_tools_detected": true,
-      "emulation_suspected": false,
-      "virtualization_suspected": true,
-      "privacy_hardening_suspected": true,
-      "identity_spoofing_suspected": false,
-      "replay_suspected": false,
-      "outdated_environment": false,
-      "verified_bot_identity": false
+      "tampering": "high_risk",
+      "developer_tools": "high_risk",
+      "emulation": "clean",
+      "virtualization": "high_risk",
+      "privacy_hardening": "notice",
+      "identity_spoofing": "clean",
+      "replay": "clean",
+      "outdated_environment": "clean"
     },
     "native_runtime_integrity": null,
     "native_app": null,

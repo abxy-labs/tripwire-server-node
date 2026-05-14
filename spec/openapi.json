@@ -301,22 +301,6 @@
                           ]
                         }
                       ],
-                      "automation": {
-                        "category": "environment",
-                        "confidence": 1.5,
-                        "provider": "browserless",
-                        "product": "chrome",
-                        "framework": "playwright",
-                        "concealment_style": "stealth",
-                        "organization": "Browserless, Inc.",
-                        "facets": {
-                          "category": {
-                            "value": "automation",
-                            "confidence": 0.97,
-                            "relation": "is"
-                          }
-                        }
-                      },
                       "web_bot_auth": {
                         "status": "verified",
                         "domain": "browserless.io"
@@ -373,15 +357,14 @@
                         "evaluated_at": "2026-03-24T20:00:05.000Z"
                       },
                       "runtime_integrity": {
-                        "tampering_detected": true,
-                        "developer_tools_detected": true,
-                        "emulation_suspected": false,
-                        "virtualization_suspected": true,
-                        "privacy_hardening_suspected": true,
-                        "identity_spoofing_suspected": false,
-                        "replay_suspected": false,
-                        "outdated_environment": false,
-                        "verified_bot_identity": false
+                        "tampering": "high_risk",
+                        "developer_tools": "high_risk",
+                        "emulation": "clean",
+                        "virtualization": "high_risk",
+                        "privacy_hardening": "notice",
+                        "identity_spoofing": "clean",
+                        "replay": "clean",
+                        "outdated_environment": "clean"
                       },
                       "native_runtime_integrity": {
                         "platform": "ios",
@@ -781,6 +764,30 @@
                           "blank_label_count": 3,
                           "topology_hash": 1234567890
                         }
+                      },
+                      "attribution": {
+                        "labels": [
+                          {
+                            "kind": "actor",
+                            "value": "automation",
+                            "label": "Automation",
+                            "confidence": 98
+                          },
+                          {
+                            "kind": "tool",
+                            "value": "selenium",
+                            "label": "Selenium",
+                            "confidence": 88
+                          }
+                        ],
+                        "behaviors": [
+                          {
+                            "channel": "typing",
+                            "value": "synthetic-typing",
+                            "label": "Synthetic Typing",
+                            "confidence": 86
+                          }
+                        ]
                       }
                     },
                     "meta": {
@@ -10962,139 +10969,163 @@
           "visitor_identity": true
         }
       },
-      "SessionAutomation": {
+      "SessionAttribution": {
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "category",
-          "confidence",
-          "provider",
-          "product",
-          "framework",
-          "concealment_style",
-          "organization",
-          "facets"
+          "labels",
+          "behaviors"
         ],
         "properties": {
-          "category": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "example": "environment"
-          },
-          "confidence": {
-            "anyOf": [
+          "labels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SessionAttributionLabel"
+            },
+            "example": [
               {
-                "type": "number",
-                "example": 1.5
+                "kind": "actor",
+                "value": "automation",
+                "label": "Automation",
+                "confidence": 98
               },
               {
-                "type": "null",
-                "example": null
+                "kind": "tool",
+                "value": "selenium",
+                "label": "Selenium",
+                "confidence": 88
               }
-            ],
-            "example": 1.5
+            ]
           },
-          "provider": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "example": "browserless"
-          },
-          "product": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "example": "chrome"
-          },
-          "framework": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "example": "playwright"
-          },
-          "concealment_style": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "example": "stealth"
-          },
-          "organization": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "example": "Browserless, Inc."
-          },
-          "facets": {
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/SessionAutomationFacet",
-              "example": {
-                "value": "automation",
-                "confidence": 93,
-                "relation": "is"
-              }
+          "behaviors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SessionAttributionBehavior"
             },
-            "example": {
-              "category": {
-                "value": "automation",
-                "confidence": 0.97,
-                "relation": "is"
+            "example": [
+              {
+                "channel": "typing",
+                "value": "synthetic-typing",
+                "label": "Synthetic Typing",
+                "confidence": 86
               }
-            }
+            ]
           }
         },
         "example": {
-          "category": "environment",
-          "confidence": 1.5,
-          "provider": "browserless",
-          "product": "chrome",
-          "framework": "playwright",
-          "concealment_style": "stealth",
-          "organization": "Browserless, Inc.",
-          "facets": {
-            "category": {
+          "labels": [
+            {
+              "kind": "actor",
               "value": "automation",
-              "confidence": 0.97,
-              "relation": "is"
+              "label": "Automation",
+              "confidence": 98
+            },
+            {
+              "kind": "tool",
+              "value": "selenium",
+              "label": "Selenium",
+              "confidence": 88
             }
-          }
+          ],
+          "behaviors": [
+            {
+              "channel": "typing",
+              "value": "synthetic-typing",
+              "label": "Synthetic Typing",
+              "confidence": 86
+            }
+          ]
         }
       },
-      "SessionAutomationFacet": {
+      "SessionAttributionBehavior": {
         "type": "object",
         "additionalProperties": false,
         "required": [
+          "channel",
           "value",
-          "confidence",
-          "relation"
+          "label",
+          "confidence"
         ],
         "properties": {
+          "channel": {
+            "type": "string",
+            "enum": [
+              "typing",
+              "form",
+              "mouse",
+              "touch",
+              "scroll",
+              "clipboard"
+            ],
+            "example": "typing"
+          },
+          "value": {
+            "type": "string",
+            "example": "synthetic-typing"
+          },
+          "label": {
+            "type": "string",
+            "example": "Synthetic Typing"
+          },
+          "confidence": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "example": 86
+          }
+        },
+        "example": {
+          "channel": "typing",
+          "value": "synthetic-typing",
+          "label": "Synthetic Typing",
+          "confidence": 86
+        }
+      },
+      "SessionAttributionLabel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "value",
+          "label",
+          "confidence"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "actor",
+              "provider",
+              "tool",
+              "product",
+              "organization",
+              "purpose",
+              "environment",
+              "trust",
+              "evasion"
+            ],
+            "example": "actor"
+          },
           "value": {
             "type": "string",
             "example": "automation"
           },
+          "label": {
+            "type": "string",
+            "example": "Automation"
+          },
           "confidence": {
-            "type": "number",
+            "type": "integer",
             "minimum": 0,
             "maximum": 100,
-            "example": 93
-          },
-          "relation": {
-            "type": "string",
-            "example": "is"
+            "example": 98
           }
         },
         "example": {
+          "kind": "actor",
           "value": "automation",
-          "confidence": 93,
-          "relation": "is"
+          "label": "Automation",
+          "confidence": 98
         }
       },
       "SessionBrowser": {
@@ -11676,7 +11707,7 @@
           "created_at",
           "decision",
           "highlights",
-          "automation",
+          "attribution",
           "web_bot_auth",
           "network",
           "runtime_integrity",
@@ -11756,49 +11787,6 @@
               }
             ]
           },
-          "automation": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/SessionAutomation",
-                "example": {
-                  "category": "environment",
-                  "confidence": 1.5,
-                  "provider": "browserless",
-                  "product": "chrome",
-                  "framework": "playwright",
-                  "concealment_style": "stealth",
-                  "organization": "Browserless, Inc.",
-                  "facets": {
-                    "category": {
-                      "value": "automation",
-                      "confidence": 0.97,
-                      "relation": "is"
-                    }
-                  }
-                }
-              },
-              {
-                "type": "null",
-                "example": null
-              }
-            ],
-            "example": {
-              "category": "environment",
-              "confidence": 1.5,
-              "provider": "browserless",
-              "product": "chrome",
-              "framework": "playwright",
-              "concealment_style": "stealth",
-              "organization": "Browserless, Inc.",
-              "facets": {
-                "category": {
-                  "value": "automation",
-                  "confidence": 0.97,
-                  "relation": "is"
-                }
-              }
-            }
-          },
           "web_bot_auth": {
             "anyOf": [
               {
@@ -11875,15 +11863,14 @@
           "runtime_integrity": {
             "$ref": "#/components/schemas/SessionRuntimeIntegrity",
             "example": {
-              "tampering_detected": true,
-              "developer_tools_detected": true,
-              "emulation_suspected": false,
-              "virtualization_suspected": true,
-              "privacy_hardening_suspected": true,
-              "identity_spoofing_suspected": false,
-              "replay_suspected": false,
-              "outdated_environment": false,
-              "verified_bot_identity": false
+              "tampering": "high_risk",
+              "developer_tools": "high_risk",
+              "emulation": "clean",
+              "virtualization": "high_risk",
+              "privacy_hardening": "notice",
+              "identity_spoofing": "clean",
+              "replay": "clean",
+              "outdated_environment": "clean"
             }
           },
           "native_runtime_integrity": {
@@ -12595,6 +12582,65 @@
                 "topology_hash": 1234567890
               }
             }
+          },
+          "attribution": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SessionAttribution",
+                "example": {
+                  "labels": [
+                    {
+                      "kind": "actor",
+                      "value": "automation",
+                      "label": "Automation",
+                      "confidence": 98
+                    },
+                    {
+                      "kind": "tool",
+                      "value": "selenium",
+                      "label": "Selenium",
+                      "confidence": 88
+                    }
+                  ],
+                  "behaviors": [
+                    {
+                      "channel": "typing",
+                      "value": "synthetic-typing",
+                      "label": "Synthetic Typing",
+                      "confidence": 86
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "null",
+                "example": null
+              }
+            ],
+            "example": {
+              "labels": [
+                {
+                  "kind": "actor",
+                  "value": "automation",
+                  "label": "Automation",
+                  "confidence": 98
+                },
+                {
+                  "kind": "tool",
+                  "value": "selenium",
+                  "label": "Selenium",
+                  "confidence": 88
+                }
+              ],
+              "behaviors": [
+                {
+                  "channel": "typing",
+                  "value": "synthetic-typing",
+                  "label": "Synthetic Typing",
+                  "confidence": 86
+                }
+              ]
+            }
           }
         },
         "example": {
@@ -12623,22 +12669,6 @@
               ]
             }
           ],
-          "automation": {
-            "category": "environment",
-            "confidence": 1.5,
-            "provider": "browserless",
-            "product": "chrome",
-            "framework": "playwright",
-            "concealment_style": "stealth",
-            "organization": "Browserless, Inc.",
-            "facets": {
-              "category": {
-                "value": "automation",
-                "confidence": 0.97,
-                "relation": "is"
-              }
-            }
-          },
           "web_bot_auth": {
             "status": "verified",
             "domain": "browserless.io"
@@ -12695,15 +12725,14 @@
             "evaluated_at": "2026-03-24T20:00:05.000Z"
           },
           "runtime_integrity": {
-            "tampering_detected": true,
-            "developer_tools_detected": true,
-            "emulation_suspected": false,
-            "virtualization_suspected": true,
-            "privacy_hardening_suspected": true,
-            "identity_spoofing_suspected": false,
-            "replay_suspected": false,
-            "outdated_environment": false,
-            "verified_bot_identity": false
+            "tampering": "high_risk",
+            "developer_tools": "high_risk",
+            "emulation": "clean",
+            "virtualization": "high_risk",
+            "privacy_hardening": "notice",
+            "identity_spoofing": "clean",
+            "replay": "clean",
+            "outdated_environment": "clean"
           },
           "native_runtime_integrity": {
             "platform": "ios",
@@ -13103,6 +13132,30 @@
               "blank_label_count": 3,
               "topology_hash": 1234567890
             }
+          },
+          "attribution": {
+            "labels": [
+              {
+                "kind": "actor",
+                "value": "automation",
+                "label": "Automation",
+                "confidence": 98
+              },
+              {
+                "kind": "tool",
+                "value": "selenium",
+                "label": "Selenium",
+                "confidence": 88
+              }
+            ],
+            "behaviors": [
+              {
+                "channel": "typing",
+                "value": "synthetic-typing",
+                "label": "Synthetic Typing",
+                "confidence": 86
+              }
+            ]
           }
         }
       },
@@ -13348,22 +13401,6 @@
                   ]
                 }
               ],
-              "automation": {
-                "category": "environment",
-                "confidence": 1.5,
-                "provider": "browserless",
-                "product": "chrome",
-                "framework": "playwright",
-                "concealment_style": "stealth",
-                "organization": "Browserless, Inc.",
-                "facets": {
-                  "category": {
-                    "value": "automation",
-                    "confidence": 0.97,
-                    "relation": "is"
-                  }
-                }
-              },
               "web_bot_auth": {
                 "status": "verified",
                 "domain": "browserless.io"
@@ -13420,15 +13457,14 @@
                 "evaluated_at": "2026-03-24T20:00:05.000Z"
               },
               "runtime_integrity": {
-                "tampering_detected": true,
-                "developer_tools_detected": true,
-                "emulation_suspected": false,
-                "virtualization_suspected": true,
-                "privacy_hardening_suspected": true,
-                "identity_spoofing_suspected": false,
-                "replay_suspected": false,
-                "outdated_environment": false,
-                "verified_bot_identity": false
+                "tampering": "high_risk",
+                "developer_tools": "high_risk",
+                "emulation": "clean",
+                "virtualization": "high_risk",
+                "privacy_hardening": "notice",
+                "identity_spoofing": "clean",
+                "replay": "clean",
+                "outdated_environment": "clean"
               },
               "native_runtime_integrity": {
                 "platform": "ios",
@@ -13828,6 +13864,30 @@
                   "blank_label_count": 3,
                   "topology_hash": 1234567890
                 }
+              },
+              "attribution": {
+                "labels": [
+                  {
+                    "kind": "actor",
+                    "value": "automation",
+                    "label": "Automation",
+                    "confidence": 98
+                  },
+                  {
+                    "kind": "tool",
+                    "value": "selenium",
+                    "label": "Selenium",
+                    "confidence": 88
+                  }
+                ],
+                "behaviors": [
+                  {
+                    "channel": "typing",
+                    "value": "synthetic-typing",
+                    "label": "Synthetic Typing",
+                    "confidence": 86
+                  }
+                ]
               }
             }
           },
@@ -13865,22 +13925,6 @@
                 ]
               }
             ],
-            "automation": {
-              "category": "environment",
-              "confidence": 1.5,
-              "provider": "browserless",
-              "product": "chrome",
-              "framework": "playwright",
-              "concealment_style": "stealth",
-              "organization": "Browserless, Inc.",
-              "facets": {
-                "category": {
-                  "value": "automation",
-                  "confidence": 0.97,
-                  "relation": "is"
-                }
-              }
-            },
             "web_bot_auth": {
               "status": "verified",
               "domain": "browserless.io"
@@ -13937,15 +13981,14 @@
               "evaluated_at": "2026-03-24T20:00:05.000Z"
             },
             "runtime_integrity": {
-              "tampering_detected": true,
-              "developer_tools_detected": true,
-              "emulation_suspected": false,
-              "virtualization_suspected": true,
-              "privacy_hardening_suspected": true,
-              "identity_spoofing_suspected": false,
-              "replay_suspected": false,
-              "outdated_environment": false,
-              "verified_bot_identity": false
+              "tampering": "high_risk",
+              "developer_tools": "high_risk",
+              "emulation": "clean",
+              "virtualization": "high_risk",
+              "privacy_hardening": "notice",
+              "identity_spoofing": "clean",
+              "replay": "clean",
+              "outdated_environment": "clean"
             },
             "native_runtime_integrity": {
               "platform": "ios",
@@ -14345,6 +14388,30 @@
                 "blank_label_count": 3,
                 "topology_hash": 1234567890
               }
+            },
+            "attribution": {
+              "labels": [
+                {
+                  "kind": "actor",
+                  "value": "automation",
+                  "label": "Automation",
+                  "confidence": 98
+                },
+                {
+                  "kind": "tool",
+                  "value": "selenium",
+                  "label": "Selenium",
+                  "confidence": 88
+                }
+              ],
+              "behaviors": [
+                {
+                  "channel": "typing",
+                  "value": "synthetic-typing",
+                  "label": "Synthetic Typing",
+                  "confidence": 86
+                }
+              ]
             }
           },
           "meta": {
@@ -17948,64 +18015,106 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "tampering_detected",
-          "developer_tools_detected",
-          "emulation_suspected",
-          "virtualization_suspected",
-          "privacy_hardening_suspected",
-          "identity_spoofing_suspected",
-          "replay_suspected",
-          "outdated_environment",
-          "verified_bot_identity"
+          "tampering",
+          "developer_tools",
+          "emulation",
+          "virtualization",
+          "privacy_hardening",
+          "identity_spoofing",
+          "replay",
+          "outdated_environment"
         ],
         "properties": {
-          "tampering_detected": {
-            "type": "boolean",
-            "example": true
+          "tampering": {
+            "type": "string",
+            "enum": [
+              "clean",
+              "notice",
+              "elevated",
+              "high_risk"
+            ],
+            "example": "high_risk"
           },
-          "developer_tools_detected": {
-            "type": "boolean",
-            "example": true
+          "developer_tools": {
+            "type": "string",
+            "enum": [
+              "clean",
+              "notice",
+              "elevated",
+              "high_risk"
+            ],
+            "example": "high_risk"
           },
-          "emulation_suspected": {
-            "type": "boolean",
-            "example": false
+          "emulation": {
+            "type": "string",
+            "enum": [
+              "clean",
+              "notice",
+              "elevated",
+              "high_risk"
+            ],
+            "example": "clean"
           },
-          "virtualization_suspected": {
-            "type": "boolean",
-            "example": true
+          "virtualization": {
+            "type": "string",
+            "enum": [
+              "clean",
+              "notice",
+              "elevated",
+              "high_risk"
+            ],
+            "example": "high_risk"
           },
-          "privacy_hardening_suspected": {
-            "type": "boolean",
-            "example": true
+          "privacy_hardening": {
+            "type": "string",
+            "enum": [
+              "clean",
+              "notice",
+              "elevated",
+              "high_risk"
+            ],
+            "example": "notice"
           },
-          "identity_spoofing_suspected": {
-            "type": "boolean",
-            "example": false
+          "identity_spoofing": {
+            "type": "string",
+            "enum": [
+              "clean",
+              "notice",
+              "elevated",
+              "high_risk"
+            ],
+            "example": "clean"
           },
-          "replay_suspected": {
-            "type": "boolean",
-            "example": false
+          "replay": {
+            "type": "string",
+            "enum": [
+              "clean",
+              "notice",
+              "elevated",
+              "high_risk"
+            ],
+            "example": "clean"
           },
           "outdated_environment": {
-            "type": "boolean",
-            "example": false
-          },
-          "verified_bot_identity": {
-            "type": "boolean",
-            "example": false
+            "type": "string",
+            "enum": [
+              "clean",
+              "notice",
+              "elevated",
+              "high_risk"
+            ],
+            "example": "clean"
           }
         },
         "example": {
-          "tampering_detected": true,
-          "developer_tools_detected": true,
-          "emulation_suspected": false,
-          "virtualization_suspected": true,
-          "privacy_hardening_suspected": true,
-          "identity_spoofing_suspected": false,
-          "replay_suspected": false,
-          "outdated_environment": false,
-          "verified_bot_identity": false
+          "tampering": "high_risk",
+          "developer_tools": "high_risk",
+          "emulation": "clean",
+          "virtualization": "high_risk",
+          "privacy_hardening": "notice",
+          "identity_spoofing": "clean",
+          "replay": "clean",
+          "outdated_environment": "clean"
         }
       },
       "SessionSignalFired": {
