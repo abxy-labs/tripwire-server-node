@@ -1,10 +1,10 @@
-# Tripwire Node Library
+# Foil Node Library
 
 ![Preview](https://img.shields.io/badge/status-preview-111827)
 ![Node 18+](https://img.shields.io/badge/node-%E2%89%A518-339933?logo=node.js&logoColor=white)
 ![License: MIT](https://img.shields.io/badge/license-MIT-0f766e.svg)
 
-The Tripwire Node library provides convenient access to the Tripwire API from applications running in Node.js. It includes a typed client for Sessions, Fingerprints, Organizations, organization API key management, sealed token verification, Gate, and Gate delivery/webhook helpers.
+The Foil Node library provides convenient access to the Foil API from applications running in Node.js. It includes a typed client for Sessions, Fingerprints, Organizations, organization API key management, sealed token verification, Gate, and Gate delivery/webhook helpers.
 
 The library also provides:
 
@@ -17,14 +17,14 @@ The library also provides:
 
 ## Documentation
 
-See the [Tripwire docs](https://tripwirejs.com/docs) and [API reference](https://tripwirejs.com/docs/api-reference/introduction).
+See the [Foil docs](https://usefoil.com/docs) and [API reference](https://usefoil.com/docs/api-reference/introduction).
 
 ## Installation
 
 You don't need this source code unless you want to modify the package. If you just want to use the package, run:
 
 ```bash
-npm install @abxy/tripwire-server
+npm install @abxy/foil-server
 ```
 
 ## Requirements
@@ -36,9 +36,9 @@ npm install @abxy/tripwire-server
 Use `FOIL_SECRET_KEY` or an explicit `secretKey` for core detect APIs. For public or bearer-auth Gate flows, the client can also be constructed without a secret key:
 
 ```ts
-import { Tripwire } from "@abxy/tripwire-server";
+import { Foil } from "@abxy/foil-server";
 
-const client = new Tripwire({
+const client = new Foil({
   secretKey: process.env.FOIL_SECRET_KEY,
 });
 
@@ -52,9 +52,9 @@ console.log(session.decision.risk_score, session.highlights[0]?.summary);
 ### Sealed token verification
 
 ```ts
-import { safeVerifyTripwireToken } from "@abxy/tripwire-server";
+import { safeVerifyFoilToken } from "@abxy/foil-server";
 
-const result = safeVerifyTripwireToken(
+const result = safeVerifyFoilToken(
   sealedToken,
   process.env.FOIL_SECRET_KEY,
 );
@@ -109,7 +109,7 @@ await client.organizations.apiKeys.revoke("org_123", created.id);
 ```ts
 const endpoint = await client.webhooks.createEndpoint("org_123", {
   name: "Production alerts",
-  url: "https://example.com/tripwire/webhook",
+  url: "https://example.com/foil/webhook",
   event_types: ["session.result.persisted", "gate.session.approved"],
 });
 
@@ -124,11 +124,11 @@ console.log(events.items[0]?.webhook_deliveries[0]?.status);
 ### Gate APIs
 
 ```ts
-const client = new Tripwire();
+const client = new Foil();
 
 const services = await client.gate.registry.list();
 const session = await client.gate.sessions.create({
-  service_id: "tripwire",
+  service_id: "foil",
   account_name: "my-project",
   delivery: createDeliveryKeyPair().delivery,
 });
@@ -144,7 +144,7 @@ import {
   createGateApprovedWebhookResponse,
   decryptGateDeliveryEnvelope,
   verifyGateWebhookSignature,
-} from "@abxy/tripwire-server";
+} from "@abxy/foil-server";
 
 const keyPair = createDeliveryKeyPair();
 const response = createGateApprovedWebhookResponse({
@@ -169,12 +169,12 @@ console.log(verifyGateWebhookSignature({
 ### Error handling
 
 ```ts
-import { TripwireApiError } from "@abxy/tripwire-server";
+import { FoilApiError } from "@abxy/foil-server";
 
 try {
   await client.sessions.list({ limit: 999 });
 } catch (error) {
-  if (error instanceof TripwireApiError) {
+  if (error instanceof FoilApiError) {
     console.error(error.status, error.code, error.message);
   }
 }
@@ -182,4 +182,4 @@ try {
 
 ## Support
 
-If you need help integrating Tripwire, start with [tripwirejs.com/docs](https://tripwirejs.com/docs).
+If you need help integrating Foil, start with [usefoil.com/docs](https://usefoil.com/docs).

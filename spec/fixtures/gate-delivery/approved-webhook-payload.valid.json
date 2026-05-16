@@ -1,12 +1,12 @@
 {
-  "service_id": "tripwire",
+  "service_id": "foil",
   "gate_session_id": "gate_0123456789abcdefghjkmnpqrs",
   "gate_account_id": "gacct_0123456789abcdefghjkmnpqrs",
   "account_name": "Acme",
   "metadata": {
     "plan": "pro"
   },
-  "tripwire": {
+  "foil": {
     "verdict": "human",
     "score": 0.12
   },

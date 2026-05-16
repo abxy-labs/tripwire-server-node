@@ -1,6 +1,6 @@
 # Server SDK Spec
 
-This directory is the authoritative cross-language contract for Tripwire server SDKs.
+This directory is the authoritative cross-language contract for Foil server SDKs.
 
 It defines:
 
@@ -76,7 +76,7 @@ Every server SDK should expose these top-level capabilities:
 
 Every SDK should default to:
 
-- `base_url = https://api.tripwirejs.com`
+- `base_url = https://api.usefoil.com`
 - `secret_key = env(FOIL_SECRET_KEY)`
 - support for public, bearer-token, and secret-key auth as required by the Gate surface
 - request timeout support
@@ -134,7 +134,7 @@ Use the shared fixtures in `fixtures/gate-delivery/` to validate:
 
 This repo is the source of truth for the shared server SDK contract.
 
-Each language SDK repo carries a synced copy of this repository in `spec/`, and the Tripwire monorepo vendors this repository as a submodule at `sdk-spec/server`.
+Each language SDK repo carries a synced copy of this repository in `spec/`, and the Foil monorepo vendors this repository as a submodule at `sdk-spec/server`.
 
 Keep the synced copies and the monorepo submodule pointer current before advancing them.
 
@@ -146,7 +146,7 @@ When changing any server SDK:
 - do not expose collect or internal-only endpoints
 - preserve the shared defaults:
   - env-based secret key fallback
-  - `https://api.tripwirejs.com`
+  - `https://api.usefoil.com`
   - request timeout support
   - no automatic retries
 - preserve pagination normalization:

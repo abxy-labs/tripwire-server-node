@@ -1,4 +1,4 @@
-import { TripwireApiError, TripwireConfigurationError } from './errors';
+import { FoilApiError, FoilConfigurationError } from './errors';
 import type {
   AcknowledgeGateSessionDeliveryRequest,
   ApiKey,
@@ -33,7 +33,7 @@ import type {
   SessionDetail,
   SessionListParams,
   SessionSummary,
-  TripwireOptions,
+  FoilOptions,
   UpdateGateServiceRequest,
   UpdateApiKeyRequest,
   UpdateOrganizationRequest,
@@ -45,9 +45,9 @@ import type {
   WebhookTest,
 } from './types';
 
-const DEFAULT_BASE_URL = 'https://api.tripwirejs.com';
+const DEFAULT_BASE_URL = 'https://api.usefoil.com';
 const DEFAULT_TIMEOUT_MS = 30_000;
-const SDK_CLIENT_HEADER = '@abxy/tripwire-server';
+const SDK_CLIENT_HEADER = '@abxy/foil-server';
 
 type QueryValue = string | number | boolean | undefined | null;
 
@@ -73,10 +73,10 @@ type AuthConfig =
   | { kind: 'none' }
   | { kind: 'bearer'; token: string };
 
-function resolveOptions(options: TripwireOptions = {}): ResolvedOptions {
+function resolveOptions(options: FoilOptions = {}): ResolvedOptions {
   const fetchImpl = options.fetch ?? globalThis.fetch;
   if (typeof fetchImpl !== 'function') {
-    throw new TripwireConfigurationError(
+    throw new FoilConfigurationError(
       'Missing fetch implementation. Pass fetch explicitly or use Node 18+.',
     );
   }
@@ -104,7 +104,7 @@ function buildUrl(baseUrl: string, path: string, query?: Record<string, QueryVal
 function createAbortSignal(timeoutMs: number, signal?: AbortSignal) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => {
-    controller.abort(new Error(`Tripwire request timed out after ${timeoutMs}ms.`));
+    controller.abort(new Error(`Foil request timed out after ${timeoutMs}ms.`));
   }, timeoutMs);
 
   const onAbort = () => controller.abort(signal?.reason);
@@ -144,9 +144,9 @@ function normalizeListEnvelope<T>(envelope: ResourceListEnvelope<T>): ListResult
   };
 }
 
-function missingSecretKeyError(): TripwireConfigurationError {
-  return new TripwireConfigurationError(
-    'Missing Tripwire secret key. Pass secretKey explicitly or set FOIL_SECRET_KEY.',
+function missingSecretKeyError(): FoilConfigurationError {
+  return new FoilConfigurationError(
+    'Missing Foil secret key. Pass secretKey explicitly or set FOIL_SECRET_KEY.',
   );
 }
 
@@ -169,7 +169,7 @@ class HttpClient {
       if (!response.ok) {
         const requestId = response.headers.get('x-request-id');
         if (isApiErrorEnvelope(payload)) {
-          throw new TripwireApiError({
+          throw new FoilApiError({
             status: response.status,
             code: payload.error.code,
             message: payload.error.message,
@@ -180,10 +180,10 @@ class HttpClient {
           });
         }
 
-        throw new TripwireApiError({
+        throw new FoilApiError({
           status: response.status,
           code: 'request.failed',
-          message: response.statusText || 'Tripwire request failed.',
+          message: response.statusText || 'Foil request failed.',
           request_id: requestId,
           body: payload,
         });
@@ -191,14 +191,14 @@ class HttpClient {
 
       return payload as T;
     } catch (error) {
-      if (error instanceof TripwireApiError) {
+      if (error instanceof FoilApiError) {
         throw error;
       }
       if (error instanceof SyntaxError) {
-        throw new TripwireApiError({
+        throw new FoilApiError({
           status: 500,
           code: 'response.invalid_json',
-          message: 'Tripwire API returned invalid JSON.',
+          message: 'Foil API returned invalid JSON.',
           body: undefined,
         });
       }
@@ -211,7 +211,7 @@ class HttpClient {
   private buildHeaders(config: RequestConfig): Record<string, string> {
     const headers: Record<string, string> = {
       Accept: 'application/json',
-      'X-Tripwire-Client': SDK_CLIENT_HEADER,
+      'X-Foil-Client': SDK_CLIENT_HEADER,
       ...(this.options.userAgent ? { 'User-Agent': this.options.userAgent } : {}),
       ...(config.body !== undefined ? { 'Content-Type': 'application/json' } : {}),
     };
@@ -223,7 +223,7 @@ class HttpClient {
 
     if (auth.kind === 'bearer') {
       if (!auth.token) {
-        throw new TripwireConfigurationError('Missing bearer token for this Tripwire request.');
+        throw new FoilConfigurationError('Missing bearer token for this Foil request.');
       }
       headers.Authorization = `Bearer ${auth.token}`;
       return headers;
@@ -254,7 +254,7 @@ async function* iterateCursor<T, TParams extends { cursor?: string } & RequestOp
   }
 }
 
-export class Tripwire {
+export class Foil {
   private readonly http: HttpClient;
 
   readonly sessions: {
@@ -323,7 +323,7 @@ export class Tripwire {
     retrieveEvent: (organizationId: string, eventId: string, options?: RequestOptions) => Promise<Event>;
   };
 
-  constructor(options: TripwireOptions = {}) {
+  constructor(options: FoilOptions = {}) {
     this.http = new HttpClient(resolveOptions(options));
 
     this.sessions = {

@@ -1,4 +1,4 @@
-export interface TripwireOptions {
+export interface FoilOptions {
   secretKey?: string;
   baseUrl?: string;
   timeoutMs?: number;
@@ -27,15 +27,15 @@ export interface ResponseMeta {
   request_id: string;
 }
 
-export interface TripwireFieldError {
+export interface FoilFieldError {
   name: string;
   issue: string;
   expected?: string;
   received?: string | number | boolean | null;
 }
 
-export interface TripwireErrorDetails {
-  fields?: TripwireFieldError[];
+export interface FoilErrorDetails {
+  fields?: FoilFieldError[];
   allowed_values?: string[];
   header_name?: string;
   parameter_set?: string;
@@ -50,7 +50,7 @@ export interface ApiErrorBody {
   retryable: boolean;
   request_id: string;
   docs_url?: string;
-  details?: TripwireErrorDetails;
+  details?: FoilErrorDetails;
 }
 
 export interface ApiErrorEnvelope {
@@ -806,7 +806,7 @@ export interface GateSessionApprovedPayload {
   gate_account_id: string;
   account_name: string;
   metadata: Record<string, unknown> | null;
-  tripwire: { verdict: 'bot' | 'human' | 'inconclusive'; score: number | null };
+  foil: { verdict: 'bot' | 'human' | 'inconclusive'; score: number | null };
   delivery: GateDeliveryRequest;
 }
 
@@ -857,7 +857,7 @@ export interface RevokeGateAgentTokenRequest extends RequestOptions {
   agent_token: string;
 }
 
-export interface VerifiedTripwireSignal {
+export interface VerifiedFoilSignal {
   id: string;
   category: string;
   confidence: string;
@@ -865,13 +865,13 @@ export interface VerifiedTripwireSignal {
   [key: string]: unknown;
 }
 
-export interface VerifiedTripwireToken {
+export interface VerifiedFoilToken {
   object: 'session_verification';
   session_id: string;
   decision: Decision;
   request: RequestContext;
   visitor_fingerprint: VisitorFingerprintLink | null;
-  signals: VerifiedTripwireSignal[];
+  signals: VerifiedFoilSignal[];
   score_breakdown: {
     categories: Record<string, number>;
   };
@@ -883,19 +883,19 @@ export interface VerifiedTripwireToken {
   [key: string]: unknown;
 }
 
-export interface SafeVerifyTripwireTokenSuccess {
+export interface SafeVerifyFoilTokenSuccess {
   ok: true;
-  data: VerifiedTripwireToken;
+  data: VerifiedFoilToken;
 }
 
-export interface SafeVerifyTripwireTokenFailure {
+export interface SafeVerifyFoilTokenFailure {
   ok: false;
   error: Error;
 }
 
-export type SafeVerifyTripwireTokenResult =
-  | SafeVerifyTripwireTokenSuccess
-  | SafeVerifyTripwireTokenFailure;
+export type SafeVerifyFoilTokenResult =
+  | SafeVerifyFoilTokenSuccess
+  | SafeVerifyFoilTokenFailure;
 
 export interface ResourceEnvelope<T> {
   data: T;

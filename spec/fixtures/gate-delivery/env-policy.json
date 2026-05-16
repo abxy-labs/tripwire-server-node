@@ -1,7 +1,7 @@
 {
   "derive_agent_token_env_key": [
     {
-      "service_id": "tripwire",
+      "service_id": "foil",
       "expected": "FOIL_GATE_AGENT_TOKEN"
     },
     {

@@ -1,27 +1,27 @@
-import type { ApiErrorBody, ApiErrorEnvelope, TripwireFieldError } from './types';
+import type { ApiErrorBody, ApiErrorEnvelope, FoilFieldError } from './types';
 
-export class TripwireConfigurationError extends Error {
+export class FoilConfigurationError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = 'TripwireConfigurationError';
+    this.name = 'FoilConfigurationError';
   }
 }
 
-export class TripwireTokenVerificationError extends Error {
+export class FoilTokenVerificationError extends Error {
   constructor(message: string, options?: { cause?: unknown }) {
     super(message);
-    this.name = 'TripwireTokenVerificationError';
+    this.name = 'FoilTokenVerificationError';
     if (options?.cause !== undefined) {
       (this as Error & { cause?: unknown }).cause = options.cause;
     }
   }
 }
 
-export class TripwireApiError extends Error {
+export class FoilApiError extends Error {
   readonly status: number;
   readonly code: string;
   readonly request_id: string | null;
-  readonly field_errors: TripwireFieldError[];
+  readonly field_errors: FoilFieldError[];
   readonly docs_url: string | null;
   readonly body: ApiErrorBody | ApiErrorEnvelope | unknown;
 
@@ -30,12 +30,12 @@ export class TripwireApiError extends Error {
     code: string;
     message: string;
     request_id?: string | null;
-    field_errors?: TripwireFieldError[];
+    field_errors?: FoilFieldError[];
     docs_url?: string | null;
     body?: ApiErrorBody | ApiErrorEnvelope | unknown;
   }) {
     super(options.message);
-    this.name = 'TripwireApiError';
+    this.name = 'FoilApiError';
     this.status = options.status;
     this.code = options.code;
     this.request_id = options.request_id ?? null;

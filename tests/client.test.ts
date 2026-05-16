@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { Tripwire } from '../src/client';
-import { TripwireApiError, TripwireConfigurationError } from '../src/errors';
+import { Foil } from '../src/client';
+import { FoilApiError, FoilConfigurationError } from '../src/errors';
 import type {
   ApiKey,
   ApiErrorEnvelope,
@@ -22,7 +22,7 @@ function createFetchMock(
   return vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => handler(input, init));
 }
 
-describe('Tripwire client', () => {
+describe('Foil client', () => {
   it('uses the env secret key by default', async () => {
     const original = process.env.FOIL_SECRET_KEY;
     process.env.FOIL_SECRET_KEY = 'sk_env_default';
@@ -30,7 +30,7 @@ describe('Tripwire client', () => {
     const fetch = createFetchMock(() => jsonResponse(fixture));
 
     try {
-      const client = new Tripwire({ fetch });
+      const client = new Foil({ fetch });
       await client.sessions.list();
       expect(fetch).toHaveBeenCalledTimes(1);
     } finally {
@@ -43,7 +43,7 @@ describe('Tripwire client', () => {
     const original = process.env.FOIL_SECRET_KEY;
     delete process.env.FOIL_SECRET_KEY;
     try {
-      const client = new Tripwire({ fetch: createFetchMock(() => jsonResponse({})) });
+      const client = new Foil({ fetch: createFetchMock(() => jsonResponse({})) });
       expect(client.gate).toBeDefined();
       expect(client.gate.registry).toBeDefined();
       expect(client.gate.registry.list).toBeTypeOf('function');
@@ -56,8 +56,8 @@ describe('Tripwire client', () => {
     const original = process.env.FOIL_SECRET_KEY;
     delete process.env.FOIL_SECRET_KEY;
     try {
-      const client = new Tripwire({ fetch: createFetchMock(() => jsonResponse({})) });
-      await expect(client.sessions.list()).rejects.toBeInstanceOf(TripwireConfigurationError);
+      const client = new Foil({ fetch: createFetchMock(() => jsonResponse({})) });
+      await expect(client.sessions.list()).rejects.toBeInstanceOf(FoilConfigurationError);
     } finally {
       if (original) process.env.FOIL_SECRET_KEY = original;
     }
@@ -72,12 +72,12 @@ describe('Tripwire client', () => {
       expect(url.searchParams.get('limit')).toBe('25');
       expect(init?.headers).toMatchObject({
         Authorization: 'Bearer sk_live_test',
-        'X-Tripwire-Client': '@abxy/tripwire-server',
+        'X-Foil-Client': '@abxy/foil-server',
       });
       return jsonResponse(fixture);
     });
 
-    const client = new Tripwire({ secretKey: 'sk_live_test', fetch });
+    const client = new Foil({ secretKey: 'sk_live_test', fetch });
     const result = await client.sessions.list({ verdict: 'bot', limit: 25 });
     expect(result).toEqual({
       items: fixture.data,
@@ -115,7 +115,7 @@ describe('Tripwire client', () => {
       return jsonResponse(cursor ? secondPage : firstPage);
     });
 
-    const client = new Tripwire({ secretKey: 'sk_live_test', fetch });
+    const client = new Foil({ secretKey: 'sk_live_test', fetch });
     const items: SessionSummary[] = [];
     for await (const item of client.sessions.iter({ verdict: 'human' })) {
       items.push(item);
@@ -131,7 +131,7 @@ describe('Tripwire client', () => {
       return jsonResponse(fixture);
     });
 
-    const client = new Tripwire({ secretKey: 'sk_live_test', fetch });
+    const client = new Foil({ secretKey: 'sk_live_test', fetch });
     const session = await client.sessions.get('sid_0123456789abcdefghjkmnpqrs');
     expect(session).toEqual(fixture.data);
     expect(session.native_runtime_integrity).toBeNull();
@@ -153,7 +153,7 @@ describe('Tripwire client', () => {
       return jsonResponse(listFixture);
     });
 
-    const client = new Tripwire({ secretKey: 'sk_live_test', fetch });
+    const client = new Foil({ secretKey: 'sk_live_test', fetch });
     expect(await client.fingerprints.list()).toEqual({
       items: listFixture.data,
       limit: 50,
@@ -198,7 +198,7 @@ describe('Tripwire client', () => {
       return jsonResponse(organizationFixture);
     });
 
-    const client = new Tripwire({ secretKey: 'sk_live_test', fetch });
+    const client = new Foil({ secretKey: 'sk_live_test', fetch });
     expect(await client.organizations.get('org_56789abcdefghjkmnpqrstvwxy')).toEqual(organizationFixture.data);
     expect(await client.organizations.create({ name: 'Example Organization', slug: 'example-organization' })).toEqual(organizationCreateFixture.data);
     expect(await client.organizations.update('org_56789abcdefghjkmnpqrstvwxy', { name: 'Example Organization' })).toEqual(organizationUpdateFixture.data);
@@ -265,7 +265,7 @@ describe('Tripwire client', () => {
       throw new Error(`Unexpected request ${init?.method ?? 'GET'} ${url.pathname}`);
     });
 
-    const client = new Tripwire({ secretKey: 'sk_live_test', fetch });
+    const client = new Foil({ secretKey: 'sk_live_test', fetch });
     await expect(
       client.webhooks.listEvents('org_56789abcdefghjkmnpqrstvwxy', {
         endpoint_id: 'we_0123456789abcdef0123456789abcdef',
@@ -306,7 +306,7 @@ describe('Tripwire client', () => {
         expect(auth).toBeNull();
         return jsonResponse(registryListFixture);
       }
-      if (url.pathname === '/v1/gate/registry/tripwire') {
+      if (url.pathname === '/v1/gate/registry/foil') {
         expect(auth).toBeNull();
         return jsonResponse(registryDetailFixture);
       }
@@ -314,7 +314,7 @@ describe('Tripwire client', () => {
         expect(auth).toBe('Bearer sk_live_test');
         return jsonResponse(servicesListFixture);
       }
-      if (url.pathname === '/v1/gate/services/tripwire' && (!init?.method || init.method === 'GET')) {
+      if (url.pathname === '/v1/gate/services/foil' && (!init?.method || init.method === 'GET')) {
         expect(auth).toBe('Bearer sk_live_test');
         return jsonResponse(serviceDetailFixture);
       }
@@ -334,7 +334,7 @@ describe('Tripwire client', () => {
       }
       if (url.pathname === '/v1/gate/sessions' && init?.method === 'POST') {
         expect(auth).toBeNull();
-        expect(body?.service_id).toBe('tripwire');
+        expect(body?.service_id).toBe('foil');
         return jsonResponse(sessionCreateFixture, { status: 201 });
       }
       if (url.pathname === '/v1/gate/sessions/gate_0123456789abcdefghjkmnpqrs' && (!init?.method || init.method === 'GET')) {
@@ -348,7 +348,7 @@ describe('Tripwire client', () => {
       }
       if (url.pathname === '/v1/gate/login-sessions') {
         expect(auth).toBe('Bearer agt_0123456789abcdefghjkmnpqrs');
-        expect(body).toEqual({ service_id: 'tripwire' });
+        expect(body).toEqual({ service_id: 'foil' });
         return jsonResponse(loginCreateFixture, { status: 201 });
       }
       if (url.pathname === '/v1/gate/login-sessions/consume') {
@@ -368,12 +368,12 @@ describe('Tripwire client', () => {
       throw new Error(`Unexpected request ${init?.method ?? 'GET'} ${url.pathname}`);
     });
 
-    const client = new Tripwire({ secretKey: 'sk_live_test', fetch });
+    const client = new Foil({ secretKey: 'sk_live_test', fetch });
 
     expect(await client.gate.registry.list()).toEqual(registryListFixture.data);
-    expect(await client.gate.registry.get('tripwire')).toEqual(registryDetailFixture.data);
+    expect(await client.gate.registry.get('foil')).toEqual(registryDetailFixture.data);
     expect(await client.gate.services.list()).toEqual(servicesListFixture.data);
-    expect(await client.gate.services.get('tripwire')).toEqual(serviceDetailFixture.data);
+    expect(await client.gate.services.get('foil')).toEqual(serviceDetailFixture.data);
     expect(await client.gate.services.create({
       id: 'acme_prod',
       name: 'Acme Production',
@@ -384,7 +384,7 @@ describe('Tripwire client', () => {
     expect(await client.gate.services.update('acme_prod', { discoverable: true })).toEqual(serviceUpdateFixture.data);
     expect(await client.gate.services.disable('acme_prod')).toEqual(serviceDisableFixture.data);
     expect(await client.gate.sessions.create({
-      service_id: 'tripwire',
+      service_id: 'foil',
       account_name: 'my-project',
       delivery: {
         version: 1,
@@ -401,7 +401,7 @@ describe('Tripwire client', () => {
       ack_token: 'gtack_0123456789abcdefghjkmnpqrs',
     })).toEqual(sessionAckFixture.data);
     expect(await client.gate.loginSessions.create({
-      service_id: 'tripwire',
+      service_id: 'foil',
       agentToken: 'agt_0123456789abcdefghjkmnpqrs',
     })).toEqual(loginCreateFixture.data);
     expect(await client.gate.loginSessions.consume({
@@ -415,22 +415,22 @@ describe('Tripwire client', () => {
     })).resolves.toBeUndefined();
   });
 
-  it('parses API errors into TripwireApiError', async () => {
+  it('parses API errors into FoilApiError', async () => {
     const fixture = loadFixture<ApiErrorEnvelope>('errors/validation-error.json');
     const fetch = createFetchMock(() => jsonResponse(fixture, {
       status: fixture.error.status,
       headers: { 'x-request-id': fixture.error.request_id },
     }));
 
-    const client = new Tripwire({ secretKey: 'sk_live_test', fetch });
+    const client = new Foil({ secretKey: 'sk_live_test', fetch });
 
     await expect(client.sessions.list({ limit: 999 })).rejects.toMatchObject({
-      name: 'TripwireApiError',
+      name: 'FoilApiError',
       status: 422,
       code: fixture.error.code,
       request_id: fixture.error.request_id,
       field_errors: fixture.error.details?.fields,
       docs_url: fixture.error.docs_url ?? null,
-    } satisfies Partial<TripwireApiError>);
+    } satisfies Partial<FoilApiError>);
   });
 });

@@ -1,7 +1,7 @@
 import { createDecipheriv, createHash } from 'node:crypto';
 import { inflateSync } from 'node:zlib';
-import { TripwireConfigurationError, TripwireTokenVerificationError } from './errors';
-import type { SafeVerifyTripwireTokenResult, VerifiedTripwireToken } from './types';
+import { FoilConfigurationError, FoilTokenVerificationError } from './errors';
+import type { SafeVerifyFoilTokenResult, VerifiedFoilToken } from './types';
 
 const VERSION = 0x01;
 
@@ -20,27 +20,27 @@ function deriveKey(secretKeyOrHash: string): Buffer {
 function resolveSecretKey(secretKey?: string): string {
   const resolved = secretKey ?? process.env.FOIL_SECRET_KEY;
   if (!resolved) {
-    throw new TripwireConfigurationError(
-      'Missing Tripwire secret key. Pass secretKey explicitly or set FOIL_SECRET_KEY.',
+    throw new FoilConfigurationError(
+      'Missing Foil secret key. Pass secretKey explicitly or set FOIL_SECRET_KEY.',
     );
   }
   return resolved;
 }
 
-export function verifyTripwireToken(
+export function verifyFoilToken(
   sealedToken: string,
   secretKey?: string,
-): VerifiedTripwireToken {
+): VerifiedFoilToken {
   try {
     const resolvedSecretKey = resolveSecretKey(secretKey);
     const buffer = Buffer.from(sealedToken, 'base64');
     if (buffer.length < 1 + 12 + 16) {
-      throw new TripwireTokenVerificationError('Tripwire token is too short.');
+      throw new FoilTokenVerificationError('Foil token is too short.');
     }
 
     const version = buffer[0];
     if (version !== VERSION) {
-      throw new TripwireTokenVerificationError(`Unsupported Tripwire token version: ${version}`);
+      throw new FoilTokenVerificationError(`Unsupported Foil token version: ${version}`);
     }
 
     const nonce = buffer.subarray(1, 13);
@@ -52,28 +52,28 @@ export function verifyTripwireToken(
 
     const compressed = Buffer.concat([decipher.update(ciphertext), decipher.final()]);
     const json = inflateSync(compressed).toString('utf8');
-    return JSON.parse(json) as VerifiedTripwireToken;
+    return JSON.parse(json) as VerifiedFoilToken;
   } catch (error) {
-    if (error instanceof TripwireConfigurationError || error instanceof TripwireTokenVerificationError) {
+    if (error instanceof FoilConfigurationError || error instanceof FoilTokenVerificationError) {
       throw error;
     }
-    throw new TripwireTokenVerificationError('Failed to verify Tripwire token.', { cause: error });
+    throw new FoilTokenVerificationError('Failed to verify Foil token.', { cause: error });
   }
 }
 
-export function safeVerifyTripwireToken(
+export function safeVerifyFoilToken(
   sealedToken: string,
   secretKey?: string,
-): SafeVerifyTripwireTokenResult {
+): SafeVerifyFoilTokenResult {
   try {
-    return { ok: true, data: verifyTripwireToken(sealedToken, secretKey) };
+    return { ok: true, data: verifyFoilToken(sealedToken, secretKey) };
   } catch (error) {
-    if (error instanceof TripwireConfigurationError || error instanceof TripwireTokenVerificationError) {
+    if (error instanceof FoilConfigurationError || error instanceof FoilTokenVerificationError) {
       return { ok: false, error };
     }
     return {
       ok: false,
-      error: new TripwireTokenVerificationError('Failed to verify Tripwire token.', { cause: error }),
+      error: new FoilTokenVerificationError('Failed to verify Foil token.', { cause: error }),
     };
   }
 }
