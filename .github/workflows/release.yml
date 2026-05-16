@@ -137,7 +137,7 @@ jobs:
       - name: Check whether npm bootstrap is required
         id: npm_bootstrap
         run: |
-          if curl --fail --silent https://registry.npmjs.org/@abxy%2Ftripwire-server >/dev/null; then
+          if curl --fail --silent https://registry.npmjs.org/@abxy%2Ffoil-server >/dev/null; then
             echo "bootstrap=false" >> "$GITHUB_OUTPUT"
           else
             echo "bootstrap=true" >> "$GITHUB_OUTPUT"
@@ -146,7 +146,7 @@ jobs:
       - name: Require npm bootstrap token
         if: ${{ steps.npm_bootstrap.outputs.bootstrap == 'true' && env.NPM_PUBLISH_TOKEN == '' }}
         run: |
-          echo "NPM_PUBLISH_TOKEN is required for the first @abxy/tripwire-server release."
+          echo "NPM_PUBLISH_TOKEN is required for the first @abxy/foil-server release."
           exit 1
 
       - name: Resolve packed tarball

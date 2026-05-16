@@ -3,7 +3,7 @@
     "object": "gate_login_session",
     "id": "gate_1123456789abcdefghjkmnpqrs",
     "status": "pending",
-    "consent_url": "https://tripwirejs.com/gate?session=gate_1123456789abcdefghjkmnpqrs",
+    "consent_url": "https://usefoil.com/gate?session=gate_1123456789abcdefghjkmnpqrs",
     "expires_at": "2026-04-04T20:20:00.000Z"
   },
   "meta": {

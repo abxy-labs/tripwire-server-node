@@ -1,42 +1,42 @@
 {
   "data": {
-    "id": "tripwire",
+    "id": "foil",
     "status": "active",
     "discoverable": true,
-    "name": "Tripwire",
+    "name": "Foil",
     "description": "Detect AI agents and malicious users",
-    "website": "https://tripwirejs.com",
-    "dashboard_login_url": "https://dashboard.tripwirejs.com/auth/gate",
+    "website": "https://usefoil.com",
+    "dashboard_login_url": "https://dashboard.usefoil.com/auth/gate",
     "env_vars": [
       {
         "name": "Publishable key",
-        "key": "TRIPWIRE_PUBLISHABLE_KEY",
+        "key": "FOIL_PUBLISHABLE_KEY",
         "secret": false
       },
       {
         "name": "Secret key",
-        "key": "TRIPWIRE_SECRET_KEY",
+        "key": "FOIL_SECRET_KEY",
         "secret": true
       }
     ],
-    "docs_url": "https://tripwirejs.com/docs",
+    "docs_url": "https://usefoil.com/docs",
     "sdks": [
       {
         "label": "Node",
-        "install": "npm install @abxy/tripwire-server",
-        "url": "https://www.npmjs.com/package/@abxy/tripwire-server"
+        "install": "npm install @abxy/foil-server",
+        "url": "https://www.npmjs.com/package/@abxy/foil-server"
       }
     ],
     "branding": {
-      "logo_url": "https://tripwirejs.com/logo.png",
+      "logo_url": "https://usefoil.com/logo.png",
       "primary_color": "#117BE7",
       "secondary_color": "#0B5CAD",
-      "ascii_art": "TRIPWIRE",
+      "ascii_art": "FOIL",
       "verified": true
     },
     "consent": {
-      "terms_url": "https://tripwirejs.com/terms",
-      "privacy_url": "https://tripwirejs.com/privacy"
+      "terms_url": "https://usefoil.com/terms",
+      "privacy_url": "https://usefoil.com/privacy"
     }
   },
   "meta": {

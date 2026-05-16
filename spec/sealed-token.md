@@ -1,13 +1,13 @@
 # Sealed Token Specification
 
-Tripwire sealed tokens are encrypted server handoff payloads returned by `Tripwire.getSession()`.
+Foil sealed tokens are encrypted server handoff payloads returned by `Foil.getSession()`.
 
 This document is the language-agnostic contract for verifying those tokens in public server SDKs.
 
 ## Overview
 
 - Input: a base64-encoded sealed token string
-- Output: a JSON payload describing the verified Tripwire session decision for the current action
+- Output: a JSON payload describing the verified Foil session decision for the current action
 - Confidentiality and integrity: AES-256-GCM
 - Compression: zlib deflate/inflate
 
@@ -30,7 +30,7 @@ Reject any token whose version byte is not `0x01`.
 
 The verifier accepts either:
 
-- a plaintext Tripwire secret key, such as `sk_live_...`
+- a plaintext Foil secret key, such as `sk_live_...`
 - or the corresponding lowercase SHA-256 hex digest
 
 Normalization rules:

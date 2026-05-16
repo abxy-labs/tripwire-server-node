@@ -1,7 +1,7 @@
 {
-  "name": "@abxy/tripwire-server",
+  "name": "@abxy/foil-server",
   "version": "0.2.3",
-  "description": "Official Tripwire Node server SDK",
+  "description": "Official Foil Node server SDK",
   "license": "MIT",
   "repository": {
     "type": "git",

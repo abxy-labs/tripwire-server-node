@@ -138,16 +138,16 @@ describe('gate delivery helpers', () => {
     const response = createGateApprovedWebhookResponse({
       delivery: keyPair.delivery,
       outputs: {
-        TRIPWIRE_PUBLISHABLE_KEY: 'pk_live_bundle',
-        TRIPWIRE_SECRET_KEY: 'sk_live_bundle',
+        FOIL_PUBLISHABLE_KEY: 'pk_live_bundle',
+        FOIL_SECRET_KEY: 'sk_live_bundle',
       },
     });
 
     expect(decryptGateDeliveryEnvelope(keyPair.privateKey, response.encrypted_delivery)).toEqual({
       version: 1,
       outputs: {
-        TRIPWIRE_PUBLISHABLE_KEY: 'pk_live_bundle',
-        TRIPWIRE_SECRET_KEY: 'sk_live_bundle',
+        FOIL_PUBLISHABLE_KEY: 'pk_live_bundle',
+        FOIL_SECRET_KEY: 'sk_live_bundle',
       },
     });
   });

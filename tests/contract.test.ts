@@ -105,7 +105,7 @@ describe('server SDK contract', () => {
     expect(stripExamples(schemas.Organization.properties?.status)).toEqual({ $ref: '#/components/schemas/OrganizationStatus' });
     expect(stripExamples(schemas.ApiKey.properties?.status)).toEqual({ $ref: '#/components/schemas/ApiKeyStatus' });
     expect(schemas.PublicError.properties?.code).toMatchObject({
-      'x-tripwire-known-values-ref': '#/components/schemas/KnownPublicErrorCode',
+      'x-foil-known-values-ref': '#/components/schemas/KnownPublicErrorCode',
     });
     expect(schemas.OrganizationStatus.enum).toEqual(['active', 'suspended', 'deleted']);
     expect(schemas.ApiKeyStatus.enum).toEqual(['active', 'rotating', 'revoked']);

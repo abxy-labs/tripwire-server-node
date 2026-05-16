@@ -58,7 +58,7 @@ export const BLOCKED_GATE_ENV_VAR_PREFIXES = [
   'GIT_CONFIG_',
 ] as const;
 
-const GATE_DELIVERY_HKDF_INFO = Buffer.from('tripwire-gate-delivery:v1', 'utf8');
+const GATE_DELIVERY_HKDF_INFO = Buffer.from('foil-gate-delivery:v1', 'utf8');
 const X25519_SPKI_PREFIX = Buffer.from('302a300506032b656e032100', 'hex');
 const BLOCKED_GATE_ENV_VAR_KEY_SET = new Set<string>(BLOCKED_GATE_ENV_VAR_KEYS);
 
@@ -88,7 +88,7 @@ export interface GateApprovedWebhookPayload {
   gate_account_id: string;
   account_name: string;
   metadata: Record<string, unknown> | null;
-  tripwire: {
+  foil: {
     verdict: 'bot' | 'human' | 'inconclusive';
     score: number | null;
   };
@@ -133,7 +133,7 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === 'object' && !Array.isArray(value);
 }
 
-function isGateVerdict(value: unknown): value is GateApprovedWebhookPayload['tripwire']['verdict'] {
+function isGateVerdict(value: unknown): value is GateApprovedWebhookPayload['foil']['verdict'] {
   return value === 'bot' || value === 'human' || value === 'inconclusive';
 }
 
@@ -149,11 +149,15 @@ export function deriveGateAgentTokenEnvKey(serviceId: string): string {
     throw new Error('service_id is required to derive a Gate agent token env key');
   }
 
+  if (normalized === 'FOIL') {
+    return `FOIL${GATE_AGENT_TOKEN_ENV_SUFFIX}`;
+  }
+
   return `${normalized}${GATE_AGENT_TOKEN_ENV_SUFFIX}`;
 }
 
 export function isGateManagedEnvVarKey(key: string): boolean {
-  return key === 'TRIPWIRE_AGENT_TOKEN' || key.endsWith(GATE_AGENT_TOKEN_ENV_SUFFIX);
+  return key === 'FOIL_AGENT_TOKEN' || key.endsWith(GATE_AGENT_TOKEN_ENV_SUFFIX);
 }
 
 export function isBlockedGateEnvVarKey(key: string): boolean {
@@ -282,14 +286,14 @@ export function validateGateApprovedWebhookPayload(value: unknown): GateApproved
   if (value.metadata !== null && value.metadata !== undefined && !isPlainObject(value.metadata)) {
     throw new Error('metadata must be an object or null');
   }
-  if (!isPlainObject(value.tripwire)) {
-    throw new Error('tripwire must be an object');
+  if (!isPlainObject(value.foil)) {
+    throw new Error('foil must be an object');
   }
-  if (!isGateVerdict(value.tripwire.verdict)) {
-    throw new Error('tripwire.verdict is invalid');
+  if (!isGateVerdict(value.foil.verdict)) {
+    throw new Error('foil.verdict is invalid');
   }
-  if (value.tripwire.score != null && typeof value.tripwire.score !== 'number') {
-    throw new Error('tripwire.score must be a number or null');
+  if (value.foil.score != null && typeof value.foil.score !== 'number') {
+    throw new Error('foil.score must be a number or null');
   }
   return {
     service_id: value.service_id,
@@ -297,9 +301,9 @@ export function validateGateApprovedWebhookPayload(value: unknown): GateApproved
     gate_account_id: value.gate_account_id,
     account_name: value.account_name,
     metadata: value.metadata && isPlainObject(value.metadata) ? value.metadata : null,
-    tripwire: {
-      verdict: value.tripwire.verdict,
-      score: value.tripwire.score ?? null,
+    foil: {
+      verdict: value.foil.verdict,
+      score: value.foil.score ?? null,
     },
     delivery: validateGateDeliveryRequest(value.delivery),
   };
@@ -366,7 +370,7 @@ export function parseWebhookEvent(rawBody: string | Buffer | Uint8Array | unknow
 
 export function verifyAndParseWebhookEvent(input: VerifyAndParseWebhookEventInput): WebhookEventEnvelope {
   if (!verifyGateWebhookSignature(input)) {
-    throw new Error('Invalid Tripwire webhook signature');
+    throw new Error('Invalid Foil webhook signature');
   }
   return parseWebhookEvent(input.rawBody);
 }

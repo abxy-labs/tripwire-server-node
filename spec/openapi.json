@@ -4427,7 +4427,7 @@
                         "sdks": [
                           {
                             "label": "Chrome",
-                            "install": "npm install @tripwire/server-node",
+                            "install": "npm install @foil/server-node",
                             "url": "https://app.acme.co/signup"
                           }
                         ],
@@ -4500,7 +4500,7 @@
                       "sdks": [
                         {
                           "label": "Chrome",
-                          "install": "npm install @tripwire/server-node",
+                          "install": "npm install @foil/server-node",
                           "url": "https://app.acme.co/signup"
                         }
                       ],
@@ -4607,7 +4607,7 @@
                         "sdks": [
                           {
                             "label": "Chrome",
-                            "install": "npm install @tripwire/server-node",
+                            "install": "npm install @foil/server-node",
                             "url": "https://app.acme.co/signup"
                           }
                         ],
@@ -4745,7 +4745,7 @@
                   "sdks": [
                     {
                       "label": "Chrome",
-                      "install": "npm install @tripwire/server-node",
+                      "install": "npm install @foil/server-node",
                       "url": "https://app.acme.co/signup"
                     }
                   ],
@@ -4794,7 +4794,7 @@
                       "sdks": [
                         {
                           "label": "Chrome",
-                          "install": "npm install @tripwire/server-node",
+                          "install": "npm install @foil/server-node",
                           "url": "https://app.acme.co/signup"
                         }
                       ],
@@ -5020,7 +5020,7 @@
                       "sdks": [
                         {
                           "label": "Chrome",
-                          "install": "npm install @tripwire/server-node",
+                          "install": "npm install @foil/server-node",
                           "url": "https://app.acme.co/signup"
                         }
                       ],
@@ -5203,7 +5203,7 @@
                   "sdks": [
                     {
                       "label": "Chrome",
-                      "install": "npm install @tripwire/server-node",
+                      "install": "npm install @foil/server-node",
                       "url": "https://app.acme.co/signup"
                     }
                   ],
@@ -5252,7 +5252,7 @@
                       "sdks": [
                         {
                           "label": "Chrome",
-                          "install": "npm install @tripwire/server-node",
+                          "install": "npm install @foil/server-node",
                           "url": "https://app.acme.co/signup"
                         }
                       ],
@@ -5476,7 +5476,7 @@
                       "sdks": [
                         {
                           "label": "Chrome",
-                          "install": "npm install @tripwire/server-node",
+                          "install": "npm install @foil/server-node",
                           "url": "https://app.acme.co/signup"
                         }
                       ],
@@ -7823,14 +7823,14 @@
               "$ref": "#/components/schemas/GateSdkInstall",
               "example": {
                 "label": "Chrome",
-                "install": "npm install @tripwire/server-node",
+                "install": "npm install @foil/server-node",
                 "url": "https://app.acme.co/signup"
               }
             },
             "example": [
               {
                 "label": "Chrome",
-                "install": "npm install @tripwire/server-node",
+                "install": "npm install @foil/server-node",
                 "url": "https://app.acme.co/signup"
               }
             ]
@@ -7875,7 +7875,7 @@
           "sdks": [
             {
               "label": "Chrome",
-              "install": "npm install @tripwire/server-node",
+              "install": "npm install @foil/server-node",
               "url": "https://app.acme.co/signup"
             }
           ],
@@ -8477,7 +8477,7 @@
           "gate_account_id",
           "account_name",
           "metadata",
-          "tripwire",
+          "foil",
           "delivery"
         ],
         "properties": {
@@ -8507,7 +8507,7 @@
               "source": "signup_form"
             }
           },
-          "tripwire": {
+          "foil": {
             "type": "object",
             "required": [
               "verdict",
@@ -8554,7 +8554,7 @@
           "metadata": {
             "source": "signup_form"
           },
-          "tripwire": {
+          "foil": {
             "verdict": "human",
             "score": 0.08
           },
@@ -9068,14 +9068,14 @@
               "$ref": "#/components/schemas/GateSdkInstall",
               "example": {
                 "label": "Chrome",
-                "install": "npm install @tripwire/server-node",
+                "install": "npm install @foil/server-node",
                 "url": "https://app.acme.co/signup"
               }
             },
             "example": [
               {
                 "label": "Chrome",
-                "install": "npm install @tripwire/server-node",
+                "install": "npm install @foil/server-node",
                 "url": "https://app.acme.co/signup"
               }
             ]
@@ -9141,7 +9141,7 @@
           "sdks": [
             {
               "label": "Chrome",
-              "install": "npm install @tripwire/server-node",
+              "install": "npm install @foil/server-node",
               "url": "https://app.acme.co/signup"
             }
           ],
@@ -9192,7 +9192,7 @@
                 "sdks": [
                   {
                     "label": "Chrome",
-                    "install": "npm install @tripwire/server-node",
+                    "install": "npm install @foil/server-node",
                     "url": "https://app.acme.co/signup"
                   }
                 ],
@@ -9233,7 +9233,7 @@
                 "sdks": [
                   {
                     "label": "Chrome",
-                    "install": "npm install @tripwire/server-node",
+                    "install": "npm install @foil/server-node",
                     "url": "https://app.acme.co/signup"
                   }
                 ],
@@ -9283,7 +9283,7 @@
               "sdks": [
                 {
                   "label": "Chrome",
-                  "install": "npm install @tripwire/server-node",
+                  "install": "npm install @foil/server-node",
                   "url": "https://app.acme.co/signup"
                 }
               ],
@@ -9337,7 +9337,7 @@
               "sdks": [
                 {
                   "label": "Chrome",
-                  "install": "npm install @tripwire/server-node",
+                  "install": "npm install @foil/server-node",
                   "url": "https://app.acme.co/signup"
                 }
               ],
@@ -9385,7 +9385,7 @@
             "sdks": [
               {
                 "label": "Chrome",
-                "install": "npm install @tripwire/server-node",
+                "install": "npm install @foil/server-node",
                 "url": "https://app.acme.co/signup"
               }
             ],
@@ -9480,14 +9480,14 @@
               "$ref": "#/components/schemas/GateSdkInstall",
               "example": {
                 "label": "Chrome",
-                "install": "npm install @tripwire/server-node",
+                "install": "npm install @foil/server-node",
                 "url": "https://app.acme.co/signup"
               }
             },
             "example": [
               {
                 "label": "Chrome",
-                "install": "npm install @tripwire/server-node",
+                "install": "npm install @foil/server-node",
                 "url": "https://app.acme.co/signup"
               }
             ]
@@ -9535,7 +9535,7 @@
           "sdks": [
             {
               "label": "Chrome",
-              "install": "npm install @tripwire/server-node",
+              "install": "npm install @foil/server-node",
               "url": "https://app.acme.co/signup"
             }
           ],
@@ -9580,7 +9580,7 @@
               "sdks": [
                 {
                   "label": "Chrome",
-                  "install": "npm install @tripwire/server-node",
+                  "install": "npm install @foil/server-node",
                   "url": "https://app.acme.co/signup"
                 }
               ],
@@ -9624,7 +9624,7 @@
             "sdks": [
               {
                 "label": "Chrome",
-                "install": "npm install @tripwire/server-node",
+                "install": "npm install @foil/server-node",
                 "url": "https://app.acme.co/signup"
               }
             ],
@@ -9675,7 +9675,7 @@
                 "sdks": [
                   {
                     "label": "Chrome",
-                    "install": "npm install @tripwire/server-node",
+                    "install": "npm install @foil/server-node",
                     "url": "https://app.acme.co/signup"
                   }
                 ],
@@ -9712,7 +9712,7 @@
                 "sdks": [
                   {
                     "label": "Chrome",
-                    "install": "npm install @tripwire/server-node",
+                    "install": "npm install @foil/server-node",
                     "url": "https://app.acme.co/signup"
                   }
                 ],
@@ -9758,7 +9758,7 @@
               "sdks": [
                 {
                   "label": "Chrome",
-                  "install": "npm install @tripwire/server-node",
+                  "install": "npm install @foil/server-node",
                   "url": "https://app.acme.co/signup"
                 }
               ],
@@ -9796,7 +9796,7 @@
           },
           "install": {
             "type": "string",
-            "example": "npm install @tripwire/server-node"
+            "example": "npm install @foil/server-node"
           },
           "url": {
             "type": "string",
@@ -9806,7 +9806,7 @@
         },
         "example": {
           "label": "Chrome",
-          "install": "npm install @tripwire/server-node",
+          "install": "npm install @foil/server-node",
           "url": "https://app.acme.co/signup"
         }
       },
@@ -9877,7 +9877,7 @@
               "metadata": {
                 "source": "signup_form"
               },
-              "tripwire": {
+              "foil": {
                 "verdict": "human",
                 "score": 0.08
               },
@@ -9903,7 +9903,7 @@
             "metadata": {
               "source": "signup_form"
             },
-            "tripwire": {
+            "foil": {
               "verdict": "human",
               "score": 0.08
             },
@@ -10734,7 +10734,7 @@
         "properties": {
           "code": {
             "type": "string",
-            "x-tripwire-known-values-ref": "#/components/schemas/KnownPublicErrorCode",
+            "x-foil-known-values-ref": "#/components/schemas/KnownPublicErrorCode",
             "example": "request.validation_failed"
           },
           "message": {
@@ -18406,14 +18406,14 @@
               "$ref": "#/components/schemas/GateSdkInstall",
               "example": {
                 "label": "Chrome",
-                "install": "npm install @tripwire/server-node",
+                "install": "npm install @foil/server-node",
                 "url": "https://app.acme.co/signup"
               }
             },
             "example": [
               {
                 "label": "Chrome",
-                "install": "npm install @tripwire/server-node",
+                "install": "npm install @foil/server-node",
                 "url": "https://app.acme.co/signup"
               }
             ]
@@ -18457,7 +18457,7 @@
           "sdks": [
             {
               "label": "Chrome",
-              "install": "npm install @tripwire/server-node",
+              "install": "npm install @foil/server-node",
               "url": "https://app.acme.co/signup"
             }
           ],
@@ -19938,7 +19938,7 @@
                   "metadata": {
                     "source": "signup_form"
                   },
-                  "tripwire": {
+                  "foil": {
                     "verdict": "human",
                     "score": 0.08
                   },

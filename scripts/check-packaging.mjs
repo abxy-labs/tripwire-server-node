@@ -10,7 +10,7 @@ const esm = await import(path.join(__dirname, '..', 'dist', 'index.js'));
 const cjs = require(path.join(__dirname, '..', 'dist', 'index.cjs'));
 
 for (const mod of [esm, cjs]) {
-  assert.equal(typeof mod.Tripwire, 'function');
-  assert.equal(typeof mod.verifyTripwireToken, 'function');
-  assert.equal(typeof mod.safeVerifyTripwireToken, 'function');
+  assert.equal(typeof mod.Foil, 'function');
+  assert.equal(typeof mod.verifyFoilToken, 'function');
+  assert.equal(typeof mod.safeVerifyFoilToken, 'function');
 }

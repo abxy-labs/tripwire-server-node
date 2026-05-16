@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { Tripwire } from '../src/client';
-import { TripwireApiError } from '../src/errors';
-import type { ApiKey, UpdateOrganizationRequest, VerifiedTripwireToken } from '../src/types';
-import { safeVerifyTripwireToken } from '../src/sealed-token';
+import { Foil } from '../src/client';
+import { FoilApiError } from '../src/errors';
+import type { ApiKey, UpdateOrganizationRequest, VerifiedFoilToken } from '../src/types';
+import { safeVerifyFoilToken } from '../src/sealed-token';
 import { loadFixture } from './helpers';
 
-const describeLive = process.env.TRIPWIRE_LIVE_SMOKE === '1' ? describe : describe.skip;
+const describeLive = process.env.FOIL_LIVE_SMOKE === '1' ? describe : describe.skip;
 
 function requireEnv(name: string): string {
   const value = process.env[name];
@@ -15,7 +15,7 @@ function requireEnv(name: string): string {
   return value;
 }
 
-async function findApiKey(client: Tripwire, organizationId: string, keyId: string): Promise<ApiKey | null> {
+async function findApiKey(client: Foil, organizationId: string, keyId: string): Promise<ApiKey | null> {
   let cursor: string | undefined;
   for (;;) {
     const page = await client.organizations.apiKeys.list(organizationId, { limit: 100, ...(cursor ? { cursor } : {}) });
@@ -26,12 +26,12 @@ async function findApiKey(client: Tripwire, organizationId: string, keyId: strin
   }
 }
 
-async function bestEffortRevoke(client: Tripwire, organizationId: string, keyId: string | undefined) {
+async function bestEffortRevoke(client: Foil, organizationId: string, keyId: string | undefined) {
   if (!keyId) return;
   try {
     await client.organizations.apiKeys.revoke(organizationId, keyId);
   } catch (error) {
-    if (error instanceof TripwireApiError && (error.status === 404 || error.code === 'request.not_found')) {
+    if (error instanceof FoilApiError && (error.status === 404 || error.code === 'request.not_found')) {
       return;
     }
     throw error;
@@ -51,11 +51,11 @@ function toUpdateStatus(status: string): UpdateOrganizationRequest['status'] | u
 
 describeLive('live API smoke', () => {
   it('exercises the public server surface', async () => {
-    const client = new Tripwire({
-      secretKey: requireEnv('TRIPWIRE_SMOKE_SECRET_KEY'),
-      baseUrl: process.env.TRIPWIRE_SMOKE_BASE_URL || 'https://api.tripwirejs.com',
+    const client = new Foil({
+      secretKey: requireEnv('FOIL_SMOKE_SECRET_KEY'),
+      baseUrl: process.env.FOIL_SMOKE_BASE_URL || 'https://api.usefoil.com',
     });
-    const organizationId = requireEnv('TRIPWIRE_SMOKE_ORGANIZATION_ID');
+    const organizationId = requireEnv('FOIL_SMOKE_ORGANIZATION_ID');
 
     let createdKeyId: string | undefined;
     let rotatedKeyId: string | undefined;
@@ -104,10 +104,10 @@ describeLive('live API smoke', () => {
 
       const fixture = loadFixture<{
         secretKey: string;
-        payload: VerifiedTripwireToken;
+        payload: VerifiedFoilToken;
         token: string;
       }>('sealed-token/vector.v1.json');
-      const verified = safeVerifyTripwireToken(fixture.token, fixture.secretKey);
+      const verified = safeVerifyFoilToken(fixture.token, fixture.secretKey);
       expect(verified.ok).toBe(true);
       if (verified.ok) {
         expect(verified.data.session_id).toBe(fixture.payload.session_id);

@@ -1,5 +1,5 @@
-export { Tripwire } from './client';
-export { TripwireApiError, TripwireConfigurationError, TripwireTokenVerificationError } from './errors';
+export { Foil } from './client';
+export { FoilApiError, FoilConfigurationError, FoilTokenVerificationError } from './errors';
 export * from './gate-delivery';
-export { verifyTripwireToken, safeVerifyTripwireToken } from './sealed-token';
+export { verifyFoilToken, safeVerifyFoilToken } from './sealed-token';
 export type * from './types';
