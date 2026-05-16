@@ -8,7 +8,7 @@ The Tripwire Node library provides convenient access to the Tripwire API from ap
 
 The library also provides:
 
-- a fast configuration path using `TRIPWIRE_SECRET_KEY`
+- a fast configuration path using `FOIL_SECRET_KEY`
 - helpers for cursor-based pagination
 - structured API errors and built-in sealed token verification
 - webhook endpoint management, test sends, and event delivery history
@@ -33,13 +33,13 @@ npm install @abxy/tripwire-server
 
 ## Usage
 
-Use `TRIPWIRE_SECRET_KEY` or an explicit `secretKey` for core detect APIs. For public or bearer-auth Gate flows, the client can also be constructed without a secret key:
+Use `FOIL_SECRET_KEY` or an explicit `secretKey` for core detect APIs. For public or bearer-auth Gate flows, the client can also be constructed without a secret key:
 
 ```ts
 import { Tripwire } from "@abxy/tripwire-server";
 
 const client = new Tripwire({
-  secretKey: process.env.TRIPWIRE_SECRET_KEY,
+  secretKey: process.env.FOIL_SECRET_KEY,
 });
 
 const page = await client.sessions.list({ verdict: "bot", limit: 25 });
@@ -56,7 +56,7 @@ import { safeVerifyTripwireToken } from "@abxy/tripwire-server";
 
 const result = safeVerifyTripwireToken(
   sealedToken,
-  process.env.TRIPWIRE_SECRET_KEY,
+  process.env.FOIL_SECRET_KEY,
 );
 
 if (!result.ok) {
@@ -150,13 +150,13 @@ const keyPair = createDeliveryKeyPair();
 const response = createGateApprovedWebhookResponse({
   delivery: keyPair.delivery,
   outputs: {
-    TRIPWIRE_PUBLISHABLE_KEY: "pk_live_...",
-    TRIPWIRE_SECRET_KEY: "sk_live_...",
+    FOIL_PUBLISHABLE_KEY: "pk_live_...",
+    FOIL_SECRET_KEY: "sk_live_...",
   },
 });
 
 const payload = decryptGateDeliveryEnvelope(keyPair.privateKey, response.encrypted_delivery);
-console.log(payload.outputs.TRIPWIRE_SECRET_KEY);
+console.log(payload.outputs.FOIL_SECRET_KEY);
 
 console.log(verifyGateWebhookSignature({
   secret: "whsec_test",

@@ -149,11 +149,15 @@ export function deriveGateAgentTokenEnvKey(serviceId: string): string {
     throw new Error('service_id is required to derive a Gate agent token env key');
   }
 
+  if (normalized === 'TRIPWIRE' || normalized === 'FOIL') {
+    return `FOIL${GATE_AGENT_TOKEN_ENV_SUFFIX}`;
+  }
+
   return `${normalized}${GATE_AGENT_TOKEN_ENV_SUFFIX}`;
 }
 
 export function isGateManagedEnvVarKey(key: string): boolean {
-  return key === 'TRIPWIRE_AGENT_TOKEN' || key.endsWith(GATE_AGENT_TOKEN_ENV_SUFFIX);
+  return key === 'FOIL_AGENT_TOKEN' || key.endsWith(GATE_AGENT_TOKEN_ENV_SUFFIX);
 }
 
 export function isBlockedGateEnvVarKey(key: string): boolean {

@@ -24,8 +24,8 @@ function createFetchMock(
 
 describe('Tripwire client', () => {
   it('uses the env secret key by default', async () => {
-    const original = process.env.TRIPWIRE_SECRET_KEY;
-    process.env.TRIPWIRE_SECRET_KEY = 'sk_env_default';
+    const original = process.env.FOIL_SECRET_KEY;
+    process.env.FOIL_SECRET_KEY = 'sk_env_default';
     const fixture = loadFixture<ResourceListEnvelope<SessionSummary>>('api/sessions/list.json');
     const fetch = createFetchMock(() => jsonResponse(fixture));
 
@@ -34,32 +34,32 @@ describe('Tripwire client', () => {
       await client.sessions.list();
       expect(fetch).toHaveBeenCalledTimes(1);
     } finally {
-      if (original) process.env.TRIPWIRE_SECRET_KEY = original;
-      else delete process.env.TRIPWIRE_SECRET_KEY;
+      if (original) process.env.FOIL_SECRET_KEY = original;
+      else delete process.env.FOIL_SECRET_KEY;
     }
   });
 
   it('throws when no secret key is configured', () => {
-    const original = process.env.TRIPWIRE_SECRET_KEY;
-    delete process.env.TRIPWIRE_SECRET_KEY;
+    const original = process.env.FOIL_SECRET_KEY;
+    delete process.env.FOIL_SECRET_KEY;
     try {
       const client = new Tripwire({ fetch: createFetchMock(() => jsonResponse({})) });
       expect(client.gate).toBeDefined();
       expect(client.gate.registry).toBeDefined();
       expect(client.gate.registry.list).toBeTypeOf('function');
     } finally {
-      if (original) process.env.TRIPWIRE_SECRET_KEY = original;
+      if (original) process.env.FOIL_SECRET_KEY = original;
     }
   });
 
   it('throws at request time when a secret-auth endpoint is called without a secret key', async () => {
-    const original = process.env.TRIPWIRE_SECRET_KEY;
-    delete process.env.TRIPWIRE_SECRET_KEY;
+    const original = process.env.FOIL_SECRET_KEY;
+    delete process.env.FOIL_SECRET_KEY;
     try {
       const client = new Tripwire({ fetch: createFetchMock(() => jsonResponse({})) });
       await expect(client.sessions.list()).rejects.toBeInstanceOf(TripwireConfigurationError);
     } finally {
-      if (original) process.env.TRIPWIRE_SECRET_KEY = original;
+      if (original) process.env.FOIL_SECRET_KEY = original;
     }
   });
 

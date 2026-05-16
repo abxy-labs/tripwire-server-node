@@ -5,7 +5,7 @@ import type { ApiKey, UpdateOrganizationRequest, VerifiedTripwireToken } from '.
 import { safeVerifyTripwireToken } from '../src/sealed-token';
 import { loadFixture } from './helpers';
 
-const describeLive = process.env.TRIPWIRE_LIVE_SMOKE === '1' ? describe : describe.skip;
+const describeLive = process.env.FOIL_LIVE_SMOKE === '1' ? describe : describe.skip;
 
 function requireEnv(name: string): string {
   const value = process.env[name];
@@ -52,10 +52,10 @@ function toUpdateStatus(status: string): UpdateOrganizationRequest['status'] | u
 describeLive('live API smoke', () => {
   it('exercises the public server surface', async () => {
     const client = new Tripwire({
-      secretKey: requireEnv('TRIPWIRE_SMOKE_SECRET_KEY'),
-      baseUrl: process.env.TRIPWIRE_SMOKE_BASE_URL || 'https://api.tripwirejs.com',
+      secretKey: requireEnv('FOIL_SMOKE_SECRET_KEY'),
+      baseUrl: process.env.FOIL_SMOKE_BASE_URL || 'https://api.tripwirejs.com',
     });
-    const organizationId = requireEnv('TRIPWIRE_SMOKE_ORGANIZATION_ID');
+    const organizationId = requireEnv('FOIL_SMOKE_ORGANIZATION_ID');
 
     let createdKeyId: string | undefined;
     let rotatedKeyId: string | undefined;

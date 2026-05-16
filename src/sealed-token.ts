@@ -18,10 +18,10 @@ function deriveKey(secretKeyOrHash: string): Buffer {
 }
 
 function resolveSecretKey(secretKey?: string): string {
-  const resolved = secretKey ?? process.env.TRIPWIRE_SECRET_KEY;
+  const resolved = secretKey ?? process.env.FOIL_SECRET_KEY;
   if (!resolved) {
     throw new TripwireConfigurationError(
-      'Missing Tripwire secret key. Pass secretKey explicitly or set TRIPWIRE_SECRET_KEY.',
+      'Missing Tripwire secret key. Pass secretKey explicitly or set FOIL_SECRET_KEY.',
     );
   }
   return resolved;

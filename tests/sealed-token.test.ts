@@ -37,13 +37,13 @@ describe('sealed token verification', () => {
 
   it('throws a configuration error when no secret key is available', () => {
     const fixture = loadFixture<{ token: string }>('sealed-token/vector.v1.json');
-    const original = process.env.TRIPWIRE_SECRET_KEY;
-    delete process.env.TRIPWIRE_SECRET_KEY;
+    const original = process.env.FOIL_SECRET_KEY;
+    delete process.env.FOIL_SECRET_KEY;
 
     try {
       expect(() => verifyTripwireToken(fixture.token)).toThrow(TripwireConfigurationError);
     } finally {
-      if (original) process.env.TRIPWIRE_SECRET_KEY = original;
+      if (original) process.env.FOIL_SECRET_KEY = original;
     }
   });
 });

@@ -82,7 +82,7 @@ function resolveOptions(options: TripwireOptions = {}): ResolvedOptions {
   }
 
   return {
-    secretKey: options.secretKey ?? process.env.TRIPWIRE_SECRET_KEY,
+    secretKey: options.secretKey ?? process.env.FOIL_SECRET_KEY,
     baseUrl: options.baseUrl && options.baseUrl !== '' ? options.baseUrl : DEFAULT_BASE_URL,
     timeoutMs: options.timeoutMs ?? DEFAULT_TIMEOUT_MS,
     fetch: fetchImpl,
@@ -146,7 +146,7 @@ function normalizeListEnvelope<T>(envelope: ResourceListEnvelope<T>): ListResult
 
 function missingSecretKeyError(): TripwireConfigurationError {
   return new TripwireConfigurationError(
-    'Missing Tripwire secret key. Pass secretKey explicitly or set TRIPWIRE_SECRET_KEY.',
+    'Missing Tripwire secret key. Pass secretKey explicitly or set FOIL_SECRET_KEY.',
   );
 }
 
